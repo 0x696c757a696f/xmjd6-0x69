@@ -1,3 +1,5 @@
 patch:
   schema_list:
     - schema: xmjd6
+  # "schema_list/+":
+  #   - {schema: xmjd6}
