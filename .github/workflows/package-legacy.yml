@@ -1,4 +1,4 @@
-name: Package Main Branch
+name: Package Legacy Branch
 
 on:
   push:
