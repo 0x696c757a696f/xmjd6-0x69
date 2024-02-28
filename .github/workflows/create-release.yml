@@ -48,6 +48,7 @@ jobs:
       
     - name: Unzip Rabbit
       run: |
+        mkdir -p rabbit-x64
         unzip rabbit-${{ env.RELEASE_TAG }}-x64.zip -d rabbit-x64
         
     - name: Merge Rime into Rabbit
