@@ -50,17 +50,14 @@ jobs:
       
     - name: Unzip Rabbit
       run: |
-        mkdir -p rabbit
+        mkdir -p Rabbit
         pwd
-        unzip rabbit-${{ env.RELEASE_TAG }}.zip -d rabbit
+        unzip rabbit-${{ env.RELEASE_TAG }}.zip -d Rabbit
         
     - name: Merge Rime into Rabbit
       run: |
-        cp -r Rime/* rabbit/
-        pwd
-        ls -al rabbit/
-        ls -al rabbit/Rime/
-        zip -r rabbit-xmjd6.zip rabbit/
+        cp -r Rime/ Rabbit/
+        zip -r Rabbit-xmjd6.zip Rabbit/
         
     - name: Create Release
       id: create_release
@@ -92,6 +89,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./rabbit-xmjd6.zip
+        asset_path: ./Rabbit-xmjd6.zip
         asset_name: Rabbit-xmjd6.zip
         asset_content_type: application/zip
