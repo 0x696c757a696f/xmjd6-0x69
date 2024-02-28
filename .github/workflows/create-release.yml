@@ -32,7 +32,7 @@ jobs:
       run: |
         # 设置仓库名和工作流文件名
         REPO="amorphobia/rabbit"
-        WORKFLOW_FILE_NAME="main.yml" # 你需要根据实际情况调整这个名称
+        WORKFLOW_FILE_NAME="ci.yml" # 你需要根据实际情况调整这个名称
           
         # 获取最新的工作流运行ID
         RUN_ID=$(curl -s \
