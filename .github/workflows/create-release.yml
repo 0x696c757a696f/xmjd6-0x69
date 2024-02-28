@@ -25,6 +25,8 @@ jobs:
       run:  | 
         mkdir -p Rime
         rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' ./Rime/
+        ls -al
+        pwd
 
     - name: Get latest release tag
       id: get_tag
@@ -49,11 +51,13 @@ jobs:
     - name: Unzip Rabbit
       run: |
         mkdir -p rabbit
+        pwd
         unzip rabbit-${{ env.RELEASE_TAG }}.zip -d rabbit
         
     - name: Merge Rime into Rabbit
       run: |
         cp -r Rime/* rabbit/
+        pwd
         zip -r rabbit-xmjd6.zip rabbit/
         
     - name: Create Release
