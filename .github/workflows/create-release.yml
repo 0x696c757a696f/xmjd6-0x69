@@ -58,6 +58,8 @@ jobs:
       run: |
         cp -r Rime/* rabbit/
         pwd
+        ls -al rabbit/
+        ls -al rabbit/Rime/
         zip -r rabbit-xmjd6.zip rabbit/
         
     - name: Create Release
