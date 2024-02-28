@@ -17,16 +17,17 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: 'main'
-
-    - name: Zip main branch files excluding .git and .github
-      run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*"
     
     - name: Zip main branch pure files
       run:  | 
         mkdir -p Rime
-        rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' ./Rime/
+        rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' . /Rime/
         ls Rime/ -al
         pwd
+    
+    - name: Zip main branch files excluding .git and .github
+      run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*" -x "Rime"
+    
 
     - name: Get latest release tag
       id: get_tag
