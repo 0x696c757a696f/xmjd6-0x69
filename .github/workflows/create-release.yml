@@ -25,7 +25,7 @@ jobs:
       run:  | 
         mkdir -p Rime
         rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' ./Rime/
-        ls -al
+        ls /Rime -al
         pwd
 
     - name: Get latest release tag
