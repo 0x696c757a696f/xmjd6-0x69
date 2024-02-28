@@ -24,8 +24,10 @@ jobs:
     - name: Zip main branch pure files
       run:  | 
         mkdir -p Rime
+        ls -al
+        ls -al Rime
         rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' --exclude='xmjd6.zip' . /Rime/
-        ls Rime/ -al
+        ls -al Rime/ 
         pwd
 
     - name: Get latest release tag
