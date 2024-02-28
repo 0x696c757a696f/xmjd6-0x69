@@ -20,7 +20,27 @@ jobs:
 
     - name: Zip main branch files excluding .git and .github
       run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*"
-      
+    
+    - name: Zip main branch pure files
+      run:  | 
+        mkdir -p Rime
+        rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' ./Rime/
+
+    - name: Download Rabbit-Full-x64.zip Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Rabbit-Full-x64
+        repository: amorphobia/rabbit
+
+    - name: Unzip Rabbit-Full-x64.zip
+      run: |
+        unzip Rabbit-Full-x64.zip -d Rabbit-Full-x64
+        
+    - name: Merge Rime into Rabbit-Full-x64
+      run: |
+        cp -r Rime/* Rabbit-Full-x64/
+        zip -r rabbit-xmjd6.zip Rabbit-Full-x64/
+        
     - name: Create Release
       id: create_release
       uses: shogo82148/actions-create-release@v1
@@ -43,4 +63,14 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./xmjd6.zip
         asset_name: xmjd6.zip
+        asset_content_type: application/zip
+        
+    - name: Upload Rabbit-xmjd6.zip to Release
+      uses: shogo82148/actions-upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./rabbit-xmjd6.zip
+        asset_name: Rabbit-xmjd6.zip
         asset_content_type: application/zip
