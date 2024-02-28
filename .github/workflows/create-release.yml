@@ -23,9 +23,9 @@ jobs:
     
     - name: Zip main branch pure files
       run:  | 
-        mkdir -p Rime
+        mkdir -p Rime/
         ls -al
-        ls -al Rime
+        ls -al Rime/
         rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' --exclude='xmjd6.zip' . /Rime/
         ls -al Rime/ 
         pwd
