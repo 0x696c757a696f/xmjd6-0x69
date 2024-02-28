@@ -26,44 +26,34 @@ jobs:
         mkdir -p Rime
         rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' ./Rime/
 
-    - name: Download Rabbit-Full-x64 artifact
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        # 设置仓库名和工作流文件名
-        REPO="amorphobia/rabbit"
-        WORKFLOW_FILE_NAME="ci.yml" # 你需要根据实际情况调整这个名称
-          
-        # 获取最新的工作流运行ID
-        RUN_ID=$(curl -s \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/$REPO/actions/workflows/$WORKFLOW_FILE_NAME/runs | jq -r '.workflow_runs[0].id')
-          
-        # 列出该运行的artifacts
-        ARTIFACTS_URL=$(curl -s \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/$REPO/actions/runs/$RUN_ID/artifacts | jq -r '.artifacts[] | select(.name=="Rabbit-Full-x64") | .archive_download_url')
-          
-        # 下载artifact
-        if [ ! -z "$ARTIFACTS_URL" ]; then
-          curl -L \
-            -o Rabbit-Full-x64.zip \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            $ARTIFACTS_URL
-        else
-          echo "Artifact Rabbit-Full-x64 not found."
-        fi
+    - name: Get latest release tag
+      id: get_tag
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const response = await github.rest.repos.getLatestRelease({
+            owner: 'amorphobia',
+            repo: 'rabbit',
+          });
+          const tagName = response.data.tag_name;
+          console.log(`Latest release tag is ${tagName}`);
+          return tagName;
 
-    - name: Unzip Rabbit-Full-x64.zip
+    - name: Set the tag as environment variable
+      run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
+    
+    - name: Download the release asset
       run: |
-        unzip Rabbit-Full-x64.zip -d Rabbit-Full-x64
+        curl -L -o rabbit-${{ env.RELEASE_TAG }}-x64.zip https://github.com/amorphobia/rabbit/releases/download/${{ env.RELEASE_TAG }}/rabbit-${{ env.RELEASE_TAG }}-x64.zip
+      
+    - name: Unzip Rabbit
+      run: |
+        unzip rabbit-${{ env.RELEASE_TAG }}-x64.zip -d rabbit-x64
         
-    - name: Merge Rime into Rabbit-Full-x64
+    - name: Merge Rime into Rabbit
       run: |
-        cp -r Rime/* Rabbit-Full-x64/
-        zip -r rabbit-xmjd6.zip Rabbit-Full-x64/
+        cp -r Rime/* rabbit-x64/
+        zip -r rabbit-xmjd6.zip rabbit-x64/
         
     - name: Create Release
       id: create_release
