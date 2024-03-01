@@ -55,7 +55,7 @@ jobs:
 
     - name: Clean SharedSupport
       run: |
-        cd rabbit/SharedSupport
+        cd Rabbit/SharedSupport
         shopt -s extglob
         rm !(punctuation.yaml|key_bindings.yaml|default.yaml)
         cd ../../
