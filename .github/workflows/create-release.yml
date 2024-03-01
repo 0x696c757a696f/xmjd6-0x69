@@ -9,7 +9,7 @@ jobs:
     permissions: write-all
     steps:
     - name: Set up environment variables
-      运行： |
+      run: |
         echo "CURRENT_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
         echo "RELEASE_TITLE=$(date +'%Y.%m.%d') 词库更新" >> $GITHUB_ENV
 
