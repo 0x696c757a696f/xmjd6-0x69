@@ -1,0 +1,4227 @@
+keyboard:
+  colorSchemas:
+    - schemaName: xiankuang
+      name: 线框☕️
+      author: 咖啡
+      back_color: '0xFFFAFAFA'
+      button_back_color: '0xFFFEFEFE'
+      button_pressed_back_color: '0xFFFAFAFA'
+      button_foreground_color: '0xFF000000'
+      button_pressed_foreground_color: '0xFFFFFFFF'
+      button_swipe_foreground_color: '0xFF5C5C5C'
+      button_swipe_pressed_foreground_color: '0xFF000000'
+      corner_radius: 8
+      border_color: '0xFF000000'
+      text_color: '0xFF000000'
+      hilited_candidate_text_color: '0xFA8C5454'
+      hilited_candidate_back_color: '0xFFFDFDFD'
+      hilited_comment_text_color: '0xFF5C5C5C'
+      hilited_candidate_label_color: '0xFF000000'
+      candidate_text_color: '0xFF000000'
+      comment_text_color: '0xFF5C5C5C'
+      label_color: '0xFF000000'
+      font_size: 17
+      swipe_font_size: 8
+      lower_edge_color: '0x01000000'
+      hilited_callout_back_color: '0xFFFAFAFA'
+      hilited_callout_foreground_color: '0xFFFAFAFA'
+      shadow_color: '0x01000000'
+      shadow_size: 2
+      button_bubble_back_color: '0x01FF9960'
+keyStyle: { }
+keyboards:
+  - name: 线框中文☕️
+    isPrimary: true
+    rows:
+      - keys:
+          - action:
+              character:
+                char: q
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: Q
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '1'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#左手模式'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: "\U000F00CC"
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: w
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: W
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '2'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: e
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: E
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '3'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: r
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: R
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '4'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: t
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: T
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '5'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: y
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: Y
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '6'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: u
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: U
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '7'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: i
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: I
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '8'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: o
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: O
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '9'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: p
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: P
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '0'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#右手模式'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: "\U000F00CF"
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+      - keys:
+          - action: none
+            width:
+              portrait:
+                percentage: 0.05
+              landscape:
+                percentage: 0.05
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+          - action:
+              character:
+                char: a
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: A
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '~'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  character:
+                    char: '`'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: s
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: S
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: /
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: d
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: D
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: ':'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: f
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: F
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: ;
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: g
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: G
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: (
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: h
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: H
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: )
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: j
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: J
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '@'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: k
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: K
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: “
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: l
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: L
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: ”
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: none
+            width:
+              portrait:
+                percentage: 0.05
+              landscape:
+                percentage: 0.05
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+      - keys:
+          - action: shift
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  keyboardType: classifySymbolic
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+          - action:
+              character:
+                char: z
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: Z
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '-'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#行首'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ⇤
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: x
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: X
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: _
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#剪切'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: "\U000F0190"
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: c
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: C
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '#'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#复制'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: 
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: v
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: V
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '?'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#粘贴'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: "\U000F0192"
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: b
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: B
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '!'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#关闭键盘'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: "\U000F030F"
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: n
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: N
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: ','
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#换行'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: 
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: m
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: M
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: .
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#行尾'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ⇥
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+          - action: backspace
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: "\U000F05E8"
+            processByRIME: true
+            swipe:
+              - direction: left
+                action:
+                  shortcutCommand: '#重输'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: del
+            darkModeStyleName: del
+      - keys:
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文数字符号☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.2
+            label:
+              loadingText: ''
+              text: 符
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  shortcutCommand: '#RimeSwitcher'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#RimeSwitcher'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: left
+                action:
+                  shortcutCommand: '#上个输入方案'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: right
+                action:
+                  shortcutCommand: '#上个输入方案'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文数字☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape: available
+            label:
+              loadingText: ''
+              text: '123'
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  shortcutCommand: '#三选上屏'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: shuzi
+            darkModeStyleName: shuzi
+          - action: space
+            width:
+              portrait: available
+              landscape:
+                percentage: 0.4
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe:
+              - direction: left
+                action:
+                  shortcutCommand: '#左移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: right
+                action:
+                  shortcutCommand: '#右移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: sp
+            darkModeStyleName: sp
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文☕️
+            width:
+              portrait:
+                percentage: 0.12
+              landscape: available
+            label:
+              loadingText: ''
+              text: 中/英
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  shortcutCommand: '#次选上屏'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: zhonying
+            darkModeStyleName: zhonying
+          - action: enter
+            width:
+              portrait:
+                percentage: 0.23
+              landscape:
+                percentage: 0.2
+            label:
+              loadingText: ''
+              text:  确认
+            processByRIME: true
+            swipe:
+              - direction: up
+                action:
+                  shortcutCommand: '#换行'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: en
+            darkModeStyleName: en
+    buttonInsets:
+      left: 2
+      right: 2
+      top: 4
+      bottom: 4
+    keyStyle:
+      shuzi:
+        buttonBackgroundColor: '0x9EB886'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      del:
+        buttonBackgroundColor: '0x43CBF3'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      en:
+        buttonBackgroundColor: '0x9AAEFA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sh:
+        buttonBackgroundColor: '0x000000'
+        pressedButtonBackgroundColor: '0xC4AAAA'
+        buttonForegroundColor: '0xFFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      zhonying:
+        buttonBackgroundColor: '0xA1D5C6'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      abc:
+        buttonBackgroundColor: '0xFEFEFE'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0x000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        fontSize: 17
+        swipeFontSize: 8
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      fuhao:
+        buttonBackgroundColor: '0xBA9565'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sp:
+        buttonBackgroundColor: '0xC4AAAA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0xFFFFFF'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+  - name: 线框中文数字☕️
+    isPrimary: true
+    rows:
+      - keys:
+          - action:
+              character:
+                char: +
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '-'
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '1'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '2'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '3'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '='
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+      - keys:
+          - action:
+              character:
+                char: '*'
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ×
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: /
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ÷
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '4'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '5'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '6'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ':'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: zhonying
+            darkModeStyleName: zhonying
+      - keys:
+          - action:
+              character:
+                char: (
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: )
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '7'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '8'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '9'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: backspace
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: "\U000F05E8"
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: del
+            darkModeStyleName: del
+      - keys:
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文☕️
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: 中
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+          - action:
+              symbol:
+                char: .
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: shuzi
+            darkModeStyleName: shuzi
+          - action:
+              character:
+                char: '0'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: space
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sp
+            darkModeStyleName: sp
+          - action: enter
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: 
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: en
+            darkModeStyleName: en
+    buttonInsets:
+      left: 2
+      right: 2
+      top: 4
+      bottom: 4
+    keyStyle:
+      en:
+        buttonBackgroundColor: '0x9AAEFA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      zhonying:
+        buttonBackgroundColor: '0xA1D5C6'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      abc:
+        buttonBackgroundColor: '0xFEFEFE'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0x000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        fontSize: 17
+        swipeFontSize: 8
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      del:
+        buttonBackgroundColor: '0x43CBF3'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      shuzi:
+        buttonBackgroundColor: '0x9EB886'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      fuhao:
+        buttonBackgroundColor: '0xBA9565'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sp:
+        buttonBackgroundColor: '0xC4AAAA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0xFFFFFF'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sh:
+        buttonBackgroundColor: '0x000000'
+        pressedButtonBackgroundColor: '0xC4AAAA'
+        buttonForegroundColor: '0xFFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+  - name: 线框中文数字符号☕️
+    isPrimary: false
+    rows:
+      - keys:
+          - action:
+              character:
+                char: '1'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '2'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '3'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '4'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '5'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '6'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '7'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '8'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '9'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '0'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+      - keys:
+          - action:
+              character:
+                char: '~'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: /
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ':'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ;
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: (
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: )
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '&'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '@'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: “
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ”
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+      - keys:
+          - action:
+              keyboardType: classifySymbolic
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+          - action:
+              character:
+                char: '-'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: _
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '#'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '?'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '!'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ','
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: .
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+          - action: backspace
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: "\U000F05E8"
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: del
+            darkModeStyleName: del
+      - keys:
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape: available
+            label:
+              loadingText: ''
+              text: ABC
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文数字☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape: available
+            label:
+              loadingText: ''
+              text: '123'
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: shuzi
+            darkModeStyleName: shuzi
+          - action: space
+            width:
+              portrait: available
+              landscape:
+                percentage: 0.5
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe:
+              - direction: left
+                action:
+                  shortcutCommand: '#左移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: right
+                action:
+                  shortcutCommand: '#右移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: sp
+            darkModeStyleName: sp
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文数字符号☕️
+            width:
+              portrait:
+                percentage: 0.12
+              landscape: available
+            label:
+              loadingText: ''
+              text: 全/半
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: zhonying
+            darkModeStyleName: zhonying
+          - action: enter
+            width:
+              portrait:
+                percentage: 0.23
+              landscape: available
+            label:
+              loadingText: ''
+              text:  确认
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: en
+            darkModeStyleName: en
+    buttonInsets:
+      left: 2
+      right: 2
+      top: 4
+      bottom: 4
+    keyStyle:
+      zhonying:
+        buttonBackgroundColor: '0xA1D5C6'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      del:
+        buttonBackgroundColor: '0x43CBF3'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      en:
+        buttonBackgroundColor: '0x9AAEFA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      fuhao:
+        buttonBackgroundColor: '0xBA9565'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sp:
+        buttonBackgroundColor: '0xC4AAAA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0xFFFFFF'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      shuzi:
+        buttonBackgroundColor: '0x9EB886'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      abc:
+        buttonBackgroundColor: '0xFEFEFE'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0x000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        fontSize: 17
+        swipeFontSize: 8
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sh:
+        buttonBackgroundColor: '0x000000'
+        pressedButtonBackgroundColor: '0xC4AAAA'
+        buttonForegroundColor: '0xFFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+  - name: 线框英文☕️
+    isPrimary: true
+    rows:
+      - keys:
+          - action:
+              character:
+                char: q
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '1'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: w
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '2'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: e
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '3'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: r
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '4'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: t
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '5'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: y
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '6'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: u
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '7'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: i
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '8'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: o
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '9'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: p
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  character:
+                    char: '0'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+      - keys:
+          - action: none
+            width:
+              portrait:
+                percentage: 0.05
+              landscape:
+                percentage: 0.05
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+          - action:
+              character:
+                char: a
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '~'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: s
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: /
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: d
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: ':'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: f
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: ;
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: g
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: (
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: h
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: )
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: j
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '@'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: k
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '"'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: l
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: ''''
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: none
+            width:
+              portrait:
+                percentage: 0.05
+              landscape:
+                percentage: 0.05
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+      - keys:
+          - action: shift
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  keyboardType: classifySymbolic
+                processByRIME: false
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+          - action:
+              character:
+                char: z
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '-'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: x
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: _
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: c
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '#'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: v
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '?'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: b
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: '!'
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: n
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: ','
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: m
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  symbol:
+                    char: .
+                processByRIME: false
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+          - action: backspace
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: "\U000F05E8"
+            processByRIME: false
+            swipe:
+              - direction: left
+                action:
+                  shortcutCommand: '#重输'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: del
+            darkModeStyleName: del
+      - keys:
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文数字符号☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.2
+            label:
+              loadingText: ''
+              text: 符
+            processByRIME: false
+            swipe:
+              - direction: up
+                action:
+                  shortcutCommand: '#RimeSwitcher'
+                processByRIME: false
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: down
+                action:
+                  shortcutCommand: '#RimeSwitcher'
+                processByRIME: false
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: left
+                action:
+                  shortcutCommand: '#上个输入方案'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: right
+                action:
+                  shortcutCommand: '#上个输入方案'
+                processByRIME: true
+                display: false
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文数字☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape: available
+            label:
+              loadingText: ''
+              text: '123'
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: shuzi
+            darkModeStyleName: shuzi
+          - action: space
+            width:
+              portrait: available
+              landscape:
+                percentage: 0.4
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: left
+                action:
+                  shortcutCommand: '#左移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: right
+                action:
+                  shortcutCommand: '#右移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: sp
+            darkModeStyleName: sp
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文☕️
+            width:
+              portrait:
+                percentage: 0.12
+              landscape: available
+            label:
+              loadingText: ''
+              text: 英/中
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: zhonying
+            darkModeStyleName: zhonying
+          - action: enter
+            width:
+              portrait:
+                percentage: 0.23
+              landscape:
+                percentage: 0.2
+            label:
+              loadingText: ''
+              text:  确认
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: en
+            darkModeStyleName: en
+    buttonInsets:
+      left: 2
+      right: 2
+      top: 4
+      bottom: 4
+    keyStyle:
+      del:
+        buttonBackgroundColor: '0x43CBF3'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      shuzi:
+        buttonBackgroundColor: '0x9EB886'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sp:
+        buttonBackgroundColor: '0xC4AAAA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0xFFFFFF'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      fuhao:
+        buttonBackgroundColor: '0xBA9565'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      abc:
+        buttonBackgroundColor: '0xFEFEFE'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0x000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        fontSize: 17
+        swipeFontSize: 8
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sh:
+        buttonBackgroundColor: '0x000000'
+        pressedButtonBackgroundColor: '0xC4AAAA'
+        buttonForegroundColor: '0xFFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      en:
+        buttonBackgroundColor: '0x9AAEFA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      zhonying:
+        buttonBackgroundColor: '0xA1D5C6'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+  - name: 线框英文数字☕️
+    isPrimary: true
+    rows:
+      - keys:
+          - action:
+              character:
+                char: +
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '-'
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '1'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '2'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '3'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '='
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+      - keys:
+          - action:
+              character:
+                char: '*'
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ×
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: /
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ÷
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '4'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '5'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '6'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ':'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: zhonying
+            darkModeStyleName: zhonying
+      - keys:
+          - action:
+              character:
+                char: (
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: )
+            width:
+              portrait:
+                percentage: 0.1
+              landscape:
+                percentage: 0.1
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action:
+              character:
+                char: '7'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '8'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '9'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: backspace
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: "\U000F05E8"
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: del
+            darkModeStyleName: del
+      - keys:
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文☕️
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: 英
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+          - action:
+              character:
+                char: .
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: shuzi
+            darkModeStyleName: shuzi
+          - action:
+              character:
+                char: '0'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: space
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sp
+            darkModeStyleName: sp
+          - action: enter
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: 
+            processByRIME: true
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: en
+            darkModeStyleName: en
+    buttonInsets:
+      left: 2
+      right: 2
+      top: 4
+      bottom: 4
+    keyStyle:
+      sp:
+        buttonBackgroundColor: '0xC4AAAA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0xFFFFFF'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      shuzi:
+        buttonBackgroundColor: '0x9EB886'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      del:
+        buttonBackgroundColor: '0x43CBF3'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      zhonying:
+        buttonBackgroundColor: '0xA1D5C6'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      en:
+        buttonBackgroundColor: '0x9AAEFA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      fuhao:
+        buttonBackgroundColor: '0xBA9565'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sh:
+        buttonBackgroundColor: '0x000000'
+        pressedButtonBackgroundColor: '0xC4AAAA'
+        buttonForegroundColor: '0xFFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      abc:
+        buttonBackgroundColor: '0xFEFEFE'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0x000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        fontSize: 17
+        swipeFontSize: 8
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+  - name: 线框英文数字符号☕️
+    isPrimary: false
+    rows:
+      - keys:
+          - action:
+              character:
+                char: '1'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '2'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '3'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '4'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '5'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '6'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '7'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '8'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '9'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '0'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+      - keys:
+          - action:
+              symbol:
+                char: '~'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: /
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: ':'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: ;
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: (
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: )
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: '&'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: '@'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: '"'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              symbol:
+                char: ''''
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+      - keys:
+          - action:
+              keyboardType: classifySymbolic
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: sh
+            darkModeStyleName: sh
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+          - action:
+              character:
+                char: '-'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: _
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '#'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '?'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: '!'
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: ','
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action:
+              character:
+                char: .
+            width:
+              portrait: available
+              landscape: available
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: abc
+            darkModeStyleName: abc
+          - action: none
+            width:
+              portrait:
+                percentage: 0.01
+              landscape:
+                percentage: 0.02
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+          - action: backspace
+            width:
+              portrait:
+                percentage: 0.14
+              landscape:
+                percentage: 0.13
+            label:
+              loadingText: ''
+              text: "\U000F05E8"
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: del
+            darkModeStyleName: del
+      - keys:
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape: available
+            label:
+              loadingText: ''
+              text: ABC
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: fuhao
+            darkModeStyleName: fuhao
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框英文数字☕️
+            width:
+              portrait:
+                percentage: 0.14
+              landscape: available
+            label:
+              loadingText: ''
+              text: '123'
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: shuzi
+            darkModeStyleName: shuzi
+          - action: space
+            width:
+              portrait: available
+              landscape:
+                percentage: 0.5
+            label:
+              loadingText: ''
+              text: ''
+            processByRIME: false
+            swipe:
+              - direction: left
+                action:
+                  shortcutCommand: '#左移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+              - direction: right
+                action:
+                  shortcutCommand: '#右移'
+                processByRIME: true
+                display: true
+                label:
+                  loadingText: ''
+                  text: ''
+            callout: [ ]
+            lightModeStyleName: sp
+            darkModeStyleName: sp
+          - action:
+              keyboardType:
+                custom:
+                  named: 线框中文数字符号☕️
+            width:
+              portrait:
+                percentage: 0.12
+              landscape: available
+            label:
+              loadingText: ''
+              text: 半/全
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: zhonying
+            darkModeStyleName: zhonying
+          - action: enter
+            width:
+              portrait:
+                percentage: 0.23
+              landscape: available
+            label:
+              loadingText: ''
+              text:  确认
+            processByRIME: false
+            swipe: [ ]
+            callout: [ ]
+            lightModeStyleName: en
+            darkModeStyleName: en
+    buttonInsets:
+      left: 2
+      right: 2
+      top: 4
+      bottom: 4
+    keyStyle:
+      abc:
+        buttonBackgroundColor: '0xFEFEFE'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0x000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        fontSize: 17
+        swipeFontSize: 8
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      en:
+        buttonBackgroundColor: '0x9AAEFA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sp:
+        buttonBackgroundColor: '0xC4AAAA'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0xFFFFFF'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      shuzi:
+        buttonBackgroundColor: '0x9EB886'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      del:
+        buttonBackgroundColor: '0x43CBF3'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1000000'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      fuhao:
+        buttonBackgroundColor: '0xBA9565'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      zhonying:
+        buttonBackgroundColor: '0xA1D5C6'
+        pressedButtonBackgroundColor: '0x000000'
+        buttonForegroundColor: '0xE1FFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
+      sh:
+        buttonBackgroundColor: '0x000000'
+        pressedButtonBackgroundColor: '0xC4AAAA'
+        buttonForegroundColor: '0xFFFFFF'
+        pressedButtonForegroundColor: '0xFFFFFF'
+        swipeForegroundColor: '0x5C5C5C'
+        pressedSwipeForegroundColor: '0x000000'
+        cornerRadius: 8
+        borderColor: '0x000000'
+        borderSize: 2
+        lowerEdgeColor: '0x01000000'
+        shadowColor: '0x01000000'
+        shadowSize: 0
+        buttonBubbleBackColor: '0xD0D0D0'
