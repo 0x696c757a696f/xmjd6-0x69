@@ -64,8 +64,8 @@ jobs:
             changelog += `- ${commitLink} ${message}<br>`; 
           });
           console.log(changelog);
-          return { changelog: changelog }; // 将 changelog 包装在对象中返回
-
+          core.setOutput("changelog", changelog);  # Set changelog to output variable
+          
     - name: Set the tag as environment variable
       run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
     
