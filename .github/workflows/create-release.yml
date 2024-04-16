@@ -68,6 +68,12 @@ jobs:
         cp -r Rime/. Rabbit/SharedSupport
         zip -r Rabbit-xmjd6.zip Rabbit/
         
+    - name: Generate Changelog
+      id: changelog
+      uses: michael0liver/github-changelog-generator-action@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}    
+        
     - name: Create Release
       id: create_release
       uses: shogo82148/actions-create-release@v1
@@ -76,24 +82,9 @@ jobs:
       with:
         tag_name: ${{ env.CURRENT_DATE }}
         release_name: ${{ env.RELEASE_TITLE }}
-        body: |
-          ## Release Notes
-          - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+        body: ${{ steps.changelog.outputs.changelog }}
         draft: false
         prerelease: false
-
-    - name: Update Changelog
-      uses: stefanzweifel/changelog-updater-action@v1
-      with:
-        latest-version: ${{ github.event.release.tag_name }}
-        release-notes: ${{ github.event.release.body }}
-
-    - name: Commit updated CHANGELOG
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        branch: ${{ github.event.release.target_commitish }}
-        commit_message: Update CHANGELOG
-        file_pattern: CHANGELOG.md
         
     - name: Upload Rabbit-xmjd6.zip to Release
       uses: shogo82148/actions-upload-release-asset@v1
