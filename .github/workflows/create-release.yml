@@ -68,11 +68,16 @@ jobs:
         cp -r Rime/. Rabbit/SharedSupport
         zip -r Rabbit-xmjd6.zip Rabbit/
         
+    - name: Get previous release tag
+      id: get_last_tag.outputs
+      uses: sammcoe/get-previous-release-action@v1       
+      
     - name: Generate Changelog
       id: changelog
       uses: heinrichreimer/action-github-changelog-generator@v2.3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}    
+        sinceTag: ${{ steps.get_last_tag.output.release}}
         
     - name: Create Release
       id: create_release
