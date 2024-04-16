@@ -63,8 +63,12 @@ jobs:
             const commitLink = `[${commit.sha.substring(0, 7)}](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${commit.sha})`;
             changelog += `- ${commitLink} ${message}<br>`; 
           });
-          console.log(changelog);
-          return changelog;
+          // 处理字符串，去除首尾的引号
+          const trimmedChangelog = changelog.replace(/^\"|\"$/g, '');
+          console.log(trimmedChangelog);
+          // 将处理后的字符串作为 Output 输出
+          core.setOutput('trimmedChangelog', trimmedChangelog);
+          return trimmedChangelog;
 
     - name: Set the tag as environment variable
       run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
