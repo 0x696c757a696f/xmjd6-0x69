@@ -47,6 +47,7 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
+          const core = require('@actions/core');  // Ensure core is correctly required
           const lastRelease = await github.rest.repos.getLatestRelease({
             owner: context.repo.owner,
             repo: context.repo.repo
@@ -63,8 +64,7 @@ jobs:
             const commitLink = `[${commit.sha.substring(0, 7)}](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${commit.sha})`;
             changelog += `- ${commitLink} ${message}<br>`; 
           });
-          console.log(changelog);
-          core.setOutput("changelog", changelog);  # Set changelog to output variable
+          core.setOutput('changelog', changelog);  // Correctly use setOutput to set 'changelog'
           
     - name: Set the tag as environment variable
       run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
