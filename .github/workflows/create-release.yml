@@ -59,10 +59,11 @@ jobs:
           });
           let changelog = '## Changelog\\n\\n';
           compare.data.commits.forEach(commit => {
-            const message = commit.commit.message.split('\\n').join(' '); // Prevent markdown errors due to commit message newlines
+            const message = commit.commit.message.split('\\n').join(' ');  # Prevent markdown errors due to commit message newlines
             changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}\\n`;
           });
-          return changelog;
+          console.log(changelog);  # Output changelog to console for debug
+          return changelog;  # Return as a raw string, make sure no JSON format issues
 
     - name: Create Release
       id: create_release
