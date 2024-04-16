@@ -59,11 +59,10 @@ jobs:
           });
           let changelog = '## Changelog\\n\\n';
           compare.data.commits.forEach(commit => {
-            const message = commit.commit.message.replace(/'/g, "\\'").replace(/"/g, '\\"').split('\\n').join(' '); // Escape single & double quotes and replace newlines
+            const message = commit.commit.message.split('\\n').join(' '); // Prevent markdown errors due to commit message newlines
             changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}\\n`;
           });
-          console.log(changelog);  # Debugging: output the changelog to check its format
-          return JSON.stringify(changelog);  # Use JSON.stringify to avoid unexpected token error
+          return changelog;
 
     - name: Create Release
       id: create_release
