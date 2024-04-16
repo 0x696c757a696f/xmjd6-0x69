@@ -70,7 +70,7 @@ jobs:
         
     - name: Generate Changelog
       id: changelog
-      uses: michael0liver/github-changelog-generator-action@v2
+      uses: heinrichreimer/action-github-changelog-generator@latest
       with:
         token: ${{ secrets.GITHUB_TOKEN }}    
         
