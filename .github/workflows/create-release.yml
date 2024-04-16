@@ -47,6 +47,7 @@ jobs:
       run: |
         echo "## Changelog" > CHANGELOG.md
         git log ${{ steps.get_tag.outputs.result.commitSha }}..HEAD --pretty=format:"%h - %s" >> CHANGELOG.md
+        echo "CHANGELOG=$(<CHANGELOG.md)" >> $GITHUB_ENV
 
     - name: Create Release
       id: create_release
@@ -57,7 +58,9 @@ jobs:
         tag_name: ${{ env.CURRENT_DATE }}
         release_name: ${{ env.RELEASE_TITLE }}
         body: |
-          $(cat CHANGELOG.md)
+          ## Release Notes
+          - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+          ${{ env.CHANGELOG }}
         draft: false
         prerelease: false
         
