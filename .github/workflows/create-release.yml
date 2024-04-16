@@ -57,7 +57,7 @@ jobs:
             base: lastRelease.data.tag_name,
             head: 'main'
           });
-          let changelog = '<br>'; 
+          let changelog = ''; 
           compare.data.commits.forEach(commit => {
             const message = commit.commit.message.split('\n').join(' '); 
             const commitLink = `[${commit.sha.substring(0, 7)}](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${commit.sha})`;
