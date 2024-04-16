@@ -69,7 +69,7 @@ jobs:
         zip -r Rabbit-xmjd6.zip Rabbit/
         
     - name: Get previous release tag
-      id: get_previous_release
+      id: get_previous_release_tag
       uses: actions/github-script@v7
       with:
         script: |
