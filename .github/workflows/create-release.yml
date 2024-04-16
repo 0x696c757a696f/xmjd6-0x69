@@ -17,6 +17,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: 'main'
+        fetch-depth: 0  # 确保获取所有历史记录以用于生成变更日志
 
     - name: Zip main branch files excluding .git and .github
       run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*"
@@ -42,15 +43,10 @@ jobs:
           console.log(`Latest release tag is ${tag}, commit SHA is ${commitSha}`);
           return { tag, commitSha };
 
-    - name: Set the tag and previous commit SHA as environment variables
-      run: |
-        echo "RELEASE_TAG=${{ steps.get_tag.outputs.result.tag }}" >> $GITHUB_ENV
-        echo "PREVIOUS_SHA=${{ steps.get_tag.outputs.result.commitSha }}" >> $GITHUB_ENV
-
     - name: Generate changelog
       run: |
-        echo '## Changelog' > CHANGELOG.md
-        git log ${{ env.PREVIOUS_SHA }}..HEAD --oneline >> CHANGELOG.md
+        echo "## Changelog" > CHANGELOG.md
+        git log ${{ steps.get_tag.outputs.result.commitSha }}..HEAD --pretty=format:"%h - %s" >> CHANGELOG.md
 
     - name: Create Release
       id: create_release
@@ -60,8 +56,10 @@ jobs:
       with:
         tag_name: ${{ env.CURRENT_DATE }}
         release_name: ${{ env.RELEASE_TITLE }}
-        body: ${{ env.RELEASE_TITLE }}
-        body_path: CHANGELOG.md  # 引用CHANGELOG.md文件内容作为release notes
+        body: |
+          ## Release Notes
+          - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+          $(cat CHANGELOG.md)
         draft: false
         prerelease: false
         
