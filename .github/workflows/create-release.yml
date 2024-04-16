@@ -57,9 +57,9 @@ jobs:
             base: lastRelease.data.tag_name,
             head: 'main'
           });
-          let changelog = '## Changelog\n';
+          let changelog = '**Changelog**\n\n';
           compare.data.commits.forEach(commit => {
-            changelog += `- ${commit.commit.message} (${commit.sha.substring(0, 7)})\n`;
+            changelog += `- \`${commit.sha.substring(0, 7)}\` ${commit.commit.message.replace(/\n/g, ' ')}\n`;
           });
           return changelog;
       env:
