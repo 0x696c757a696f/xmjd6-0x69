@@ -57,10 +57,10 @@ jobs:
             base: lastRelease.data.tag_name,
             head: 'main'
           });
-          let changelog = '## Changelog\n\n'; // 使用实际换行符 `\n`
+          let changelog = '## Changelog<br/>'; 
           compare.data.commits.forEach(commit => {
-            const message = commit.commit.message.split('\n').join(' '); // 将 commit message 中的换行转为空格
-            changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}\n`; // 使用实际换行符 `\n`
+            const message = commit.commit.message.split('\n').join('<br/>'); 
+            changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}<br/>`; 
           });
           console.log(changelog);
           return changelog;
