@@ -4,7 +4,32 @@ on:
   workflow_dispatch:
 
 jobs:
+  get_previous_release_tag:
+    runs-on: ubuntu-latest
+    outputs:
+      previous_release_tag: ${{ steps.get_previous_release.outputs.previous_release_tag }}
+    steps:
+      - name: Get previous release tag
+        id: get_previous_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const response = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 1
+            });
+            if (response.data.length > 0) {
+              const previousReleaseTag = response.data[0].tag_name;
+              console.log(`Previous release tag: ${previousReleaseTag}`);
+              return { previous_release_tag: previousReleaseTag };
+            } else {
+              console.log('No previous release found');
+              return { previous_release_tag: '' };
+            }
+
   release:
+    needs: get_previous_release_tag
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -68,30 +93,12 @@ jobs:
         cp -r Rime/. Rabbit/SharedSupport
         zip -r Rabbit-xmjd6.zip Rabbit/
         
-    - name: Get previous release tag
-      id: get_previous_release_tag
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const response = await github.rest.repos.listReleases({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            per_page: 1
-          });
-          if (response.data.length > 0) {
-            const previousReleaseTag = response.data[0].tag_name;
-            console.log(`Previous release tag: ${previousReleaseTag}`);
-            core.setOutput('previous_release_tag', previousReleaseTag);
-          } else {
-            console.log('No previous release found');
-          }  
-      
     - name: Generate Changelog
       id: changelog
       uses: heinrichreimer/action-github-changelog-generator@v2.3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}    
-        sinceTag: ${{ get_previous_release_tag.outputs.previous_release_tag }}
+        sinceTag: ${{ needs.get_previous_release_tag.outputs.previous_release_tag }}
         
     - name: Create Release
       id: create_release
