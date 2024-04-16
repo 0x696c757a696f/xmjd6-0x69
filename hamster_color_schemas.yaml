@@ -1,0 +1,273 @@
+colorSchemas:
+  - schemaName: solarized_dark
+    name: 曬經・月／Solarized Dark
+    author: 雪齋 <lyc20041@gmail.com>/Morse <morse.hsiao@gmail.com>
+    back_color: 0xF0352A0A # 键盘背景色
+    button_back_color: 0xF0352A0A # 按键背景色
+    button_pressed_back_color: 0x403516 # 按下时按键背景色
+    button_foreground_color: 0x7389FF # 按键上文字颜色
+    button_pressed_foreground_color: 0x7389FF # 按下时按键上文字颜色
+    button_swipe_foreground_color: 0x7389FF # 按键上划动文字的颜色
+    corner_radius: 5 # 按键圆角半径
+    border_color: 0x2A1F00 # 按键边框颜色
+    text_color: 0x756E5D # 组字区域文字颜色
+    hilited_candidate_back_color: 0x403516 # 候选栏首选文字区域背景色
+    hilited_candidate_text_color: 0x989F52 # 候选栏首选文字颜色
+    hilited_comment_text_color: 0x289989 # 候选栏首选文字 Comment 信息颜色
+    hilited_candidate_label_color: 0xCC8947 # 候选栏首选序号颜色
+    candidate_text_color: 0x7389FF # 候选栏次选文字颜色
+    comment_text_color: 0xC38AFF # 候选栏次选文字 Comment 信息颜色
+    label_color: 0x478DF4 # 候选栏次选序号颜色
+  - schemaName: solarized_light
+    name: 曬經・日／Solarized Light
+    author: 雪齋 <lyc20041@gmail.com>/Morse <morse.hsiao@gmail.com>
+    back_color: 0xF0E5F6FB # 键盘背景色
+    button_back_color: 0xF0E5F6FB # 按键背景色
+    button_pressed_back_color: 0xD7E8ED # 按下时按键背景色
+    button_foreground_color: 0x595E00 # 按键上文字颜色
+    button_pressed_foreground_color: 0x595E00 # 按下时按键上文字颜色
+    button_swipe_foreground_color: 0x595E00 # 按键上划动文字的颜色
+    corner_radius: 5 # 按键圆角半径
+    border_color: 0xEDFFFF # 按键边框颜色
+    text_color: 0xA1A095 # 组字区域文字颜色
+    hilited_candidate_back_color: 0xD7E8ED # 候选栏首选文字区域背景色
+    hilited_candidate_text_color: 0x3942CB # 候选栏首选文字颜色
+    hilited_comment_text_color: 0x8144C2 # 候选栏首选文字 Comment 信息颜色
+    hilited_candidate_label_color: 0x2566C6 # 候选栏首选序号颜色
+    candidate_text_color: 0x595E00 # 候选栏次选文字颜色
+    comment_text_color: 0x005947 # 候选栏次选文字 Comment 信息颜色
+    label_color: 0xA36407 # 候选栏次选序号颜色
+  - schemaName: WELLAN LT
+    name: 蔚蓝-青蛇 浅
+    author: MO
+    back_color: "0x01312C2D"
+    button_back_color: "0xFFFFFF"
+    button_pressed_back_color: "0x79972D"
+    button_bubble_back_color: "0xFFFFFF"
+    button_foreground_color: "0x3F3F3F"
+    button_pressed_foreground_color: "0xFFFFF2"
+    button_swipe_foreground_color: "0x000000"
+    font_size: 18
+    swipe_font_size: 6
+    corner_radius: 13
+    border_color: "0x01000000"
+    text_color: "0x79972D"
+    lower_edge_col: "0x0A000000"
+    shadow_color: "0x32000000"
+    shadow_size: 1
+    hilited_candidate_back_color: "0xFFFFFF"
+    hilited_candidate_text_color: "0x79972D"
+    hilited_candidate_label_color: "0x000000"
+    hilited_comment_text_color: "0x000000"
+    candidate_text_color: "0x000000"
+    comment_text_color: "0x000000"
+    label_color: "0x000000"
+    hilited_callout_back_color: "0x79972D"
+    hilited_callout_foreground_color: "0xFFFFFF"
+  - schemaName: WELLAN BK
+    name: 蔚蓝-青蛇 深
+    author: MO
+    back_color: "0x01312C2D"
+    button_back_color: "0x9B000000"
+    button_pressed_back_color: "0x79972D"
+    button_bubble_back_color: "0x454545"
+    button_foreground_color: "0xFFFFF2"
+    button_pressed_foreground_color: "0xFFFFF2"
+    button_swipe_foreground_color: "0xFFFFFF"
+    font_size: 18
+    swipe_font_size: 6
+    corner_radius: 13
+    border_color: "0x01000000"
+    text_color: "0x78962C"
+    lower_edge_col: "0x0A000000"
+    shadow_color: "0x37000000"
+    shadow_size: 1
+    hilited_candidate_back_color: "0x9B000000"
+    hilited_candidate_text_color: "0x78962C"
+    hilited_candidate_label_color: "0x78962C"
+    hilited_comment_text_color: "0x78962C"
+    candidate_text_color: "0xFFFFFF"
+    comment_text_color: "0xFFFFFF"
+    label_color: "0xFFFFFF"
+    hilited_callout_back_color: "0x79972D"
+    hilited_callout_foreground_color: "0xFFFFFF"
+  - schemaName: QJ L
+    name: 轻简
+    author: MO
+    back_color: "0x01312C2D"
+    button_back_color: "0xF1F1F1"
+    button_pressed_back_color: "0x5D4B3A"
+    button_bubble_back_color: "0xF5FFFFFF"
+    button_foreground_color: "0x544A41"
+    button_pressed_foreground_color: "0xF1F1F1"
+    button_swipe_foreground_color: "0x5D4B3A"
+    corner_radius: 5
+    border_color: "0x015D4B3A"
+    text_color: "0xEBF0EB"
+    lower_edge_col: "0x015D4B3A"
+    shadow_color: "0x01000000"
+    shadow_size: 0
+    hilited_candidate_back_color: "0xF5F1F1F1"
+    hilited_candidate_text_color: "0x544A41"
+    hilited_candidate_label_color: "0x000000"
+    hilited_comment_text_color: "0x544A41"
+    candidate_text_color: "0xDC524233"
+    comment_text_color: "0x524233"
+    label_color: "0x000000"
+    hilited_callout_back_color: "0xFA544A41"
+    hilited_callout_foreground_color: "0xF1F1F1"
+  - schemaName: QJ D
+    name: 轻简
+    author: MO
+    back_color: "0x01312C2D"
+    button_back_color: "0x39312A"
+    button_pressed_back_color: "0xE0DCDA"
+    button_bubble_back_color: "0xF5544A41"
+    button_foreground_color: "0xF5F5F5"
+    button_pressed_foreground_color: "0x43403C"
+    button_swipe_foreground_color: "0xF1F1F1"
+    font_size: 17
+    corner_radius: 7
+    border_color: "0x01F1F1F1"
+    text_color: "0xEBF0EB"
+    lower_edge_col: "0x01F1F1F1"
+    shadow_color: "0x01000000"
+    shadow_size: 0
+    hilited_candidate_back_color: "0xF5544A41"
+    hilited_candidate_text_color: "0xF5F5F5"
+    hilited_candidate_label_color: "0x000000"
+    hilited_comment_text_color: "0xF5F5F5"
+    candidate_text_color: "0xDCF5F5F5"
+    comment_text_color: "0xF5F5F5"
+    label_color: "0x000000"
+    hilited_callout_back_color: "0xFAF1F1F1"
+    hilited_callout_foreground_color: "0x544A41"
+  - schemaName: Night tracking_dark
+    name: 黑夜追踪.深
+    author: YG777
+    back_color: "0x01312C2D"
+    button_back_color: "0x080808"
+    button_pressed_back_color: "0x8E4CBD"
+    button_bubble_back_color: "0xF5312C2D"
+    button_foreground_color: "0xFDFDFC"
+    button_pressed_foreground_color: "0x05F005"
+    button_swipe_foreground_color: "0x07A8F2"
+    font_size: 20
+    swipe_font_size: 6
+    corner_radius: 13
+    border_color: "0x01F3F1F2"
+    text_color: "0xEBF0EB"
+    lower_edge_col: "0x01DB760A"
+    shadow_color: "0x010385E2"
+    shadow_size: 1
+    hilited_candidate_back_color: "0xF536A4F2"
+    hilited_candidate_text_color: "0x050505"
+    hilited_candidate_label_color: "0x000000"
+    hilited_comment_text_color: "0xF4F2F8"
+    candidate_text_color: "0xDCF3F7F4"
+    comment_text_color: "0x0FA8D2"
+    label_color: "0x000000"
+    hilited_callout_back_color: "0xFA36A4F2"
+    hilited_callout_foreground_color: "0x0A0A0A"
+  - schemaName: Flawless
+    name: 无暇
+    author: Wiiliam <no_reply@najest.com>
+    back_color: "0x05312C2D"
+    button_back_color: "0xFFFFFF"
+    button_pressed_back_color: "0xABADA9"
+    button_bubble_back_color: "0xD0D0D0"
+    button_foreground_color: "0x000000"
+    button_pressed_foreground_color: "0x250E44"
+    button_swipe_foreground_color: "0x342314"
+    corner_radius: 5
+    border_color: "0x000000"
+    text_color: "0xFF0000"
+    lower_edge_col: "0x000000"
+    shadow_color: "0x000000"
+    shadow_size: 0
+    hilited_candidate_back_color: "0xFFFFFF"
+    hilited_candidate_text_color: "0x0000FF"
+    hilited_candidate_label_color: "0x6B6BC7"
+    hilited_comment_text_color: "0x2B5813"
+    candidate_text_color: "0x6464DD"
+    comment_text_color: "0xAAB220"
+    label_color: "0x732796"
+    hilited_callout_back_color: "0xFFFFFF"
+    hilited_callout_foreground_color: "0x000000"
+  - schemaName: Dark God
+    name: 暗黑魔神
+    author: Wiiliam <no_reply@najest.com>
+    back_color: "0x05312C2D"
+    button_back_color: "0x626362"
+    button_pressed_back_color: "0xABADA9"
+    button_bubble_back_color: "0xD0D0D0"
+    button_foreground_color: "0xFFFFFF"
+    button_pressed_foreground_color: "0xF4AE44"
+    button_swipe_foreground_color: "0xFFFFFF"
+    corner_radius: 5
+    border_color: "0x430A17"
+    text_color: "0x1D71D7"
+    lower_edge_col: "0x01000000"
+    shadow_color: "0x01000000"
+    shadow_size: 0
+    hilited_candidate_back_color: "0xFFFFFF"
+    hilited_candidate_text_color: "0x0000FF"
+    hilited_candidate_label_color: "0x6B6BC7"
+    hilited_comment_text_color: "0x2B5813"
+    candidate_text_color: "0x6464DD"
+    comment_text_color: "0xAAB220"
+    label_color: "0x732796"
+    hilited_callout_back_color: "0xFFFFFF"
+    hilited_callout_foreground_color: "0x000000"
+  - schemaName: Flawless nol
+    name: 无暇 无框
+    author: Wiiliam <no_reply@najest.com>
+    back_color: "0x05312C2D"
+    button_back_color: "0xFFFFFF"
+    button_pressed_back_color: "0xABADA9"
+    button_bubble_back_color: "0xD0D0D0"
+    button_foreground_color: "0x5D4B3A"
+    button_pressed_foreground_color: "0x5D4B3A"
+    button_swipe_foreground_color: "0x342314"
+    font_size: 18
+    corner_radius: 5
+    border_color: "0x01000000"
+    text_color: "0x5D4B3A"
+    lower_edge_col: "0x01000000"
+    shadow_color: "0x01000000"
+    shadow_size: 0
+    hilited_candidate_back_color: "0xFFFFFF"
+    hilited_candidate_text_color: "0x392F22"
+    hilited_candidate_label_color: "0x6B6BC7"
+    hilited_comment_text_color: "0x2B5813"
+    candidate_text_color: "0x5D4B3A"
+    comment_text_color: "0xAAB220"
+    label_color: "0x732796"
+    hilited_callout_back_color: "0xFFFFFF"
+    hilited_callout_foreground_color: "0x000000"
+  - schemaName: Dark God nob
+    name: 暗黑魔神 无框
+    author: Wiiliam <no_reply@najest.com>
+    back_color: "0x05312C2D"
+    button_back_color: "0x39312A"
+    button_pressed_back_color: "0xE0DCDA"
+    button_bubble_back_color: "0x544A41"
+    button_foreground_color: "0xF5F5F5"
+    button_pressed_foreground_color: "0x43403C"
+    button_swipe_foreground_color: "0xFFFFFF"
+    corner_radius: 5
+    border_color: "0x01430A17"
+    text_color: "0xF5F5F5"
+    lower_edge_col: "0x01000000"
+    shadow_color: "0x01000000"
+    shadow_size: 0
+    hilited_candidate_back_color: "0x39312A"
+    hilited_candidate_text_color: "0xF5F5F5"
+    hilited_candidate_label_color: "0x6B6BC7"
+    hilited_comment_text_color: "0x2B5813"
+    candidate_text_color: "0xF1F1F1"
+    comment_text_color: "0xAAB220"
+    label_color: "0x732796"
+    hilited_callout_back_color: "0xFFFFFF"
+    hilited_callout_foreground_color: "0x000000"
+    
