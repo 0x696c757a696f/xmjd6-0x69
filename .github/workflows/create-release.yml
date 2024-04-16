@@ -57,14 +57,12 @@ jobs:
             base: lastRelease.data.tag_name,
             head: 'main'
           });
-          let changelog = '## Changelog\n\n';
+          let changelog = '## Changelog\n\n';  # Change: Ensure no extraneous quotes around changelog content
           compare.data.commits.forEach(commit => {
-            const message = commit.commit.message.split('\n').join(' '); // Replace newlines in commit messages to avoid markdown errors
+            const message = commit.commit.message.split('\n').join(' ');  # Prevent markdown errors due to commit message newlines
             changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}\n`;
           });
-          return changelog;
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          return changelog;  # This output is used directly, make sure it's correctly formatted
 
     - name: Create Release
       id: create_release
@@ -74,7 +72,7 @@ jobs:
       with:
         tag_name: ${{ env.CURRENT_DATE }}
         release_name: ${{ env.RELEASE_TITLE }}
-        body: |
+        body: |  # Change: Using pipe to correctly handle multi-line strings from outputs
           ${{ steps.changelog.outputs.result }}
           ## Release Notes
           - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
