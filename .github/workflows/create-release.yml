@@ -57,10 +57,10 @@ jobs:
             base: lastRelease.data.tag_name,
             head: 'main'
           });
-          let changelog = '## Changelog<br/>'; 
+          let changelog = '<br>'; 
           compare.data.commits.forEach(commit => {
-            const message = commit.commit.message.split('\n').join('<br/>'); 
-            changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}<br/>`; 
+            const message = commit.commit.message.split('\n').join(' '); 
+            changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}<br>`; 
           });
           console.log(changelog);
           return changelog;
@@ -74,6 +74,7 @@ jobs:
         tag_name: ${{ env.CURRENT_DATE }}
         release_name: ${{ env.RELEASE_TITLE }}
         body: |
+          ## Changelog
           ${{ steps.changelog.outputs.result }}
           ## Release Notes
           - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
