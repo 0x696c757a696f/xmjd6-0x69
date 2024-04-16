@@ -64,7 +64,7 @@ jobs:
             const commitLink = `[${commit.sha.substring(0, 7)}](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${commit.sha})`;
             changelog += `- ${commitLink} ${message}<br>`; 
           });
-          core.setOutput('changelog', changelog);  // Correctly use setOutput to set 'changelog'
+          return changelog;
           
     - name: Set the tag as environment variable
       run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
@@ -104,7 +104,7 @@ jobs:
         release_name: ${{ env.RELEASE_TITLE }}
         body: |
           ## Changelog
-          ${{ steps.changelog.outputs.changelog }}
+          ${{ steps.changelog.outputs.result }}
           ## Release Notes
           - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
         draft: false
