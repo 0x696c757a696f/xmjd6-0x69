@@ -64,7 +64,7 @@ jobs:
             changelog += `- ${commitLink} ${message}<br>`; 
           });
           // 处理字符串，去除首尾的引号
-          const trimmedChangelog = changelog..trim();
+          const trimmedChangelog = changelog.trim();
           console.log(trimmedChangelog);
           // 将处理后的字符串作为 Output 输出
           core.setOutput('trimmedChangelog', trimmedChangelog);
