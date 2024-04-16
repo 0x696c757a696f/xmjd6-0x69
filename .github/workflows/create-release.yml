@@ -57,9 +57,10 @@ jobs:
             base: lastRelease.data.tag_name,
             head: 'main'
           });
-          let changelog = '**Changelog**\n\n';
+          let changelog = '## Changelog\n\n';
           compare.data.commits.forEach(commit => {
-            changelog += `- \`${commit.sha.substring(0, 7)}\` ${commit.commit.message.replace(/\n/g, ' ')}\n`;
+            const message = commit.commit.message.split('\n').join(' '); // Replace newlines in commit messages to avoid markdown errors
+            changelog += `- \`${commit.sha.substring(0, 7)}\` ${message}\n`;
           });
           return changelog;
       env:
