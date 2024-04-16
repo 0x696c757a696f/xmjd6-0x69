@@ -45,9 +45,8 @@ jobs:
 
     - name: Generate changelog
       run: |
-        echo "## Changelog" > CHANGELOG.md
-        git log ${{ steps.get_tag.outputs.result.commitSha }}..HEAD --pretty=format:"%h - %s" >> CHANGELOG.md
-        echo "CHANGELOG=$(<CHANGELOG.md)" >> $GITHUB_ENV
+        git log ${{ steps.get_tag.outputs.result.commitSha }}..HEAD --pretty=format:"%h - %s (%an)" > CHANGELOG.md
+        echo "CHANGELOG=$(cat CHANGELOG.md)" >> $GITHUB_ENV
 
     - name: Create Release
       id: create_release
@@ -60,6 +59,7 @@ jobs:
         body: |
           ## Release Notes
           - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+          ### Changelog
           ${{ env.CHANGELOG }}
         draft: false
         prerelease: false
