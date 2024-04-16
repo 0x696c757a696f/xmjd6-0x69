@@ -6,7 +6,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write
+      actions: write
+
     steps:
     - name: Set up environment variables
       run: |
@@ -15,9 +18,6 @@ jobs:
 
     - name: Checkout main branch
       uses: actions/checkout@v4
-      with:
-        ref: 'main'
-        fetch-depth: 0  # 确保获取所有历史记录以用于生成变更日志
 
     - name: Zip main branch files excluding .git and .github
       run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*"
@@ -29,24 +29,41 @@ jobs:
         ls -al Rime/
         pwd
 
-    - name: Get latest release tag and commit SHA
+    - name: Get latest release tag
       id: get_tag
       uses: actions/github-script@v7
       with:
         script: |
-          const release = await github.rest.repos.getLatestRelease({
+          const response = await github.rest.repos.getLatestRelease({
             owner: 'amorphobia',
             repo: 'rabbit',
           });
-          const tag = release.data.tag_name;
-          const commitSha = release.data.target_commitish;
-          console.log(`Latest release tag is ${tag}, commit SHA is ${commitSha}`);
-          return { tag, commitSha };
+          const tagName = response.data.tag_name;
+          console.log(`Latest release tag is ${tagName}`);
+          return tagName;
 
-    - name: Generate changelog
-      run: |
-        git log ${{ steps.get_tag.outputs.result.commitSha }}..HEAD --pretty=format:"%h - %s (%an)" > CHANGELOG.md
-        echo "CHANGELOG=$(cat CHANGELOG.md)" >> $GITHUB_ENV
+    - name: Fetch tags and generate changelog from last release
+      id: changelog
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const lastRelease = await github.rest.repos.getLatestRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+          const compare = await github.rest.repos.compareCommits({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            base: lastRelease.data.tag_name,
+            head: 'main'
+          });
+          let changelog = '## Changelog\n';
+          compare.data.commits.forEach(commit => {
+            changelog += `- ${commit.commit.message} (${commit.sha.substring(0, 7)})\n`;
+          });
+          return changelog;
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Release
       id: create_release
@@ -57,13 +74,12 @@ jobs:
         tag_name: ${{ env.CURRENT_DATE }}
         release_name: ${{ env.RELEASE_TITLE }}
         body: |
+          ${{ steps.changelog.outputs.result }}
           ## Release Notes
           - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
-          ### Changelog
-          ${{ env.CHANGELOG }}
         draft: false
         prerelease: false
-        
+
     - name: Upload Rabbit-xmjd6.zip to Release
       uses: shogo82148/actions-upload-release-asset@v1
       env:
@@ -73,7 +89,7 @@ jobs:
         asset_path: ./Rabbit-xmjd6.zip
         asset_name: Rabbit-xmjd6.zip
         asset_content_type: application/zip
-        
+
     - name: Upload xmjd6.zip to Release
       uses: shogo82148/actions-upload-release-asset@v1
       env:
