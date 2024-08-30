@@ -19,45 +19,22 @@ jobs:
     - name: Checkout main branch
       uses: actions/checkout@v4
 
-    - name: Convert .dict.yaml files to .txt
+    - name: Convert .dict.yaml files to .txt using Bash
       run: |
         mkdir -p mb/xmjd6
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
         do
           txt_file="mb/xmjd6/$(basename $dict_file .dict.yaml).txt"
-          python3 - << 'EOF'
-            import re
-
-            def is_english(s):
-                return re.match(r'^[A-Za-z0-9\s]+$', s) is not None
-
-            input_file = "${dict_file}"
-            output_file = "${txt_file}"
-
-            with open(input_file, 'r', encoding='utf-8') as file:
-                lines = file.readlines()
-
-            processed_lines = []
-            for line in lines:
-                line = line.strip()
-                # Skip lines that start with #
-                if line.startswith('#'):
-                    continue
-                parts = line.split('\t')
-                if len(parts) == 2:
-                    if is_english(parts[0]):
-                        processed_line = f'{parts[0]}\t{parts[1]}'
-                    else:
-                        processed_line = f'{parts[1]}\t{parts[0]}'
-                    processed_lines.append(processed_line)
-                else:
-                    processed_lines.append(line)
-
-            with open(output_file, 'w', encoding='utf-8') as file:
-                for processed_line in processed_lines:
-                    file.write(processed_line + '\n')
-        EOF
-                done
+          # Process file, skip lines starting with #, and swap columns if the first is not English
+          awk -F'\t' '
+          /^[^#]/ {
+            if ($1 ~ /^[A-Za-z0-9\s]+$/) {
+              print $1 "\t" $2
+            } else {
+              print $2 "\t" $1
+            }
+          }' "$dict_file" > "$txt_file"
+        done
 
     - name: Merge all .txt files and add header
       run: |
