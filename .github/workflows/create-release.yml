@@ -21,10 +21,10 @@ jobs:
 
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
-        mkdir -p mb/xmjd6
+        mkdir -p Rime
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
         do
-          txt_file="mb/xmjd6/$(basename $dict_file .dict.yaml).txt"
+          txt_file="Rime/$(basename $dict_file .dict.yaml).txt"
           # Process file, skip lines starting with #, and swap columns if the first is not English
           awk -F'\t' '
           /^[^#]/ {
@@ -38,18 +38,11 @@ jobs:
 
     - name: Merge all .txt files and add header
       run: |
-        # 将头信息写入临时文件
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33+n13\n[DATA]\n'
-        echo -e "$header" > mb/xmjd6/xmjd6.header.txt
-
-        # 将所有 .txt 文件合并成一个文件（不包括头文件）
-        cat mb/xmjd6/*.txt > mb/xmjd6/xmjd6.body.txt
-
-        # 合并头文件和内容文件
-        cat mb/xmjd6/xmjd6.header.txt mb/xmjd6/xmjd6.body.txt > mb/xmjd6/xmjd6.txt
-
-        # 删除临时文件
-        rm mb/xmjd6/xmjd6.header.txt mb/xmjd6/xmjd6.body.txt
+        echo -e "$header" > Rime/xmjd6.header.txt
+        cat Rime/*.txt > Rime/xmjd6.body.txt
+        cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt > mb/xmjd6/xmjd6.txt
+        rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
 
     - name: Remove all files except xmjd6.txt
       run: |
@@ -58,6 +51,12 @@ jobs:
     - name: Zip yong.ini and mb directory
       run: |
         zip -r yong-xmjd6.zip yong.ini mb/
+
+    - name: Create Rabbit-xmjd6.zip with SharedSupport
+      run: |
+        mkdir -p Rabbit/SharedSupport
+        cp -r Rime/. Rabbit/SharedSupport
+        zip -r Rabbit-xmjd6.zip Rabbit/
 
     - name: Get latest release tag
       id: get_tag
