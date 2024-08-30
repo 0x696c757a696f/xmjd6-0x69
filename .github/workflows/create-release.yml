@@ -41,21 +41,18 @@ jobs:
           }' "$dict_file" > "$txt_file"
         done
 
-    - name: Merge all .txt files and add header
+    - name: Merge all .txt files and add header, remove extra newline after [DATA]
       run: |
-        header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33+n13\n[DATA]\n'
+        header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
         echo -e "$header" > Rime/xmjd6.header.txt
         cat Rime/*.txt > Rime/xmjd6.body.txt
-        cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt > mb/xmjd6/xmjd6.txt
+        echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-
-    - name: Remove all files except xmjd6.txt
-      run: |
-        find mb/xmjd6/ -type f ! -name 'xmjd6.txt' -delete
 
     - name: Zip xmjd6.txt file
       run: |
         zip -j mb/xmjd6.zip mb/xmjd6/xmjd6.txt
+        rm mb/xmjd6/xmjd6.txt  # Remove the txt file after zipping if not needed
 
     - name: Zip yong.ini and mb directory
       run: |
