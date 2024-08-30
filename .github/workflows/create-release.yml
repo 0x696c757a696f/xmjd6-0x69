@@ -123,19 +123,8 @@ jobs:
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
 
-    - name: Zip xmjd6.txt file
-      run: |
-        zip -j mb/xmjd6.zip mb/xmjd6/xmjd6.txt
-        rm mb/xmjd6/xmjd6.txt  # Remove the txt file after zipping if not needed
-
     - name: Zip yong.ini and mb directory
       run: |
-        zip -r yong-xmjd6.zip yong.ini mb/
-        
-    - name: Zip yong.ini and mb directory
-      run: |
-        mkdir -p mb/xmjd6  # Ensure the directory exists
-        echo "Dummy content for yong.ini" > yong.ini  # Creating a dummy yong.ini file for example
         zip -r yong-xmjd6.zip yong.ini mb/
         
     - name: Create Release
