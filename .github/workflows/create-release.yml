@@ -59,12 +59,12 @@ jobs:
         zip -r yong-xmjd6.zip yong.ini mb/
         
     - name: Zip main branch files excluding .git and .github
-      run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*" -x "yong*"
+      run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*" -x "yong*" -x "mb*" -x "Rime*"
 
     - name: Prepare Rime directory for Rabbit
       run: |
         mkdir -p Rime/
-        rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' --exclude='xmjd6.zip' --exclude='yong*' . Rime/
+        rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' --exclude='xmjd6.zip' --exclude='yong*' --exclude='mb*' --exclude='Rime*' . Rime/
         ls -al Rime/
         pwd
 
