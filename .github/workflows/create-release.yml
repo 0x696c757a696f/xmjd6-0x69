@@ -39,8 +39,9 @@ jobs:
     - name: Merge all .txt files and add header
       run: |
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33+n13\n[DATA]\n'
-        echo -e "$header" > mb/xmjd6/xmjd6.txt
-        cat mb/xmjd6/*.txt >> mb/xmjd6/xmjd6.txt
+        echo -e "$header" > mb/xmjd6/xmjd6.tmp.txt
+        cat mb/xmjd6/*.txt >> mb/xmjd6/xmjd6.tmp.txt
+        mv mb/xmjd6/xmjd6.tmp.txt mb/xmjd6/xmjd6.txt
 
     - name: Remove all files except xmjd6.txt
       run: |
