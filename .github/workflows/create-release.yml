@@ -25,40 +25,39 @@ jobs:
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
         do
           txt_file="mb/xmjd6/$(basename $dict_file .dict.yaml).txt"
-          # Python script to process the .dict.yaml files
-          python3 -c "
-import re
+          python3 - << 'EOF'
+            import re
 
-def is_english(s):
-    return re.match(r'^[A-Za-z0-9\s]+$', s) is not None
+            def is_english(s):
+                return re.match(r'^[A-Za-z0-9\s]+$', s) is not None
 
-input_file = '$dict_file'
-output_file = '$txt_file'
+            input_file = "${dict_file}"
+            output_file = "${txt_file}"
 
-with open(input_file, 'r', encoding='utf-8') as file:
-    lines = file.readlines()
+            with open(input_file, 'r', encoding='utf-8') as file:
+                lines = file.readlines()
 
-processed_lines = []
-for line in lines:
-    line = line.strip()
-    # Skip lines that start with #
-    if line.startswith('#'):
-        continue
-    parts = line.split('\t')
-    if len(parts) == 2:
-        if is_english(parts[0]):
-            processed_line = f'{parts[0]}\t{parts[1]}'
-        else:
-            processed_line = f'{parts[1]}\t{parts[0]}'
-        processed_lines.append(processed_line)
-    else:
-        processed_lines.append(line)
+            processed_lines = []
+            for line in lines:
+                line = line.strip()
+                # Skip lines that start with #
+                if line.startswith('#'):
+                    continue
+                parts = line.split('\t')
+                if len(parts) == 2:
+                    if is_english(parts[0]):
+                        processed_line = f'{parts[0]}\t{parts[1]}'
+                    else:
+                        processed_line = f'{parts[1]}\t{parts[0]}'
+                    processed_lines.append(processed_line)
+                else:
+                    processed_lines.append(line)
 
-with open(output_file, 'w', encoding='utf-8') as file:
-    for processed_line in processed_lines:
-        file.write(processed_line + '\\n')
-          "
-        done
+            with open(output_file, 'w', encoding='utf-8') as file:
+                for processed_line in processed_lines:
+                    file.write(processed_line + '\n')
+        EOF
+                done
 
     - name: Merge all .txt files and add header
       run: |
