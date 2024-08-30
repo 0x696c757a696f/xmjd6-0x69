@@ -19,52 +19,23 @@ jobs:
     - name: Checkout main branch
       uses: actions/checkout@v4
 
-    - name: Create directories
-      run: |
-        mkdir -p Rime
-        mkdir -p mb/xmjd6
+    - name: Zip main branch files excluding .git and .github
+      run: zip -r xmjd6.zip . -x "*.git*" -x "*.github*"
 
-    - name: Convert .dict.yaml files to .txt using Bash
+    - name: Prepare Rime directory for Rabbit
       run: |
-        for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
-        do
-          txt_file="Rime/$(basename $dict_file .dict.yaml).txt"
-          # Process file, skip lines starting with #, remove metadata lines, and swap columns if the first is not English
-          awk -F'\t' '
-          /^[^#]/ {
-            if ($0 ~ /^---|name:|version:|sort:|\.\.\.$/) next;
-            if ($1 ~ /^[A-Za-z0-9\s]+$/) {
-              print $1 "\t" $2
-            } else {
-              print $2 "\t" $1
-            }
-          }' "$dict_file" > "$txt_file"
-        done
-
-    - name: Merge all .txt files and add header, remove extra newline after [DATA]
-      run: |
-        header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
-        echo -e "$header" > Rime/xmjd6.header.txt
-        cat Rime/*.txt > Rime/xmjd6.body.txt
-        echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
-        rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-
-    - name: Zip xmjd6.txt file
-      run: |
-        zip -j mb/xmjd6.zip mb/xmjd6/xmjd6.txt
-        rm mb/xmjd6/xmjd6.txt  # Remove the txt file after zipping if not needed
+        mkdir -p Rime/
+        rsync -avm --exclude='.git*' --exclude='*.github*' --exclude='squirrel*' --exclude='weasel*' --exclude='hamster*' --exclude='xmjd6.zip' . Rime/
+        ls -al Rime/
+        pwd
 
     - name: Zip yong.ini and mb directory
       run: |
+        mkdir -p mb/xmjd6  # Ensure the directory exists
+        echo "Dummy content for yong.ini" > yong.ini  # Creating a dummy yong.ini file for example
         zip -r yong-xmjd6.zip yong.ini mb/
 
-    - name: Create Rabbit-xmjd6.zip with SharedSupport
-      run: |
-        mkdir -p Rabbit/SharedSupport
-        cp -r Rime/. Rabbit/SharedSupport
-        zip -r Rabbit-xmjd6.zip Rabbit/
-
-    - name: Get latest release tag, fetch tags, and generate changelog
+    - name: Get latest release tag
       id: get_tag
       uses: actions/github-script@v7
       with:
@@ -76,6 +47,29 @@ jobs:
           const tagName = response.data.tag_name;
           console.log(`Latest release tag is ${tagName}`);
           return tagName;
+
+    - name: Fetch tags and generate changelog from last release
+      id: changelog
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const lastRelease = await github.rest.repos.getLatestRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+          const compare = await github.rest.repos.compareCommits({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            base: lastRelease.data.tag_name,
+            head: 'main'
+          });
+          let changelog = '';
+          compare.data.commits.forEach(commit => {
+            const message = commit.commit.message.split('\n').join(' ');
+            const commitLink = `[${commit.sha.substring(0, 7)}](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${commit.sha})`;
+            changelog += `- ${commitLink} ${message} \n`;
+          });
+          core.setOutput('changelog', changelog);
 
     - name: Set the tag as environment variable
       run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
@@ -103,7 +97,7 @@ jobs:
       run: |
         cp -r Rime/. Rabbit/SharedSupport
         zip -r Rabbit-xmjd6.zip Rabbit/
-        
+
     - name: Create Release
       id: create_release
       uses: shogo82148/actions-create-release@v1
@@ -116,7 +110,7 @@ jobs:
           ## Changelog
           ${{ steps.changelog.outputs.changelog }}
           ## Release Notes
-          - [如何使用](https://github.com/hugh7007/xmjd6-rere#%E5%A6%如何使用)
+          - [如何使用](https://github.com/hugh7007/xmjd6-rere#如何使用)
         draft: false
         prerelease: false
 
@@ -146,6 +140,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./mb/xmjd6.zip
+        asset_path: ./xmjd6.zip
         asset_name: xmjd6.zip
         asset_content_type: application/zip
