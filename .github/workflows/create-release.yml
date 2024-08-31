@@ -18,7 +18,7 @@ jobs:
 
     - name: Checkout main branch
       uses: actions/checkout@v4
-      
+
     - name: Create directories
       run: |
         mkdir -p Rime
@@ -70,33 +70,6 @@ jobs:
           });
           core.setOutput('changelog', changelog);
 
-    - name: Set the tag as environment variable
-      run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
-    
-    - name: Download the release asset
-      run: |
-        curl -L -o rabbit-${{ env.RELEASE_TAG }}.zip https://github.com/amorphobia/rabbit/releases/download/${{ env.RELEASE_TAG }}/rabbit-${{ env.RELEASE_TAG }}-x64.zip
-      
-    - name: Unzip Rabbit
-      run: |
-        mkdir -p Rabbit
-        unzip rabbit-${{ env.RELEASE_TAG }}.zip -d Rabbit
-
-    - name: Clean SharedSupport
-      run: |
-        mkdir -p /tmp/Rabbit_backup
-        cp Rabbit/SharedSupport/punctuation.yaml /tmp/Rabbit_backup/
-        cp Rabbit/SharedSupport/key_bindings.yaml /tmp/Rabbit_backup/
-        cp Rabbit/SharedSupport/default.yaml /tmp/Rabbit_backup/
-        rm -rf Rabbit/SharedSupport/*
-        cp /tmp/Rabbit_backup/* Rabbit/SharedSupport/
-        rm -rf /tmp/Rabbit_backup
-
-    - name: Merge Rime into Rabbit
-      run: |
-        cp -r Rime/. Rabbit/SharedSupport
-        zip -r Rabbit-xmjd6.zip Rabbit/
-
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
@@ -113,18 +86,19 @@ jobs:
           }' "$dict_file" > "$txt_file"
         done
 
-    - name: Merge all .txt files and add header, convert to GB18030
+    - name: Merge all .txt files, add header, and convert to GB18030 using Python
       run: |
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
         echo -e "$header" > Rime/xmjd6.header.txt
         cat Rime/*.txt > Rime/xmjd6.body.txt
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-        iconv -f UTF-8 -t GB18030//IGNORE mb/xmjd6/xmjd6.txt -o mb/xmjd6/xmjd6.txt
+        python -c "import sys; open('mb/xmjd6/xmjd6_gb18030.txt', 'w', encoding='gb18030', errors='ignore').write(open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8').read())"
+
     - name: Zip yong.ini and mb directory
       run: |
         zip -r yong-xmjd6.zip yong.ini mb/
-        
+
     - name: Create Release
       id: create_release
       uses: shogo82148/actions-create-release@v1
