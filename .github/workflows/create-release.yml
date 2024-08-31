@@ -97,32 +97,30 @@ jobs:
         cp -r Rime/. Rabbit/SharedSupport
         zip -r Rabbit-xmjd6.zip Rabbit/
 
-
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
         do
           txt_file="Rime/$(basename $dict_file .dict.yaml).txt"
-          # Process file, skip lines starting with #, remove metadata lines, and swap columns if the first is not English
           awk -F'\t' '
           /^[^#]/ {
             if ($0 ~ /^---|name:|version:|sort:|\.\.\.$/) next;
             if ($1 ~ /^[A-Za-z0-9\s]+$/) {
-              print $1 " " $2  # Replace tab with a space
+              print $1 " " $2
             } else {
-              print $2 " " $1  # Replace tab with a space
+              print $2 " " $1
             }
           }' "$dict_file" > "$txt_file"
         done
 
-
-    - name: Merge all .txt files and add header, remove extra newline after [DATA]
+    - name: Merge all .txt files and add header, convert to GB18030
       run: |
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
         echo -e "$header" > Rime/xmjd6.header.txt
         cat Rime/*.txt > Rime/xmjd6.body.txt
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
+        iconv -f UTF-8 -t GB18030//IGNORE mb/xmjd6/xmjd6.txt -o mb/xmjd6/xmjd6.txt
     - name: Zip yong.ini and mb directory
       run: |
         zip -r yong-xmjd6.zip yong.ini mb/
