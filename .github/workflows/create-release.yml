@@ -18,7 +18,7 @@ jobs:
 
     - name: Checkout main branch
       uses: actions/checkout@v4
-
+      
     - name: Create directories
       run: |
         mkdir -p Rime
@@ -70,6 +70,33 @@ jobs:
           });
           core.setOutput('changelog', changelog);
 
+    - name: Set the tag as environment variable
+      run: echo "RELEASE_TAG=${{ steps.get_tag.outputs.result }}" >> $GITHUB_ENV
+    
+    - name: Download the release asset
+      run: |
+        curl -L -o rabbit-${{ env.RELEASE_TAG }}.zip https://github.com/amorphobia/rabbit/releases/download/${{ env.RELEASE_TAG }}/rabbit-${{ env.RELEASE_TAG }}-x64.zip
+      
+    - name: Unzip Rabbit
+      run: |
+        mkdir -p Rabbit
+        unzip rabbit-${{ env.RELEASE_TAG }}.zip -d Rabbit
+
+    - name: Clean SharedSupport
+      run: |
+        mkdir -p /tmp/Rabbit_backup
+        cp Rabbit/SharedSupport/punctuation.yaml /tmp/Rabbit_backup/
+        cp Rabbit/SharedSupport/key_bindings.yaml /tmp/Rabbit_backup/
+        cp Rabbit/SharedSupport/default.yaml /tmp/Rabbit_backup/
+        rm -rf Rabbit/SharedSupport/*
+        cp /tmp/Rabbit_backup/* Rabbit/SharedSupport/
+        rm -rf /tmp/Rabbit_backup
+
+    - name: Merge Rime into Rabbit
+      run: |
+        cp -r Rime/. Rabbit/SharedSupport
+        zip -r Rabbit-xmjd6.zip Rabbit/
+
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
@@ -93,7 +120,7 @@ jobs:
         cat Rime/*.txt > Rime/xmjd6.body.txt
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-        python -c "import sys; open('mb/xmjd6/xmjd6_gb18030.txt', 'w', encoding='gb18030', errors='ignore').write(open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8').read())"
+        python -c "import sys; open('mb/xmjd6/xmjd6.txt', 'w', encoding='gb18030', errors='ignore').write(open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8').read())"
 
     - name: Zip yong.ini and mb directory
       run: |
