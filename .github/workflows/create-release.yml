@@ -100,6 +100,7 @@ jobs:
 
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
+        mkdir -p Rime
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
         do
           txt_file="Rime/$(basename $dict_file .dict.yaml).txt"
@@ -108,12 +109,13 @@ jobs:
           /^[^#]/ {
             if ($0 ~ /^---|name:|version:|sort:|\.\.\.$/) next;
             if ($1 ~ /^[A-Za-z0-9\s]+$/) {
-              print $1 "\t" $2
+              print $1 " " $2  # Replace tab with a space
             } else {
-              print $2 "\t" $1
+              print $2 " " $1  # Replace tab with a space
             }
           }' "$dict_file" > "$txt_file"
         done
+
 
     - name: Merge all .txt files and add header, remove extra newline after [DATA]
       run: |
