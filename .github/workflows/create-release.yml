@@ -120,7 +120,7 @@ jobs:
         cat Rime/*.txt > Rime/xmjd6.body.txt
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-        python -c "import sys; open('mb/xmjd6/xmjd6.txt', 'w', encoding='gb18030', errors='ignore').write(open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8').read())"
+        python -c "with open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8') as f: data = f.read(); open('mb/xmjd6/xmjd6.txt', 'w', encoding='gb18030', errors='ignore').write(data)"
 
     - name: Zip yong.ini and mb directory
       run: |
