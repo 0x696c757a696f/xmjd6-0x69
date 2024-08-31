@@ -100,7 +100,6 @@ jobs:
 
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
-        mkdir -p Rime
         for dict_file in xmjd6.zidingyi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.danzi.dict.yaml xmjd6.buchong.dict.yaml xmjd6.gbk.dict.yaml xmjd6.wxw.dict.yaml
         do
           txt_file="Rime/$(basename $dict_file .dict.yaml).txt"
