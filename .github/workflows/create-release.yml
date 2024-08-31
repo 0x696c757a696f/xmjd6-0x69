@@ -124,7 +124,7 @@ jobs:
         cat Rime/*.txt > Rime/xmjd6.body.txt
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-
+        iconv -f UTF-8 -t GB18030 mb/xmjd6/xmjd6.txt -o mb/xmjd6/xmjd6.txt  # Overwrite the original file with converted content
     - name: Zip yong.ini and mb directory
       run: |
         zip -r yong-xmjd6.zip yong.ini mb/
