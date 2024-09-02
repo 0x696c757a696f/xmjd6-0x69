@@ -113,14 +113,23 @@ jobs:
           }' "$dict_file" > "$txt_file"
         done
 
-    - name: Merge all .txt files, add header
+    - name: Merge all .txt files, add header, and clean up
       run: |
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
         echo -e "$header" > Rime/xmjd6.header.txt
         find Rime/ -type f -name '*.txt' ! -name 'xmjd6.wxw.txt' -exec cat {} + > Rime/xmjd6.body.txt
-        cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt > mb/xmjd6/xmjd6_complete.txt
-        mv mb/xmjd6/xmjd6_complete.txt mb/xmjd6/xmjd6.txt
+        # 添加调试输出，查看文件列表
+        echo "Files combined into Rime/xmjd6.body.txt:"
+        ls -l Rime/
+        # 确保中间文件和目标文件不会冲突
+        cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt > mb/xmjd6/xmjd6_intermediate.txt
+        echo "Intermediate file created:"
+        ls -l mb/
+        mv mb/xmjd6/xmjd6_intermediate.txt mb/xmjd6/xmjd6.txt
+        echo "Final file moved to destination:"
+        ls -l mb/
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
+
 
 
     - name: Process xmjd6.wxw.txt and xmjd6.body.txt for code mapping
