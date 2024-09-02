@@ -113,14 +113,22 @@ jobs:
           }' "$dict_file" > "$txt_file"
         done
 
-    - name: Merge all .txt files, add header, and convert to GB18030 using Python
+    - name: Merge all .txt files except xmjd6.wxw.txt, add header
       run: |
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
         echo -e "$header" > Rime/xmjd6.header.txt
-        cat Rime/*.txt > Rime/xmjd6.body.txt
+        find Rime/ -type f -name '*.txt' ! -name 'xmjd6.wxw.txt' -exec cat {} + > Rime/xmjd6.body.txt
         echo -n "$(cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt)" > mb/xmjd6/xmjd6.txt
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
-        python -c "with open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8') as f: data = f.read(); open('mb/xmjd6/xmjd6.txt', 'w', encoding='gb18030', errors='ignore').write(data)"
+
+    - name: Process xmjd6.wxw.txt and xmjd6.body.txt for code mapping
+      run: |
+        awk -v FS='\t' -v OFS=' ' 'NR==FNR {map[$1] = $2; next} {if (!map[$1]) print $2,$1; else print $2,"$["$1"("map[$1]")]"$1}' Rime/xmjd6.wxw.txt mb/xmjd6/xmjd6.txt > mb/xmjd6/xmjd6_processed.txt
+
+    - name: Convert to GB18030 using Python and overwrite
+      run: |
+        python -c "with open('mb/xmjd6/xmjd6_processed.txt', 'r', encoding='utf-8') as f: data = f.read(); open('mb/xmjd6/xmjd6.txt', 'w', encoding='gb18030', errors='ignore').write(data)"
+
 
     - name: Zip yong.ini and mb directory
       run: |
