@@ -115,20 +115,30 @@ jobs:
 
     - name: Merge all .txt files, add header, and clean up
       run: |
+        # Creating the header file
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
         echo -e "$header" > Rime/xmjd6.header.txt
+        
+        # Finding and concatenating all relevant text files
         find Rime/ -type f -name '*.txt' ! -name 'xmjd6.wxw.txt' -exec cat {} + > Rime/xmjd6.body.txt
-        # 添加调试输出，查看文件列表
-        echo "Files combined into Rime/xmjd6.body.txt:"
-        ls -l Rime/
-        # 确保中间文件和目标文件不会冲突
+        
+        # Check the contents briefly
+        echo "Contents of the header:"
+        cat Rime/xmjd6.header.txt
+        echo "Contents of the body (first 10 lines):"
+        head Rime/xmjd6.body.txt
+        
+        # Combine into an intermediate file safely
         cat Rime/xmjd6.header.txt Rime/xmjd6.body.txt > mb/xmjd6/xmjd6_intermediate.txt
-        echo "Intermediate file created:"
-        ls -l mb/
+        
+        # Move to the final location and clean up
         mv mb/xmjd6/xmjd6_intermediate.txt mb/xmjd6/xmjd6.txt
-        echo "Final file moved to destination:"
+        echo "Intermediate file has been moved to the final destination."
         ls -l mb/
+        
+        # Remove temporary files
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
+
 
 
 
