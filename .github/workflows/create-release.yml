@@ -90,7 +90,12 @@ jobs:
         cp Rabbit/SharedSupport/default.yaml /tmp/Rabbit_backup/
         cp Rabbit/SharedSupport/symbols.yaml /tmp/Rabbit_backup/
         cp Rime/default.custom.yaml Rabbit/Rime
+        cp Rime/xmjd6.user.dict.yaml Rabbit/Rime
+        cp Rime/xmjd6.custom.yaml Rabbit/Rime
         rm -rf Rabbit/SharedSupport/*
+        rm -f Rime/default.custom.yaml
+        rm -f Rime/xmjd6.user.dict.yaml
+        rm -f Rime/xmjd6.custom.yaml
         cp /tmp/Rabbit_backup/* Rabbit/SharedSupport/
         rm -rf /tmp/Rabbit_backup
 
