@@ -155,22 +155,27 @@ jobs:
         #    - END 块遍历所有编码，输出最终格式： 编码 \t 词1 \t 词2...
         awk -F' ' '
         {
-          # 检查行是否包含有效的 词 和 编码 (至少两个字段)
+          # 检查行是否包含有效的 词 和 编码
           if (NF >= 2) {
-            # $2 是编码， $1 是词/字
-            # 如果是第一次遇到这个编码，则将词/字作为第一个候选
-            # 如果不是，则在现有候选后添加制表符和新的词/字
-            if (!($2 in a)) {
-              a[$2] = $1
+            # 假设 $1 是词语 (word)，$2 是编码 (code)
+            word = $1;
+            code = $2;
+            
+            # 使用编码 (code) 作为键来归并词语
+            if (!(code in a)) {
+              a[code] = word
             } else {
-              a[$2] = a[$2] "\t" $1
+              a[code] = a[code] "\t" word
             }
           }
         }
         END {
-          # 遍历所有编码 (键)，输出 编码 和 合并后的候选 (值)
-          for (key in a) {
-            print key "\t" a[key]
+          # 遍历所有编码 (键)，输出 编码 \t 词1 \t 词2...
+          for (code in a) {
+            # 确保编码不为空
+            if (code != "") {
+              print code "\t" a[code]
+            }
           }
         }
         ' Rime/xmjd6.body.txt > dazhu.txt
