@@ -149,22 +149,36 @@ jobs:
           exit 1
         fi
         
-        # 2. 使用 awk 进行归并和格式转换：
-        #    - $2 是编码， $1 是词/字。
-        #    - 'a[$2]=a[$2]"\t"$1' 将相同编码的所有词/字连接起来，以制表符 \t 分隔。
-        #    - END 块遍历所有编码，输出最终格式： 编码 \t 词1 \t 词2...
-        awk -F' ' '
+        # 2. 修正后的 AWK 脚本：增加对输入行的清理，确保 $1是编码，$2是词语
+        awk '
         {
-          # 检查行是否包含有效的 词 和 编码
-          if (NF >= 2) {
-            # 假设 $1 是词语 (word)，$2 是编码 (code)
-            word = $1;
-            code = $2;
-            
-            # 使用编码 (code) 作为键来归并词语
+          # 移除行首尾的空白字符
+          gsub(/^[[:space:]]+|[[:space:]]+$/, "");
+          
+          # 如果是空行，跳过
+          if ($0 == "") {
+            next;
+          }
+          
+          # 强制使用第一个空格作为分隔符，获取编码和词语
+          # 格式是： 编码<空格>词语/字
+          code = $1;   # 第一字段是编码
+          
+          # 提取词语部分（从第二个字段开始的所有内容）
+          # NF > 1 保证有词语
+          if (NF > 1) {
+            word = substr($0, length($1) + 2); # 从第一个空格后一个字符开始截取
+          } else {
+            # 如果只有一列，通常是格式错误，跳过
+            next;
+          }
+          
+          # 归并逻辑
+          if (code != "") {
             if (!(code in a)) {
               a[code] = word
             } else {
+              # 使用制表符 \t 分隔不同的候选词
               a[code] = a[code] "\t" word
             }
           }
@@ -172,10 +186,7 @@ jobs:
         END {
           # 遍历所有编码 (键)，输出 编码 \t 词1 \t 词2...
           for (code in a) {
-            # 确保编码不为空
-            if (code != "") {
-              print code "\t" a[code]
-            }
+            print code "\t" a[code]
           }
         }
         ' Rime/xmjd6.body.txt > dazhu.txt
@@ -186,7 +197,7 @@ jobs:
         # 删除临时文件
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
         python -c "with open('mb/xmjd6/xmjd6.txt', 'r', encoding='utf-8') as f: data = f.read(); open('mb/xmjd6/xmjd6.txt', 'w', encoding='gb18030', errors='ignore').write(data)"
-
+        
     - name: Zip yong
       run: |
         mkdir -p .yong
