@@ -121,7 +121,7 @@ jobs:
           }' "$dict_file" > "$txt_file"
         done
 
-    - name: Merge .txt files in specific order, add header, and clean up
+    - name: Merge .txt files in specific order, add header
       run: |
         # 创建头文件
         header='name=星猫键道6\nkey=`abcedfghijklmnopqrstuvwxyz;\\\nlen=12\nwildcard=~\nbihua=viuoa\ncode_e2=p11+p12+p21+p22+p13+p23\ncode_e3=p11+p21+p31+p13+p23+p33\ncode_a4=p11+p21+p31+n11+p13+p23+p33\n[DATA]'
@@ -141,6 +141,42 @@ jobs:
         
         # 将中间文件移动到最终位置
         mv mb/xmjd6/tmp_xmjd6.txt mb/xmjd6/xmjd6.txt
+    - name: Generate dazhu.txt from xmjd6.body.txt，and clean up
+      run: |
+        # 1. 确保 xmjd6.body.txt 存在（由上一步生成）
+        if [ ! -f Rime/xmjd6.body.txt ]; then
+          echo "Error: Rime/xmjd6.body.txt not found. Cannot generate dazhu.txt."
+          exit 1
+        fi
+        
+        # 2. 使用 awk 进行归并和格式转换：
+        #    - $2 是编码， $1 是词/字。
+        #    - 'a[$2]=a[$2]"\t"$1' 将相同编码的所有词/字连接起来，以制表符 \t 分隔。
+        #    - END 块遍历所有编码，输出最终格式： 编码 \t 词1 \t 词2...
+        awk -F' ' '
+        {
+          # 检查行是否包含有效的 词 和 编码 (至少两个字段)
+          if (NF >= 2) {
+            # $2 是编码， $1 是词/字
+            # 如果是第一次遇到这个编码，则将词/字作为第一个候选
+            # 如果不是，则在现有候选后添加制表符和新的词/字
+            if (!($2 in a)) {
+              a[$2] = $1
+            } else {
+              a[$2] = a[$2] "\t" $1
+            }
+          }
+        }
+        END {
+          # 遍历所有编码 (键)，输出 编码 和 合并后的候选 (值)
+          for (key in a) {
+            print key "\t" a[key]
+          }
+        }
+        ' Rime/xmjd6.body.txt > dazhu.txt
+        
+        # 3. 检查文件是否生成成功
+        ls -al dazhu.txt
         
         # 删除临时文件
         rm Rime/xmjd6.header.txt Rime/xmjd6.body.txt
@@ -213,3 +249,13 @@ jobs:
         asset_path: ./xmjd6.zip
         asset_name: xmjd6.zip
         asset_content_type: application/zip
+        
+    - name: Upload dazhu.txt to Release
+      uses: shogo82148/actions-upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dazhu.txt
+        asset_name: dazhu.txt
+        asset_content_type: text/plain; charset=utf-8
