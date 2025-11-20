@@ -338,7 +338,7 @@ recognizer:
     unicode: "^&+.*$"
 
 topup:
-  __include: "layout/topup"
+  __include: /layout/topup
   min_length: 4
   max_length: 6
   auto_clear: true
