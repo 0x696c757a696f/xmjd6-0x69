@@ -198,6 +198,8 @@ jobs:
     - name: Zip yong
       run: |
         mkdir -p .yong
+        wget https://github.com/hugh7007/xmjd6-rere/releases/download/20231115/yong-win.7z .
+        wget https://github.com/hugh7007/xmjd6-rere/releases/download/20231115/yong.ini .
         cp yong.ini .yong/
         cp -r mb .yong/
         zip -r yong-xmjd6.zip .yong
