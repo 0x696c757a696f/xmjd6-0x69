@@ -3,7 +3,7 @@
 schema:
   schema_id: xmjd6.en
   name: "英文词库核心"
-  version: "20251223"
+  version: "2026-01-31"
 
 engine:
   processors:

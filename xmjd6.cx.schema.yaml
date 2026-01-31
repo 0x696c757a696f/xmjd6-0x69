@@ -4,7 +4,7 @@
 schema:
   schema_id: xmjd6.cx
   name: 键道6反查·勿选
-  version: "1"
+  version: "2026-01-31"
 
 switches:
   - name: ascii_mode
