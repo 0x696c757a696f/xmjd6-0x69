@@ -172,7 +172,7 @@ jobs:
 
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
-        for dict_file in xmjd6.danzi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.zidingyi.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.buchong.dict.yaml xmjd6.yingwen.dict.yaml xmjd6.wxw.dict.yaml
+        for dict_file in xmjd6.danzi.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fuhao.dict.yaml xmjd6.en.dict.yaml xmjd6.lianjie.dict.yaml xmjd6.zidingyi.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.buchong.dict.yaml xmjd6.catholicism.dict.yaml xmjd6.yingwen.dict.yaml xmjd6.wxw.dict.yaml
         do
           txt_file="Rime/$(basename $dict_file .dict.yaml).txt"
           awk -F'\t' '
@@ -193,11 +193,15 @@ jobs:
         echo -e "$header" > Rime/xmjd6.header.txt
         
         # 按照指定顺序合并 .txt 文件
-        cat Rime/xmjd6.buchong.txt \
-            Rime/xmjd6.danzi.txt \
+        cat Rime/xmjd6.danzi.txt \
+            Rime/xmjd6.cizu.txt \
+            Rime/xmjd6.fuhao.txt \
+            Rime/xmjd6.buchong.txt \
+            Rime/xmjd6.catholicism.txt \
+            Rime/xmjd6.lianjie.txt \
             Rime/xmjd6.zidingyi.txt \
             Rime/xmjd6.fjcy.txt \
-            Rime/xmjd6.cizu.txt \
+            Rime/xmjd6.en.txt \                
             Rime/xmjd6.yingwen.txt \
             Rime/xmjd6.wxw.txt > Rime/xmjd6.body.txt
         
