@@ -201,7 +201,7 @@ jobs:
             Rime/xmjd6.lianjie.txt \
             Rime/xmjd6.zidingyi.txt \
             Rime/xmjd6.fjcy.txt \
-            Rime/xmjd6.en.txt \                
+            Rime/xmjd6.en.txt \
             Rime/xmjd6.yingwen.txt \
             Rime/xmjd6.wxw.txt > Rime/xmjd6.body.txt
         
