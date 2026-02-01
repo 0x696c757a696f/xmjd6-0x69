@@ -44,6 +44,7 @@ import_tables:
 # 扩展：补充码表
   - xmjd6.buchong
   - xmjd6.catholicism
+  - xmjd6.richang
 # ---------------------------------------
 # 扩展：链接等
   - xmjd6.lianjie
