@@ -63,7 +63,7 @@ translator:
     - xform/iü/iv/
 
 reverse_lookup:
-  dictionary: luna_pinyin
+  dictionary: pinyin_simp
   prefix: "`"
   tips: 〔PinYin〕
   preedit_format:

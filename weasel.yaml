@@ -1,7 +1,7 @@
 # Weasel settings
 # encoding: utf-8
 
-config_version: "2026-01-31"
+config_version: "2026-02-01"
 
 app_options:
   WindowsTerminal.exe: {ascii_mode: true}
@@ -40,8 +40,7 @@ global_ascii: false                        # 切换为 ascii 模式时，是否�
 
 
 style:
-  __include": win11_preset
-  antialias_mode": default                 # 次像素反锯齿设定：default；force_dword；cleartype；grayscale；aliased
+  antialias_mode: default                 # 次像素反锯齿设定：default；force_dword；cleartype；grayscale；aliased
   color_font: true                         # ★在Windows 8.1以上系统上使用彩色字体，支持彩色Emoji。如系统版本低于8.1则自动false
   color_scheme: CatLight                   # 主题色
   color_scheme_dark: CatDark               # 暗色主题色
@@ -67,7 +66,6 @@ style:
   vertical_text_left_to_right: false       # 竖排方向是否从左到右：true；false
   vertical_text_with_wrap: false           # 文本竖排模式下，自动换行：true；false
   vertical_auto_reverse: false             # 文本竖排模式下，候选窗口位于光标上方时倒序排列：true；false
-  vertical_auto_reverse": false            # 竖排候选翻转
   paging_on_scroll: true                   # 在候选窗口上滑动滚轮的行为：true（翻页）；false （选中下一个候选）
   click_to_capture: false                  # 鼠标点击候选项，创建截图：true；false
 
@@ -87,7 +85,7 @@ style:
     shadow_radius: 0                       # 阴影区域半径，为 0 不显示阴影；需要同时在配色方案中指定非透明的阴影颜色
     shadow_offset_x: 4                     # 阴影左右偏移距离
     shadow_offset_y: 4                     # 阴影上下偏移距离
-    style/layout/min_width: 30
+    min_width: 30
     # type: vertical                       # 布局设置，效果和 style 下的设置相同：
                                            # horizontal（横向）；vertical（竖向） ; vertical_text（竖排文本） ; vertical+fullscreen（全屏） ; horizontal+fullscreen（横向全屏）
 # [preset_color_schemes]
