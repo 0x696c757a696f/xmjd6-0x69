@@ -401,11 +401,12 @@ recognizer:
 #        xmjdWXYZ: "^'['/a-z][a-z0-9,./:?!']*'?$"
 
 topup:
-  __include: "layout/topup"
+  __include: /layout/topup
   min_length: 4
   max_length: 6
   auto_clear: true
   min_length_danzi: 2
   topup_command: true
+  
 menu:
   page_size: 5 #请到xmjd6.custom.yaml去修改
