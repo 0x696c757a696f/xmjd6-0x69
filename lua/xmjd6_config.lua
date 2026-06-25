@@ -1,6 +1,6 @@
--- 天行键配置工具
+-- 星猫键道配置工具
 -- 统一读取反查标签、字典名、追加候选属性键等配置。
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-29
 
 local M = {}

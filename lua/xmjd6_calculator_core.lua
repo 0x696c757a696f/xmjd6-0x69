@@ -2,14 +2,15 @@
 -- 从 xmjd6_ext_core.lua 拆分：= 表达式计算器。
 -- Rime Script >https://github.com/baopaau/rime-lua-collection/blob/master/calculator_translator.lua
 -- 计算器适配版，此版本经过二次优化
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-06-03
 
 local M = {}
+local registry = require("common.xmjd6_cache_registry")
 
 -- Rime Script >https://github.com/baopaau/rime-lua-collection/blob/master/calculator_translator.lua
 -- 计算器适配版，此版本经过二次优化 
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-03-17
 -- 簡易計算器（執行任何Lua表達式）
 -- 优化说明：高级数学函数(微积分、统计)改为延迟加载，节省内存；使用沙盒环境增强安全性和性能。
@@ -510,6 +511,11 @@ local function calculator_translator(input, seg, env)
   end
 end
 
+function M.money_text(value)
+  local speakMoney = load_money_functions()
+  return speakMoney(tostring(value or ""))
+end
+
 local function fini(env)
   speakMoney_cached = nil
 end
@@ -518,5 +524,10 @@ end
 
 M.func = calculator_translator
 M.fini = fini
+
+registry.register("calculator", function()
+  fini()
+  return true
+end)
 
 return M

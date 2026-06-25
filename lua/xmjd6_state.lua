@@ -1,6 +1,6 @@
 -- 共享状态工具
 -- 管理追加候选属性键、候选隐藏和候选刷新状态。
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-06-04
 
 local config = require("xmjd6_config")

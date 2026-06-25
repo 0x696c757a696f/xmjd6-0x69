@@ -1,6 +1,6 @@
 -- 候选处理工具
 -- 封装候选 genuine/comment/type 访问与安全修改。
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-29
 
 local M = {}

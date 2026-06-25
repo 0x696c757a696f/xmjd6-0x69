@@ -1,6 +1,6 @@
 -- 天行键低频扩展轻入口
 -- 首次触发时加载当前方案的 ext_core 并常驻，天文大表按需加载/释放。
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-09
 
 local string_sub = string.sub
@@ -25,6 +25,9 @@ end
 local function is_calendar_input(input)
     local n = input:match("^=(%d+)$")
     if not n or not (n:match("^19%d%d") or n:match("^20%d%d") or n:match("^21%d%d")) then
+        return false
+    end
+    if #n > 8 then
         return false
     end
     if #n >= 6 then
@@ -68,6 +71,13 @@ local function translator(input, seg, env)
         return
     end
 
+    if string_sub(input, 1, 1) == "i" then
+        core = core or require(ext_core_module(env))
+        if core.history_func and core.history_func(input, seg, env) then
+            return
+        end
+    end
+
     if string_sub(input, 1, 1) == "=" then
         local ctx = env and env.engine and env.engine.context
         if ctx and ctx.get_option and not ctx:get_option("jisuanqi") then
@@ -95,3 +105,4 @@ local function fini(env)
 end
 
 return { func = translator, fini = fini }
+

@@ -1,11 +1,11 @@
 -- 万能符反查读音补全
 -- 只在 reverse_lookup 模式下运行，把当前方案 cx 字典中的单字读音拼入注释。
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-29
 
-local config_util = require("xmjd6_config")
-local candidate_util = require("xmjd6_candidate")
-local reverse = require("xmjd6_reverse")
+local config_util = require("common.xmjd6_config")
+local candidate_util = require("common.xmjd6_candidate")
+local reverse = require("common.xmjd6_reverse")
 
 local M = {}
 

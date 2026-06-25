@@ -1,9 +1,10 @@
 -- 反查缓存工具
 -- 统一管理 ReverseLookup 句柄、读音缓存和释放策略。
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-06-03
 
 local M = {}
+local registry = require("xmjd6_cache_registry")
 
 local DEFAULT_CACHE_LIMIT = 256
 local MIN_CACHE_LIMIT = 64
@@ -338,5 +339,19 @@ end
 function M.clear_hint_cache()
     clear_hint_cache()
 end
+
+function M.clear_all()
+    for dict_name in pairs(handles) do
+        close_entry(dict_name)
+    end
+    clear_pron_cache()
+    clear_hint_cache()
+    clear_core_hint_maps()
+    return true
+end
+
+registry.register("reverse", function()
+    return M.clear_all()
+end)
 
 return M

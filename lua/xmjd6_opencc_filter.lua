@@ -1,10 +1,11 @@
 -- 文本映射过滤器
--- 作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-06-03
 
 local M = {}
-local config_util = require("xmjd6_config")
+local config_util = require("common.xmjd6_config")
 local opencc_data = require("xmjd6_opencc_data")
+local registry = require("common.xmjd6_cache_registry")
 local list_size = config_util.list_size
 
 local DEFAULT_DELIMITER = "|"
@@ -74,6 +75,11 @@ local function reset_runtime_tables(clear_fmm)
     clear_table(shared_results)
     clear_table(shared_parts)
 end
+
+registry.register("opencc_filter", function()
+    reset_runtime_tables(true)
+    return true
+end)
 
 local function module_namespace(env)
     local ns = env.name_space or ""
@@ -716,3 +722,4 @@ function M.func(input, env)
 end
 
 return M
+

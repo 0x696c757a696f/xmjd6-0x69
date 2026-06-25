@@ -1,10 +1,11 @@
 -- 天行键日期时间扩展核心
 -- 从 xmjd6_ext_core.lua 拆分：日期、农历、节气、日期查询。
 -- 含有日历原作者未知
--- 此版本作者：@浮生 https://github.com/wzxmer/rime-txjx
+-- 此版本作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-29
 
 local M = {}
+local registry = require("common.xmjd6_cache_registry")
 
 
 local math_floor = math.floor
@@ -1507,8 +1508,10 @@ end
 
 M.func = translator
 M.fini = fini
-M.get_jq_data = function()
-    return get_cached_jq_data(_G_CACHE)
-end
+
+registry.register("time", function()
+    fini()
+    return true
+end)
 
 return M
