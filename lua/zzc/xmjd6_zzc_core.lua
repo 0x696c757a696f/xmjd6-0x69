@@ -509,6 +509,71 @@ local function pending_version_file()
     return path("zzc/cache_version.txt")
 end
 
+local function deploy_flush_stamp_file()
+    return path("zzc/last_deploy_flush.tsv")
+end
+
+local function read_first_line(file_path)
+    local f = io.open(file_path, "r")
+    if not f then return nil end
+    local line = f:read("*l")
+    f:close()
+    return line
+end
+
+local function parse_deploy_flush_marker(line)
+    if type(line) ~= "string" or line == "" then return nil, nil end
+    local stamp, version = line:match("^(.-)\t(.*)$")
+    if stamp then return stamp, version end
+    return line, ""
+end
+
+local function runtime_ops_signature()
+    local f = io.open(runtime_ops_file(), "r")
+    if not f then return "" end
+    local hash = 2166136261
+    for line in f:lines() do
+        local text = line .. "\n"
+        for i = 1, #text do
+            hash = (hash * 16777619 + text:byte(i)) % 4294967296
+        end
+    end
+    f:close()
+    return string.format("%08x", hash)
+end
+
+local function schema_id_from_env(env)
+    local id = env and env.engine and env.engine.schema and env.engine.schema.schema_id or ""
+    if type(id) ~= "string" or id == "" then return "xmjd6" end
+    if not id:match("^[%w_.%-]+$") then return "xmjd6" end
+    return id
+end
+
+local function current_deploy_stamp(env)
+    local schema_id = schema_id_from_env(env)
+    local config = env and env.engine and env.engine.schema and env.engine.schema.config
+    if not config then return nil end
+    local keys = {
+        "default",
+        "default.custom",
+        schema_id .. ".schema",
+        schema_id .. ".custom",
+        schema_id .. ".symbols",
+        schema_id .. ".symbols.custom",
+    }
+    local parts = { "schema=" .. schema_id }
+    local version = config:get_string("__build_info/rime_version")
+    if version and version ~= "" then parts[#parts + 1] = "rime=" .. version end
+    for _, key in ipairs(keys) do
+        local value = config:get_int("__build_info/timestamps/" .. key)
+        if value and value ~= 0 then
+            parts[#parts + 1] = key .. "=" .. tostring(value)
+        end
+    end
+    if not parts[2] then return nil end
+    return table.concat(parts, "\t")
+end
+
 local function new_tx()
     return os.date("%Y%m%d%H%M%S") .. string.format("%03d", math.floor((os.clock() * 1000) % 1000))
 end
@@ -1020,6 +1085,27 @@ end
 
 function M.flush_runtime_ops()
     return flush_runtime_ops_to_pending()
+end
+
+function M.maybe_flush_after_deploy(env)
+    local stamp = current_deploy_stamp(env)
+    if not stamp then return true, false end
+    local stamp_file = deploy_flush_stamp_file()
+    local current_signature = runtime_ops_signature()
+    local last_stamp, last_signature = parse_deploy_flush_marker(read_first_line(stamp_file))
+    if last_stamp == stamp and last_signature == current_signature then
+        return true, false
+    end
+    local flushed = false
+    if last_signature ~= current_signature then
+        local ok, changed_or_err = flush_runtime_ops_to_pending()
+        if not ok then return nil, changed_or_err end
+        flushed = changed_or_err == true
+        current_signature = runtime_ops_signature()
+    end
+    local wrote, err = write_file_atomic(stamp_file, { stamp .. "\t" .. current_signature })
+    if not wrote then return nil, err end
+    return true, flushed
 end
 
 function M.reorder_words_at_code(words, code)
