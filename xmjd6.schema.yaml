@@ -1,4 +1,4 @@
-﻿# Rime schema settings
+# Rime schema settings
 # encoding: utf-8
 # 方案维护者：Proud丶Cat、热热佬、千年蟲
 # 方案溯源：星空键道6.2 →  🐈星猫键道6.3
@@ -10,7 +10,7 @@
 # v键开启二分反查功能（通过键道双拼拆分文字可打全字集）。遇到不会读的字也可以随时随地打出全字集。
 # u键开启全拼反查功能拼音查全码，新增笔画提示。
 # i键开启英文单词联想输入模式。
-# a键开启连打模式，自造词模式。
+# a键开启连打模式。
 
 schema:
   schema_id: xmjd6
@@ -26,7 +26,7 @@ schema:
     v键开启二分反查功能（通过键道双拼拆分文字可打全字集）。遇到不会读的字也可以随时随地打出全字集。
     u键开启全拼反查功能拼音查全码，新增笔画提示。
     i键开启英文单词联想输入模式。
-    a键开启连打模式，自造词模式。
+    a键开启连打模式。
   version: "20251127"
   dependencies:
     - xmjd6.cx
@@ -37,6 +37,7 @@ schema:
 # ============ 引擎 ============
 engine:
   processors:
+    - lua_processor@*zzc.xmjd6_zzc_processor
     - lua_processor@*xmjd6_processor    # 按键处理（次选·空顶·顶功）
     - ascii_composer
     - recognizer
@@ -52,7 +53,6 @@ engine:
     - matcher              # 模式匹配
     - affix_segmentor@pinyin_simp  # 拼音反查
     - affix_segmentor@quanpinerfen # 全拼
-    - affix_segmentor@xmjdWXYZ     # 二分前缀
     - affix_segmentor@xmjd6gbk     # GBK前缀
     - abc_segmentor        # 字母分段
     - punct_segmentor      # 标点分段
@@ -60,21 +60,16 @@ engine:
 
   translators:
     - lua_translator@*xmjd6_core        # 低频扩展入口（计算器·时间转换）
-    - history_translator@repeat_history
-    - history_translator@repeat_history2
     - punct_translator
     - table_translator
     - reverse_lookup_translator
-    - table_translator@xmjdWXYZ
-    - table_translator@xmjdYY
-    - table_translator@xmjdZZ
-    - table_translator@xmjdWW
     - table_translator@xmjd6_user
     - script_translator@quanpinerfen
     - script_translator@pinyin_simp
     - script_translator@xmjd6gbk
 
   filters:
+    - lua_filter@*zzc.xmjd6_zzc_filter
     - lua_filter@*xmjd6_completion        # 辅助码提示（需在reverse_lookup之前处理comment）
     - reverse_lookup_filter@reverse_lookup    # 统一反查（全拼+二分+GBK+万能符）
     - lua_filter@*xmjd6_reverse_hint      # 万能符反查读音补全
@@ -95,14 +90,14 @@ switches:
     states: [ 简约, 表情展示 ]
   - name: direct_symbols  # custom.yaml的开关4
     states: [ 快符关, 快符开 ]
-  - name: auto_fallback  # custom.yaml的开关5
-    states: [ 空顶关, 空顶开 ]
-  - name: sbb_hint  # custom.yaml的开关6
-    states: [ 简约, 630提示 ]
-  - name: smarttwo  # custom.yaml的开关7
+  - name: smarttwo  # custom.yaml的开关5
     states: [ ";次选关", ";次选开" ]
-  - name: jisuanqi  # custom.yaml的开关8
+  - name: jisuanqi  # custom.yaml的开关6
     states: [ 计算关, 计算开 ]
+  - name: auto_fallback  # custom.yaml的开关7
+    states: [ 空顶关, 空顶开 ]
+  - name: sbb_hint  # custom.yaml的开关8
+    states: [ 简约, 630提示 ]
   - name: mars  # custom.yaml的开关9
     states: [ 地球文, 火星文 ] #火星文
   - name: full_shape  # custom.yaml的开关10
@@ -111,8 +106,6 @@ switches:
 ascii_composer:
   switch_key:
     Caps_Lock: noop
-    Shift_L: commit_code
-    Shift_R: commit_code
 
 # ============ 拼写 ============
 speller:
@@ -148,13 +141,8 @@ translator:
 
 # ============ 辅助功能 ============
 repeat_history:
-  input: i #重复上次上屏内容
-  size: 3
-  initial_quality: 10000
-
-repeat_history2:
-  input: ;f #重复上次上屏内容
-  size: 3
+  input: i
+  size: 1
   initial_quality: 10000
 
 xmjd6_opencc_filter:
@@ -169,21 +157,21 @@ xmjd6_opencc_filter:
       mode: replace
       comment_mode: none
       sentence: true
-      tags: [ abc, quanpinerfen, xmjd6gbk, phrase, sentence, date, time, xgqk, jdqk ]
+      tags: [ abc, pinyin_simp, quanpinerfen, xmjd6gbk, reverse_lookup, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
     - option: emoji_cn
       dataset_name: "xmjd6_emoji"
       prefix: "emoji/"
       mode: append
       comment_mode: none
       split: emoji
-      tags: [ abc, phrase, sentence, date, time, xgqk, jdqk ]
+      tags: [ abc, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
     - option: mars
       dataset_name: "xmjd6_martian"
       prefix: "mars/"
       mode: replace
       comment_mode: none
       sentence: true
-      tags: [ abc, phrase, sentence, date, time, xgqk, jdqk ]
+      tags: [ abc, pinyin_simp, quanpinerfen, xmjd6gbk, reverse_lookup, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
 
 # ============ 反查与副词典 ============
 xmjd6gbk:
@@ -234,49 +222,6 @@ reverse_lookup:
     - xform#^\(([^)]+)\)★(.+)$#[$1 | $2]# # 恢复：有读音有编码
     - xform|^\(([^)]+)\)(★)?$|[$1]|
     - xform|^([^\[].*)$|[$1]|
-
-# ============ 造词 ============
-xmjdWXYZ:
-  tag: xmjdWXYZ
-  dictionary: xmjd6.extended
-  user_dict: xmjd6_user
-# ↓ 用户词典格式，tabledb（文本） 或 userdb （二进制）。
-  db_class: tabledb
-#  db_class: userdb
-  enable_charset_filter: false
-  enable_completion: true
-  enable_encoder: true
-  enable_sentence: true
-  enable_user_dict: true
-  encode_commit_history: false
-  preedit_format:
-    - xform|1|_|
-  comment_format:
-    - xform|1|_|
-#    - xform|~||
-  prefix: "a"
-  tips: "〔造词〕"
-
-xmjdYY:
-  __include: /xmjdWXYZ
-  tag: xmjdYY
-  dictionary: xmjd6.Y
-  prefix: "~E"
-  tips: "〔Y〕"
-
-xmjdZZ:
-  __include: /xmjdWXYZ
-  tag: xmjdZZ
-  dictionary: xmjd6.Z
-  prefix: "~R"
-  tips: "〔Z〕"
-
-xmjdWW:
-  __include: /xmjdWXYZ
-  tag: xmjdWW
-  dictionary: xmjd6.W
-  prefix: "~T"
-  tips: "〔W〕"
 
 xmjd6_user:
   dictionary: ""
@@ -336,11 +281,9 @@ recognizer:
     reverse_lookup: "[a-z`]*`+[a-z`]*"
     expression: "^=[^;']+$"
     punct: "^/([0-9]0?|[a-z]+)$"    # 支持 / 和 ; 开头的符号快符
-    xmjdWXYZ: "^a['/a-z][a-z,./:?!']*'?$"
     pinyin_simp: "^u[a-z']*'?$"
     quanpinerfen: "^v[a-z']*'?$"
     xmjd6gbk: "^o[a-z]*?$"
-#        xmjdWXYZ: "^'['/a-z][a-z0-9,./:?!']*'?$"
 
 # ============ 顶功 ============
 topup:
