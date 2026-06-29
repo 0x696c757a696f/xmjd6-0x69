@@ -2,9 +2,9 @@
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-29
 
-local config_util = require("common.xmjd6_config")
-local candidate_util = require("common.xmjd6_candidate")
-local zzc_core = require("zzc.xmjd6_zzc_core")
+local config_util = require("xmjd6.common.xmjd6_config")
+local candidate_util = require("xmjd6.common.xmjd6_candidate")
+local zzc_core = require("xmjd6.zzc.xmjd6_zzc_core")
 
 local type = type
 local COMPLETION_LIMIT = 30

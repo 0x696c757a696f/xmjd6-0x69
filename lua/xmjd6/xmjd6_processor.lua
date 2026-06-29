@@ -8,11 +8,11 @@ local string_match = string.match
 local string_find = string.find
 local string_lower = string.lower
 local type = type
-local config_util = require("common.xmjd6_config")
-local platform = require("common.xmjd6_platform")
-local state = require("common.xmjd6_state")
-local registry = require("common.xmjd6_cache_registry")
-local zzc_processor = require("zzc.xmjd6_zzc_processor")
+local config_util = require("xmjd6.common.xmjd6_config")
+local platform = require("xmjd6.common.xmjd6_platform")
+local state = require("xmjd6.common.xmjd6_state")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
+local zzc_processor = require("xmjd6.zzc.xmjd6_zzc_processor")
 
 local kAccepted = 1
 local kNoop = 2

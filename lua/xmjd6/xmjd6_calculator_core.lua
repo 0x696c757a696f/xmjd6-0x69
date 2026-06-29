@@ -6,7 +6,7 @@
 -- 更新：2026-06-03
 
 local M = {}
-local registry = require("common.xmjd6_cache_registry")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
 
 -- Rime Script >https://github.com/baopaau/rime-lua-collection/blob/master/calculator_translator.lua
 -- 计算器适配版，此版本经过二次优化 

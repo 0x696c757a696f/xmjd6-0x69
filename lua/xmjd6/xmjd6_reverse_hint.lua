@@ -3,9 +3,9 @@
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-05-29
 
-local config_util = require("common.xmjd6_config")
-local candidate_util = require("common.xmjd6_candidate")
-local reverse = require("common.xmjd6_reverse")
+local config_util = require("xmjd6.common.xmjd6_config")
+local candidate_util = require("xmjd6.common.xmjd6_candidate")
+local reverse = require("xmjd6.common.xmjd6_reverse")
 
 local M = {}
 

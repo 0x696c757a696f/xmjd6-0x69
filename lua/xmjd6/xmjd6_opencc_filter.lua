@@ -3,9 +3,9 @@
 -- 更新：2026-06-03
 
 local M = {}
-local config_util = require("common.xmjd6_config")
-local opencc_data = require("xmjd6_opencc_data")
-local registry = require("common.xmjd6_cache_registry")
+local config_util = require("xmjd6.common.xmjd6_config")
+local opencc_data = require("xmjd6.xmjd6_opencc_data")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
 local list_size = config_util.list_size
 
 local DEFAULT_DELIMITER = "|"

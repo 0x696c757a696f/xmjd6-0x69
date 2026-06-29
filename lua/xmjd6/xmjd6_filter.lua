@@ -2,12 +2,12 @@
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-06-03
 
-local config_util = require("common.xmjd6_config")
-local platform = require("common.xmjd6_platform")
-local candidate_util = require("common.xmjd6_candidate")
-local reverse = require("common.xmjd6_reverse")
-local state = require("common.xmjd6_state")
-local registry = require("common.xmjd6_cache_registry")
+local config_util = require("xmjd6.common.xmjd6_config")
+local platform = require("xmjd6.common.xmjd6_platform")
+local candidate_util = require("xmjd6.common.xmjd6_candidate")
+local reverse = require("xmjd6.common.xmjd6_reverse")
+local state = require("xmjd6.common.xmjd6_state")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
 
 local string_match = string.match
 local string_find = string.find
@@ -17,7 +17,7 @@ local ext_core
 
 local function load_ext_core()
     if not ext_core then
-        ext_core = require("xmjd6_ext_core")
+        ext_core = require("xmjd6.xmjd6_ext_core")
     end
     return ext_core
 end

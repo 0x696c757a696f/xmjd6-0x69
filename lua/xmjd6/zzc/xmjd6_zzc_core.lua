@@ -1,6 +1,6 @@
 local M = {}
-local codec = require("zzc.xmjd6_zzc_codec")
-local store = require("zzc.xmjd6_zzc_store")
+local codec = require("xmjd6.zzc.xmjd6_zzc_codec")
+local store = require("xmjd6.zzc.xmjd6_zzc_store")
 
 local char_parts
 local char_parts_full_loaded = false

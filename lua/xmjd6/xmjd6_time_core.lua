@@ -5,7 +5,7 @@
 -- 更新：2026-05-29
 
 local M = {}
-local registry = require("common.xmjd6_cache_registry")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
 
 
 local math_floor = math.floor

@@ -1,4 +1,4 @@
-local core = require("zzc.xmjd6_zzc_core")
+local core = require("xmjd6.zzc.xmjd6_zzc_core")
 
 local kAccepted = 1
 local kNoop = 2

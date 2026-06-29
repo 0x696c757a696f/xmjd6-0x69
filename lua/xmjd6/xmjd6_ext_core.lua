@@ -13,7 +13,7 @@ local sub = string.sub
 local floor = math.floor
 local random = math.random
 local randomseed = math.randomseed
-local registry = require("common.xmjd6_cache_registry")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
 local utf8_codes = utf8.codes
 local utf8_char = utf8.char
 

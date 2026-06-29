@@ -4,7 +4,7 @@
 -- 更新：2026-06-03
 
 local M = {}
-local registry = require("common.xmjd6_cache_registry")
+local registry = require("xmjd6.common.xmjd6_cache_registry")
 
 local DEFAULT_CACHE_LIMIT = 256
 local MIN_CACHE_LIMIT = 64

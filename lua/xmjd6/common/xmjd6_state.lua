@@ -3,9 +3,9 @@
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-06-04
 
-local config = require("common.xmjd6_config")
-local platform = require("common.xmjd6_platform")
-local candidate = require("common.xmjd6_candidate")
+local config = require("xmjd6.common.xmjd6_config")
+local platform = require("xmjd6.common.xmjd6_platform")
+local candidate = require("xmjd6.common.xmjd6_candidate")
 
 local M = {}
 
