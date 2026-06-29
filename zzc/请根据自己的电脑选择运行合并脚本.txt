@@ -20,10 +20,14 @@ Linux:
 重要文件:
 - ../xmjd6.zzc.dict.yaml
   自造词操作记录，也是临时 zzc 码表。
-- char_parts.tsv
+- ../zzc_state/zzc_reset.tsv
+  电脑合并后写入的清理标记，用于手机识别并重置已合并的本地 zzc。
+- ../zzc_state/zzc_reset_seen.tsv
+  手机侧已处理 reset marker 的记录。
+- ../zzc_state/char_parts.tsv
   单字拆分索引，合并脚本会自动重建。
-- runtime_exact.tsv / index.tsv / group_*.tsv
-  输入法运行时快照，合并后会清空重建。
+- ../zzc_state/runtime_ops.tsv / runtime_exact.tsv / effective_state.tsv / runtime_ops_appended.tsv / cache_version.tsv
+  输入法运行态数据，合并或重置后按规则清理或重建。
 - 撤回合并/
   合并前自动备份目录，只保留最近 3 份。
 

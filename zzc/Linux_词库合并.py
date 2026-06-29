@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import shutil
+import secrets
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -20,20 +21,44 @@ def find_one(base: Path, pattern: str) -> Path:
     return matches[0]
 
 
-def schema_target_names(schema: str) -> list[str]:
-    primary = f"{schema}.cizu.dict.yaml" if schema == "xmjd6" else f"{schema}.dict.yaml"
-    return [primary, f"{schema}.fjcy.dict.yaml"]
+def strip_suffix(text: str, suffix: str) -> str:
+    if text.endswith(suffix):
+        return text[:-len(suffix)]
+    return text
+
+
+def target_dict_name_options(prefix: str) -> list[list[str]]:
+    if prefix.startswith("xmjd6"):
+        return [[f"{prefix}.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
+    if prefix.startswith("xmjd"):
+        return [[f"{prefix}.cizu.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
+    raise ValueError(f"unsupported zzc prefix: {prefix}")
+
+
+def resolve_target_dicts(root: Path, prefix: str) -> list[Path]:
+    out = []
+    for options in target_dict_name_options(prefix):
+        matched = None
+        for name in options:
+            path = root / name
+            if path.exists():
+                matched = path
+                break
+        out.append(matched or (root / options[0]))
+    return out
 
 
 def has_target_dicts(base: Path, schema: str) -> bool:
-    return all((base / name).exists() for name in schema_target_names(schema))
+    return all(path.exists() for path in resolve_target_dicts(base, schema))
 
 
 def discover_layout() -> tuple[Path, Path, Path, str]:
     script_path = Path(sys.executable if getattr(sys, "frozen", False) else __file__).resolve()
     start_dir = script_path.parent
-    op_candidates = sorted(start_dir.glob("*.zzc.dict.yaml"))
-    op_candidates += sorted(start_dir.parent.glob("*.zzc.dict.yaml"))
+    search_dirs = [start_dir, start_dir.parent]
+    op_candidates = []
+    for base in search_dirs:
+        op_candidates += sorted(base.glob("*.zzc.dict.yaml"))
     seen: set[Path] = set()
     unique_ops: list[Path] = []
     for path in op_candidates:
@@ -45,31 +70,38 @@ def discover_layout() -> tuple[Path, Path, Path, str]:
         raise FileNotFoundError(f"missing *.zzc.dict.yaml in {start_dir} or {start_dir.parent}")
 
     for ops_path in unique_ops:
-        schema = ops_path.name.removesuffix(".zzc.dict.yaml")
-        for root in (ops_path.parent, ops_path.parent.parent):
+        schema = strip_suffix(ops_path.name, ".zzc.dict.yaml")
+        for root in search_dirs:
             if has_target_dicts(root, schema):
                 zzc_dir = root / "zzc" if (root / "zzc").exists() else ops_path.parent
                 return root, zzc_dir, ops_path, schema
     ops_path = unique_ops[0]
-    schema = ops_path.name.removesuffix(".zzc.dict.yaml")
+    schema = strip_suffix(ops_path.name, ".zzc.dict.yaml")
     root = ops_path.parent.parent if ops_path.parent.name == "zzc" else ops_path.parent
     zzc_dir = root / "zzc" if (root / "zzc").exists() else ops_path.parent
     return root, zzc_dir, ops_path, schema
 
 
 ROOT, ZZC_DIR, OPS, SCHEMA = discover_layout()
+STATE_DIR = ROOT / "zzc_state"
 ROLLBACK_DIR = ZZC_DIR / "撤回合并"
-INDEX = ZZC_DIR / "index.tsv"
-RUNTIME_EXACT = ZZC_DIR / "runtime_exact.tsv"
-RUNTIME_OPS = ZZC_DIR / "runtime_ops.tsv"
-EFFECTIVE_STATE = ZZC_DIR / "effective_state.tsv"
-CHAR_PARTS = ZZC_DIR / "char_parts.tsv"
-CACHE_VERSION = ZZC_DIR / "cache_version.txt"
+RUNTIME_EXACT = STATE_DIR / "runtime_exact.tsv"
+RUNTIME_OPS = STATE_DIR / "runtime_ops.tsv"
+EFFECTIVE_STATE = STATE_DIR / "effective_state.tsv"
+CHAR_PARTS = STATE_DIR / "char_parts.tsv"
+CACHE_VERSION = STATE_DIR / "cache_version.tsv"
+RESET_MARKER = STATE_DIR / "zzc_reset.tsv"
+RESET_SEEN = STATE_DIR / "zzc_reset_seen.tsv"
 CHAR_DICT = ROOT / f"{SCHEMA}.danzi.dict.yaml"
 LEGACY_ROOT_OPS = ROOT / f"{SCHEMA}.zzc.ops.tsv"
 LEGACY_OPS = ZZC_DIR / "ops.tsv"
 LEGACY_PENDING = ZZC_DIR / "pending.tsv"
-TARGET_DICTS = [ROOT / name for name in schema_target_names(SCHEMA)]
+LEGACY_RUNTIME_EXACT = ZZC_DIR / "runtime_exact.tsv"
+LEGACY_RUNTIME_OPS = ZZC_DIR / "runtime_ops.tsv"
+LEGACY_EFFECTIVE_STATE = ZZC_DIR / "effective_state.tsv"
+LEGACY_RESET_MARKER = ZZC_DIR / "zzc_reset.tsv"
+LEGACY_RESET_SEEN = ZZC_DIR / "zzc_reset_seen.tsv"
+TARGET_DICTS = resolve_target_dicts(ROOT, SCHEMA)
 
 
 def read_text(path: Path) -> str:
@@ -79,7 +111,8 @@ def read_text(path: Path) -> str:
 def write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(text, encoding="utf-8", newline="\n")
+    with tmp.open("w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
     tmp.replace(path)
 
 
@@ -187,7 +220,7 @@ def rebuild_char_parts() -> int:
 
 def load_ops() -> list[dict[str, str]]:
     ops: list[dict[str, str]] = []
-    for source in (OPS, RUNTIME_OPS, LEGACY_ROOT_OPS, LEGACY_OPS, LEGACY_PENDING):
+    for source in (OPS, RUNTIME_OPS, LEGACY_RUNTIME_OPS, LEGACY_ROOT_OPS, LEGACY_OPS, LEGACY_PENDING):
         if not source.exists():
             continue
         for line in read_text(source).splitlines():
@@ -413,7 +446,13 @@ def create_rollback_log(ops_count: int, keep_count: int) -> Path:
     backup_if_exists(RUNTIME_OPS, state_dir, manifest, "state_path")
     backup_if_exists(EFFECTIVE_STATE, state_dir, manifest, "state_path")
     backup_if_exists(RUNTIME_EXACT, state_dir, manifest, "state_path")
-    backup_if_exists(INDEX, state_dir, manifest, "state_path")
+    backup_if_exists(RESET_MARKER, state_dir, manifest, "state_path")
+    backup_if_exists(RESET_SEEN, state_dir, manifest, "state_path")
+    backup_if_exists(LEGACY_RUNTIME_OPS, state_dir, manifest, "state_path")
+    backup_if_exists(LEGACY_EFFECTIVE_STATE, state_dir, manifest, "state_path")
+    backup_if_exists(LEGACY_RUNTIME_EXACT, state_dir, manifest, "state_path")
+    backup_if_exists(LEGACY_RESET_MARKER, state_dir, manifest, "state_path")
+    backup_if_exists(LEGACY_RESET_SEEN, state_dir, manifest, "state_path")
     backup_if_exists(LEGACY_ROOT_OPS, state_dir, manifest, "state_path")
     backup_if_exists(LEGACY_OPS, state_dir, manifest, "state_path")
     backup_if_exists(LEGACY_PENDING, state_dir, manifest, "state_path")
@@ -463,7 +502,19 @@ def merge_into_real_dicts(ops: list[dict[str, str]], keep_rows: list[tuple[str, 
 
 
 def touch_cache_version() -> None:
-    write_text(CACHE_VERSION, datetime.now().strftime("%Y%m%d%H%M%S%f") + "\n")
+    write_text(CACHE_VERSION, f"cache_token\t{secrets.token_hex(8)}\n")
+
+
+def write_reset_marker() -> None:
+    write_text(
+        RESET_MARKER,
+        "\n".join([
+            "version\t2",
+            f"schema\t{SCHEMA}",
+            "mode\tfull_reset",
+            f"reset_token\t{secrets.token_hex(16)}",
+        ]) + "\n",
+    )
 
 
 def clear_ops() -> None:
@@ -476,10 +527,9 @@ def clear_ops() -> None:
 
 def clear_runtime_cache() -> None:
     removed = 0
-    for group_file in ZZC_DIR.glob("group_*.tsv"):
+    for group_file in list(STATE_DIR.glob("group_*.tsv")) + list(ZZC_DIR.glob("group_*.tsv")):
         group_file.unlink()
         removed += 1
-    write_text(INDEX, "")
     write_text(RUNTIME_EXACT, "")
     write_text(EFFECTIVE_STATE, "")
     print(f"cleared runtime cache: group={removed}")
@@ -504,6 +554,7 @@ def main() -> int:
     merge_into_real_dicts(ops, keep_rows, latest_order_map(ops))
     clear_ops()
     clear_runtime_cache()
+    write_reset_marker()
     print(f"merge done: {perf_counter() - started:.1f}s")
     return 0
 
