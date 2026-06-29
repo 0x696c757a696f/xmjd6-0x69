@@ -7,7 +7,9 @@ local state = { active = false, stage = "off", items = {}, mode = "make", target
 local current_action_candidate
 local first_candidate
 local reset
+local refresh_context
 local command_candidate_snapshot
+local collect_lookup_input
 
 local zzc_props = {
     "_xmjd6_zzc_stage",
@@ -36,6 +38,7 @@ local probe_props = {
     "_xmjd6_zzc_display",
     "_xmjd6_zzc_replaced",
 }
+
 
 local function reset_state_fields()
     state.active = false
@@ -311,7 +314,7 @@ local function sync_state(ctx)
     end
 end
 
-local function refresh_context(ctx)
+refresh_context = function(ctx)
     if not ctx then return end
     pcall(function()
         if ctx.refresh_non_confirmed_composition then
@@ -514,8 +517,10 @@ local function probe_first_candidate(ctx, code)
     end
     local old_input = ctx.input or ""
     local old_props = snapshot_props(ctx, probe_props)
+    local old_core_stage = core.current_stage and core.current_stage() or "off"
     local text = nil
     local ok = pcall(function()
+        if core.set_current_stage then core.set_current_stage("off") end
         clear_props(ctx, probe_props)
         ctx.input = code
         refresh_context(ctx)
@@ -538,6 +543,7 @@ local function probe_first_candidate(ctx, code)
     pcall(function()
         ctx:clear()
         ctx.input = old_input
+        if core.set_current_stage then core.set_current_stage(old_core_stage) end
         restore_props(ctx, old_props, probe_props)
         refresh_context(ctx)
     end)
@@ -566,9 +572,10 @@ local function is_cjk_text(text)
     return text and text:match("[\228-\233][\128-\191][\128-\191]") ~= nil
 end
 
-local function capture_current_candidate(ctx, next_input)
+local function capture_current_candidate(ctx, next_input, opts)
     if not ctx then return nil end
-    local code_hint = strip_zzc_prefix(ctx.input)
+    opts = opts or {}
+    local code_hint = collect_lookup_input(ctx.input)
     local cand = current_action_candidate(ctx) or first_candidate(ctx)
     if not is_real_candidate(cand) then return nil end
     local text = cand.text
@@ -581,6 +588,10 @@ local function capture_current_candidate(ctx, next_input)
     end
     if not appended then return nil end
     state.display_word = core.buffer_word() or state.display_word
+    if opts.preserve_input then
+        sync_state(ctx)
+        return appended
+    end
     ctx:clear()
     ctx.input = next_input ~= nil and next_input or "\\"
     sync_state(ctx)
@@ -598,7 +609,7 @@ local function capture_candidate_at(ctx, idx)
     if not is_real_candidate(cand) then return nil end
     local text = cand.text
     if not text or text == "" or not is_cjk_text(text) then return nil end
-    local code_hint = strip_zzc_prefix(ctx.input)
+    local code_hint = collect_lookup_input(ctx.input)
     local appended
     if state.mode == "make" and (not state.target_code or state.target_code == "") then
         appended = append_text_raw(text)
@@ -617,7 +628,80 @@ end
 local function pending_input_code(ctx)
     local input = ctx and ctx.input or ""
     if input == "" or input == "\\" then return "" end
-    return strip_zzc_prefix(input)
+    return collect_lookup_input(input)
+end
+
+local function collect_display_prefix()
+    if state.stage ~= "collect" then return "\\" end
+    if state.mode == "append" and (state.target_code or "") ~= "" then
+        return (state.target_code or "") .. "\\+"
+    end
+    if state.mode == "replace" and (state.target_code or "") ~= "" then
+        return (state.target_code or "") .. "\\"
+    end
+    return "\\"
+end
+
+collect_lookup_input = function(input)
+    input = tostring(input or "")
+    local prefix = collect_display_prefix()
+    if prefix ~= "" and input:sub(1, #prefix) == prefix then
+        return input:sub(#prefix + 1)
+    end
+    if input:sub(1, 1) == "\\" then
+        return strip_zzc_prefix(input)
+    end
+    return input
+end
+
+local function update_collect_input_shape(ctx)
+    if not (ctx and state.stage == "collect") then return false end
+    if not ((state.mode == "append" or state.mode == "replace") and (state.target_code or "") ~= "") then return false end
+    local lookup = collect_lookup_input(ctx.input)
+    if lookup == "" or lookup == "\\" then return false end
+    local shaped = lookup
+    if not probe_first_candidate(ctx, lookup) then
+        shaped = collect_display_prefix() .. lookup
+    end
+    if ctx.input ~= shaped then
+        ctx.input = shaped
+        refresh_context(ctx)
+        return true
+    end
+    return false
+end
+
+local function push_collect_code_char(ctx, ch)
+    if not (ctx and ch and ch ~= "" and state.stage == "collect") then return false end
+    if not ((state.mode == "append" or state.mode == "replace") and (state.target_code or "") ~= "") then return false end
+    if has_visible_menu(ctx) then return false end
+    local lookup = collect_lookup_input(ctx.input)
+    if #lookup >= 6 then
+        ctx.input = collect_display_prefix()
+        sync_state(ctx)
+        refresh_context(ctx)
+        return true
+    end
+    lookup = lookup .. ch
+    if probe_first_candidate(ctx, lookup) then
+        ctx.input = lookup
+    else
+        ctx.input = collect_display_prefix() .. lookup
+    end
+    sync_state(ctx)
+    refresh_context(ctx)
+    return true
+end
+
+local function prepare_collect_lookup_for_capture(ctx)
+    if not (ctx and state.stage == "collect") then return false end
+    if not ((state.mode == "append" or state.mode == "replace") and (state.target_code or "") ~= "") then return false end
+    local input = ctx.input or ""
+    local lookup = collect_lookup_input(input)
+    if lookup == "" or lookup == "\\" or input == lookup then return false end
+    ctx.input = lookup
+    refresh_context(ctx)
+    return true
 end
 
 local function current_direct_code(ctx)
@@ -733,6 +817,13 @@ local function restore_code_backslash_input(ctx)
     return restore_plain_input(ctx, target ~= "" and (target .. "\\") or "\\")
 end
 
+local function restore_code_without_backslash(ctx)
+    local origin = state.origin_input or ""
+    local code = origin:gsub("\\$", "")
+    if code == "" then code = state.target_code or "" end
+    return restore_plain_input(ctx, code)
+end
+
 local function handle_shorten_wait_backspace(ctx)
     local idx = tonumber(state.shorten_idx or 1) or 1
     if idx > 1 then
@@ -754,9 +845,19 @@ local function handle_collect_backspace(ctx)
     end
     if state.stage == "collect"
         and (state.mode == "append" or state.mode == "replace")
-        and ctx.input == "\\"
-        and #state.items == 0 then
-        return restore_code_backslash_input(ctx)
+        and ctx.input and ctx.input ~= "" and ctx.input ~= "\\" then
+        local lookup = collect_lookup_input(ctx.input)
+        if #lookup > 1 then
+            lookup = lookup:sub(1, -2)
+            ctx.input = lookup
+            sync_state(ctx)
+            refresh_context(ctx)
+            return kAccepted
+        end
+        ctx.input = "\\"
+        sync_state(ctx)
+        refresh_context(ctx)
+        return kAccepted
     end
     if state.stage == "collect" and ctx.input and #ctx.input == 1 and ctx.input ~= "\\" then
         ctx.input = "\\"
@@ -767,24 +868,26 @@ local function handle_collect_backspace(ctx)
     if state.stage == "collect" and ctx.input and ctx.input ~= "" and ctx.input ~= "\\" then
         return kNoop
     end
+    if state.stage == "collect"
+        and (state.mode == "append" or state.mode == "replace")
+        and ctx.input == "\\"
+        and #state.items == 0 then
+        return restore_code_without_backslash(ctx)
+    end
     if #state.items > 0 then
         table.remove(state.items)
+        core.set_state_items(state.items)
         state.display_word = core.buffer_word() or ""
         if #state.items > 0 then
             ctx.input = "\\"
             sync_state(ctx)
             refresh_context(ctx)
         else
-            if state.mode == "append" or state.mode == "replace" then
-                return restore_code_backslash_input(ctx)
-            else
-                state.stage = "collect"
-                state.active = true
-                state.mode = "make"
-                ctx.input = "\\"
-                sync_state(ctx)
-                refresh_context(ctx)
-            end
+            state.stage = "collect"
+            state.active = true
+            ctx.input = "\\"
+            sync_state(ctx)
+            refresh_context(ctx)
         end
         return kAccepted
     end
@@ -831,16 +934,35 @@ command_candidate_snapshot = function(ctx, code, opts)
     local out = {}
     local seen = {}
     local cover = core.zzc_cover_for_input and core.zzc_cover_for_input(code or "")
+    local append_out = {}
+    local append_seen = {}
     local function add_cover_rows(rows)
         for _, row in ipairs(rows or {}) do
             local word = row and row.word
-            if word and word ~= ""
-                and not seen[word]
-                and (not cover or not cover.hide_words or not cover.hide_words[word]) then
+            if word and word ~= "" and not seen[word] then
                 out[#out + 1] = word
                 seen[word] = true
             end
         end
+    end
+    local function add_append_rows(rows)
+        for _, row in ipairs(rows or {}) do
+            local word = row and row.word
+            if word and word ~= "" and not seen[word] and not append_seen[word] then
+                append_out[#append_out + 1] = word
+                append_seen[word] = true
+            end
+        end
+    end
+    local function flush_append_rows()
+        for _, word in ipairs(append_out) do
+            if not seen[word] then
+                out[#out + 1] = word
+                seen[word] = true
+            end
+        end
+        append_out = {}
+        append_seen = {}
     end
     local function collect_from_menu(menu)
         if not menu then return end
@@ -849,7 +971,12 @@ command_candidate_snapshot = function(ctx, code, opts)
             if not cand then break end
             local cand_type = candidate_type(cand)
             local zzc_candidate = cand_type == "zzc_saved" or cand_type == "zzc_cover" or cand_type == "zzc_append"
-            if is_real_candidate(cand)
+            if cand_type == "zzc_append" then
+                if is_real_candidate(cand) and cand.text and cand.text ~= "" and not seen[cand.text] and not append_seen[cand.text] then
+                    append_out[#append_out + 1] = cand.text
+                    append_seen[cand.text] = true
+                end
+            elseif is_real_candidate(cand)
                 and (cand.preedit == code or zzc_candidate)
                 and not seen[cand.text]
                 and (zzc_candidate
@@ -866,8 +993,11 @@ command_candidate_snapshot = function(ctx, code, opts)
         collect_from_menu(seg and seg.menu)
     end
     if cover and cover.rows then add_cover_rows(cover.rows) end
-    if cover and cover.append_rows then add_cover_rows(cover.append_rows) end
-    if (out[1] and not opts.force_probe) or not ctx or not code or code == "" then return out end
+    if cover and cover.append_rows then add_append_rows(cover.append_rows) end
+    if not ctx or not code or code == "" then
+        flush_append_rows()
+        return out
+    end
     local old_input = ctx.input or ""
     local old_props = snapshot_props(ctx)
     local old_core_stage = core.current_stage and core.current_stage() or "off"
@@ -882,7 +1012,8 @@ command_candidate_snapshot = function(ctx, code, opts)
         end
     end)
     if cover and cover.rows then add_cover_rows(cover.rows) end
-    if cover and cover.append_rows then add_cover_rows(cover.append_rows) end
+    if cover and cover.append_rows then add_append_rows(cover.append_rows) end
+    flush_append_rows()
     pcall(function()
         ctx:clear()
         ctx.input = old_input
@@ -955,7 +1086,6 @@ end
 
 local function waiting_length_confirm(ctx)
     if state.stage ~= "collect" or state.mode == "replace" then return false end
-    if (ctx and ctx.input or "") ~= "\\" then return false end
     recover_collect_items(ctx)
     return state.items and #state.items >= 2
 end
@@ -993,6 +1123,7 @@ end
 
 local function commit_command_deletes(ctx)
     local digits = state.display_word or ""
+    if digits == "" then digits = "1" end
     local code = state.target_code or ""
     local snapshot = state.command_candidates
     for d in digits:gmatch("%d") do
@@ -1003,7 +1134,7 @@ local function commit_command_deletes(ctx)
             end
             local word = snapshot and snapshot[idx]
             if word and code ~= "" then
-                core.delete_word_at_code(word, code)
+                local ok, err = core.delete_word_at_code(word, code)
             end
         end
     end
@@ -1042,7 +1173,19 @@ local function commit_code_choice(ctx, env, idx)
         return kAccepted
     end
     local items = state.items or {}
-    if #items == 0 then items = core.raw_items_from_text(word) end
+    if #items == 0 then
+        items = core.items_from_text(word) or core.raw_items_from_text(word)
+    end
+    local len = tonumber((ctx and ctx.get_property and ctx:get_property("_xmjd6_zzc_len")) or "")
+    if len then
+        local choices = core.code_choices_for_text(word, len, 9)
+        for _, resolved in ipairs(choices or {}) do
+            if resolved.code == code then
+                items = resolved.items or items
+                break
+            end
+        end
+    end
     local saved_code = core.save_word_at_code(items, code, nil, function(probe_code)
         return probe_first_candidate(ctx, probe_code)
     end)
@@ -1117,6 +1260,14 @@ local function finalize_current(ctx, env, opts)
         if not saved_code and err == "missing_parts" then
             local choices, choice_err = core.code_choices_for_text(word, len, 9)
             if choices and choices[1] then
+                if #choices == 1 then
+                    local choice = choices[1]
+                    saved_code, err = core.save_word_at_code(choice.items or state.items, choice.code, nil, function(code)
+                        return probe_first_candidate(ctx, code)
+                    end)
+                end
+            end
+            if not saved_code and choices and choices[1] then
                 state.stage = "resolve_code"
                 state.mode = "make"
                 state.target_code = ""
@@ -1153,6 +1304,17 @@ local function finalize_with_length(ctx, len, env)
     return finalize_current(ctx, env, { len = len, direct_code = direct_code })
 end
 
+local function handoff_length_to_filter(ctx, len, ch)
+    if not ctx or not len then return kAccepted end
+    if ctx.set_property then ctx:set_property("_xmjd6_zzc_len", tostring(len)) end
+    local suffix = ch and ch ~= "" and ch or tostring(len)
+    local word = core.buffer_word() or state.display_word or ""
+    ctx.input = "\\" .. word .. suffix
+    sync_state(ctx)
+    refresh_context(ctx)
+    return kAccepted
+end
+
 local function push_code_char(ctx, ch)
     if not ctx or not ch or ch == "" then return end
     local pushed = false
@@ -1179,6 +1341,7 @@ local function activate_collect(ctx, first_char)
     sync_state(ctx)
     if is_code_char(first_char) then
         push_code_char(ctx, first_char)
+        update_collect_input_shape(ctx)
     end
 end
 
@@ -1199,6 +1362,7 @@ local function begin_replace_collect(ctx, target_code, first_char)
     sync_state(ctx)
     if is_code_char(first_char) then
         push_code_char(ctx, first_char)
+        update_collect_input_shape(ctx)
     end
 end
 
@@ -1302,20 +1466,14 @@ local function handle_command_wait(ctx, key, ch, shifted, keycode)
         refresh_context(ctx)
         return kAccepted
     end
-    if state.mode == "undo" and is_minus_key(key, ch) and (not state.display_word or state.display_word == "") then
-        state.display_word = "-"
+    if state.mode == "undo" and is_minus_key(key, ch) then
+        state.display_word = (state.display_word or "") .. "-"
         sync_state(ctx)
         refresh_context(ctx)
         return kAccepted
     end
-    if state.mode == "delete" and is_minus_key(key, ch) and (not state.display_word or state.display_word == "") then
-        state.mode = "undo"
-        state.target_code = ""
-        state.command_candidates = {}
-        state.display_word = "-"
-        sync_state(ctx)
-        refresh_context(ctx)
-        return kAccepted
+    if state.mode == "delete" and is_minus_key(key, ch) then
+        return begin_command_wait(ctx, "undo", state.target_code or "", "-", {}, true)
     end
     local idx = resolve_index_key(key, ch)
     if idx and idx >= 1 and idx <= 9 then
@@ -1413,6 +1571,9 @@ local function processor(key_event, env)
     end
 
     if not state.active then
+        if is_backspace(key) and current_input ~= "\\" then
+            return kNoop
+        end
         local command_prefix, command_directive = split_command_input(current_input)
         if command_prefix ~= nil and (command_directive == "!!!" or command_directive == "！！！") then
             core.undo_all_pending()
@@ -1420,14 +1581,14 @@ local function processor(key_event, env)
             return kAccepted
         end
         if command_prefix ~= nil and command_directive == "--" then
-            core.undo_last_tx()
-            reset(ctx)
-            return kAccepted
+            return begin_command_wait(ctx, "undo", command_prefix or "", "-", {}, true)
+        end
+        if current_input == "\\-" and is_minus_key(key, ch) then
+            return begin_command_wait(ctx, "undo", "", "-", {}, true)
         end
         local command_code = command_trigger_code(current_input)
         if command_code then
             local code = command_code
-            if code == "" then code = ctx and ctx.input or "" end
             return begin_command_wait(ctx, code == "" and "undo" or "delete", code, "", command_candidate_snapshot(ctx, code), false)
         end
         if current_input == "\\" then
@@ -1478,6 +1639,9 @@ local function processor(key_event, env)
             end
             if is_minus_key(key, ch) then
                 return begin_command_wait(ctx, "delete", target_code, "", command_candidate_snapshot(ctx, target_code), true)
+            end
+            if is_bang_key(key, ch, shifted, keycode) then
+                return begin_command_wait(ctx, "undo", target_code, "!", command_candidate_snapshot(ctx, target_code), true)
             end
             if is_plus_key(key, ch, shifted, keycode) then
                 begin_append_collect(ctx, target_code)
@@ -1564,11 +1728,19 @@ local function processor(key_event, env)
         return begin_restore_wait(ctx, state.target_code)
     end
 
+    if state.stage == "collect" and code_char and has_visible_menu(ctx) then
+        return kNoop
+    end
+
+    if state.stage == "collect" and code_char and push_collect_code_char(ctx, code_char) then
+        return kAccepted
+    end
+
     if state.stage == "collect" and (ctx.input or "") == "\\" and ch and ch ~= "" and not is_trigger(key, ch) then
         local idx = resolve_index_key(key, ch)
         if waiting_length_confirm(ctx) and idx and idx >= 1 and idx <= 9 then
             if direct_len then
-                return finalize_with_length(ctx, direct_len, env)
+                return handoff_length_to_filter(ctx, direct_len, ch)
             end
             if invalid_length_digit(idx, direct_len) then
                 reset(ctx)
@@ -1613,7 +1785,7 @@ local function processor(key_event, env)
         local idx = resolve_index_key(key, ch)
         if waiting_length_confirm(ctx) and idx and idx >= 1 and idx <= 9 then
             if direct_len then
-                return finalize_with_length(ctx, direct_len, env)
+                return handoff_length_to_filter(ctx, direct_len, ch)
             end
             if invalid_length_digit(idx, direct_len) then
                 reset(ctx)
@@ -1626,7 +1798,7 @@ local function processor(key_event, env)
                 local cand_len, cand_text = selected_length_candidate(ctx, idx)
                 if cand_len then
                     if ctx then ctx:clear() end
-                    return finalize_with_length(ctx, cand_len, env)
+                    return handoff_length_to_filter(ctx, cand_len, cand_text)
                 end
             end
             capture_candidate_at(ctx, idx)
@@ -1635,7 +1807,7 @@ local function processor(key_event, env)
     end
 
     if direct_len and state.mode ~= "replace" and waiting_length_confirm(ctx) then
-        return finalize_with_length(ctx, direct_len, env)
+        return handoff_length_to_filter(ctx, direct_len, ch)
     end
 
     if state.stage == "collect" then
@@ -1657,11 +1829,12 @@ local function processor(key_event, env)
         end
         if is_space(key) then
             if (ctx.input or "") == "" then return kNoop end
+            prepare_collect_lookup_for_capture(ctx)
             local cand = current_action_candidate(ctx) or first_candidate(ctx)
             local cand_len = cand and length_from_candidate_text(cand.text)
             if cand_len and ready_for_length(ctx) then
                 ctx:clear()
-                return finalize_with_length(ctx, cand_len, env)
+                return handoff_length_to_filter(ctx, cand_len, cand.text)
             end
             local text = capture_current_candidate(ctx)
             if not text then return kAccepted end
@@ -1691,8 +1864,36 @@ local function module_capture_current_candidate(ctx, next_input)
 end
 
 local function init(env)
-    if not core.maybe_flush_after_deploy then return end
-    local ok, result, changed_or_err = pcall(core.maybe_flush_after_deploy, env)
+    if core.apply_reset_marker then
+        local reset_ok, reset_result, reset_changed_or_err = pcall(core.apply_reset_marker)
+        if reset_ok and reset_result then
+            env._zzc_reset_changed = reset_changed_or_err == true
+        elseif reset_ok then
+            env._zzc_flush_ok = false
+            env._zzc_flush_error = tostring(reset_changed_or_err or "")
+            return
+        else
+            env._zzc_flush_ok = false
+            env._zzc_flush_error = tostring(reset_result or "")
+            return
+        end
+    end
+    if not core.cleanup_appended_runtime_ops then return end
+    local ok, result, changed_or_err = pcall(core.cleanup_appended_runtime_ops)
+    if ok then
+        env._zzc_flush_ok = result and true or false
+        env._zzc_flush_changed = changed_or_err == true
+        env._zzc_flush_error = result and nil or tostring(changed_or_err or "")
+    else
+        env._zzc_flush_ok = false
+        env._zzc_flush_changed = false
+        env._zzc_flush_error = tostring(result or "")
+    end
+end
+
+local function fini(env)
+    if not core.flush_runtime_ops then return end
+    local ok, result, changed_or_err = pcall(core.flush_runtime_ops)
     if ok then
         env._zzc_flush_ok = result and true or false
         env._zzc_flush_changed = changed_or_err == true
@@ -1707,6 +1908,7 @@ end
 return {
     init = init,
     func = processor,
+    fini = fini,
     is_active = module_is_active,
     capture_current_candidate = module_capture_current_candidate,
 }

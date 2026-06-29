@@ -114,6 +114,24 @@ local function path(name)
     return join_path(data_dir(), name)
 end
 
+local function state_path(name)
+    return path("zzc_state/" .. name)
+end
+
+local function legacy_state_path(name)
+    return path("zzc/" .. name)
+end
+
+local function existing_state_path(name)
+    local next_path = state_path(name)
+    local f = io.open(next_path, "r")
+    if f then
+        f:close()
+        return next_path
+    end
+    return legacy_state_path(name)
+end
+
 local function flag_exists(name)
     local f = io.open(path(name), "r")
     if not f then return false end
@@ -302,7 +320,7 @@ local function add_char_part(text, s, y, p, code)
 end
 
 local function load_char_parts_from_tsv(target)
-    local f = io.open(path("zzc/char_parts.tsv"), "r")
+    local f = io.open(existing_state_path("char_parts.tsv"), "r")
     if not f then return false end
     local found = false
     local seen_target = false
@@ -486,7 +504,7 @@ local function pending_file()
 end
 
 runtime_ops_file = function()
-    return path("zzc/runtime_ops.tsv")
+    return state_path("runtime_ops.tsv")
 end
 
 local function legacy_root_ops_file()
@@ -494,23 +512,43 @@ local function legacy_root_ops_file()
 end
 
 local function legacy_ops_file()
-    return path("zzc/ops.tsv")
+    return existing_state_path("ops.tsv")
 end
 
 local function legacy_pending_file()
-    return path("zzc/pending.tsv")
+    return existing_state_path("pending.tsv")
 end
 
 effective_state_file = function()
-    return path("zzc/effective_state.tsv")
+    return state_path("effective_state.tsv")
 end
 
 local function pending_version_file()
-    return path("zzc/cache_version.txt")
+    return state_path("cache_version.tsv")
 end
 
-local function deploy_flush_stamp_file()
-    return path("zzc/last_deploy_flush.tsv")
+local function legacy_pending_version_file()
+    return existing_state_path("cache_version.txt")
+end
+
+local function runtime_ops_append_stamp_file()
+    return state_path("runtime_ops_appended.tsv")
+end
+
+local function runtime_exact_file()
+    return state_path("runtime_exact.tsv")
+end
+
+local function readable_runtime_exact_file()
+    return existing_state_path("runtime_exact.tsv")
+end
+
+local function reset_marker_file()
+    return existing_state_path("zzc_reset.tsv")
+end
+
+local function reset_seen_file()
+    return state_path("zzc_reset_seen.tsv")
 end
 
 local function read_first_line(file_path)
@@ -521,11 +559,59 @@ local function read_first_line(file_path)
     return line
 end
 
-local function parse_deploy_flush_marker(line)
-    if type(line) ~= "string" or line == "" then return nil, nil end
-    local stamp, version = line:match("^(.-)\t(.*)$")
-    if stamp then return stamp, version end
-    return line, ""
+local function reset_marker_from_file(file_path)
+    local f = io.open(file_path, "r")
+    if not f then return nil end
+    local marker = {}
+    for line in f:lines() do
+        local key, value = line:match("^([^\t]+)\t(.+)$")
+        if key and value then
+            marker[key] = value
+        end
+    end
+    f:close()
+    if marker.version ~= "2" or marker.schema ~= "xmjd6" or marker.mode ~= "full_reset" then
+        return nil
+    end
+    local token = marker.reset_token or ""
+    if not token:match("^[0-9a-fA-F]+$") then return nil end
+    marker.reset_token = token:lower()
+    return marker
+end
+
+local function file_has_content(file_path)
+    local f = io.open(file_path, "r")
+    if not f then return false end
+    local has_content = false
+    for line in f:lines() do
+        if line:match("%S") then
+            has_content = true
+            break
+        end
+    end
+    f:close()
+    return has_content
+end
+
+local function ops_has_body_record()
+    local f = io.open(pending_file(), "r")
+    if not f then return false end
+    for line in f:lines() do
+        if pending_record_from_line(line) then
+            f:close()
+            return true
+        end
+    end
+    f:close()
+    return false
+end
+
+local function has_local_resettable_zzc_state()
+    return ops_has_body_record()
+        or file_has_content(runtime_ops_file())
+        or file_has_content(readable_runtime_exact_file())
+        or file_has_content(effective_state_file())
+        or file_has_content(runtime_ops_append_stamp_file())
 end
 
 local function runtime_ops_signature()
@@ -540,38 +626,6 @@ local function runtime_ops_signature()
     end
     f:close()
     return string.format("%08x", hash)
-end
-
-local function schema_id_from_env(env)
-    local id = env and env.engine and env.engine.schema and env.engine.schema.schema_id or ""
-    if type(id) ~= "string" or id == "" then return "xmjd6" end
-    if not id:match("^[%w_.%-]+$") then return "xmjd6" end
-    return id
-end
-
-local function current_deploy_stamp(env)
-    local schema_id = schema_id_from_env(env)
-    local config = env and env.engine and env.engine.schema and env.engine.schema.config
-    if not config then return nil end
-    local keys = {
-        "default",
-        "default.custom",
-        schema_id .. ".schema",
-        schema_id .. ".custom",
-        schema_id .. ".symbols",
-        schema_id .. ".symbols.custom",
-    }
-    local parts = { "schema=" .. schema_id }
-    local version = config:get_string("__build_info/rime_version")
-    if version and version ~= "" then parts[#parts + 1] = "rime=" .. version end
-    for _, key in ipairs(keys) do
-        local value = config:get_int("__build_info/timestamps/" .. key)
-        if value and value ~= 0 then
-            parts[#parts + 1] = key .. "=" .. tostring(value)
-        end
-    end
-    if not parts[2] then return nil end
-    return table.concat(parts, "\t")
 end
 
 local function new_tx()
@@ -631,25 +685,25 @@ end
 
 local function read_pending_version()
     local f = io.open(pending_version_file(), "r")
-    if not f then return "" end
-    local value = f:read("*l") or ""
-    f:close()
-    return value
+    if f then
+        local value = ""
+        for line in f:lines() do
+            local key, item = line:match("^([^\t]+)\t(.+)$")
+            if key == "cache_token" then
+                value = item or ""
+                break
+            end
+        end
+        f:close()
+        return value
+    end
+    return read_first_line(legacy_pending_version_file()) or ""
 end
 
 local function write_pending_version()
     local value = new_tx()
-    local file_path = pending_version_file()
-    local tmp = file_path .. ".tmp"
-    local f = io.open(tmp, "w")
-    if not f then return nil end
-    f:write(value, "\n")
-    f:close()
-    os.remove(file_path)
-    if not os.rename(tmp, file_path) then
-        os.remove(tmp)
-        return nil
-    end
+    local ok, err = write_file_atomic(pending_version_file(), { "cache_token\t" .. value })
+    if not ok then return nil, err end
     pending_version = read_pending_version()
     pending_version_check_second = os.time()
     return value
@@ -811,6 +865,20 @@ local function rewrite_runtime_ops_records(records)
     end)
 end
 
+local function append_ops_records_to_pending(records)
+    return with_effective_state_batch(function()
+        ensure_ops_file()
+        local f = io.open(pending_file(), "a")
+        if not f then return nil, "ops_open_failed" end
+        for _, record in ipairs(records or {}) do
+            f:write(pending_line_from_record(record), "\n")
+        end
+        f:close()
+        write_pending_version()
+        return true
+    end)
+end
+
 local function compact_pending_records(records)
     local latest = {}
     local latest_order_tx_by_code = {}
@@ -848,35 +916,98 @@ local function flush_runtime_ops_to_pending()
     ensure_ops_file()
     ensure_runtime_ops_file()
     local records = load_pending_cache_current()
-    local has_runtime = false
+    local runtime_signature = runtime_ops_signature()
+    local runtime_records = {}
     for _, record in ipairs(records or {}) do
         if record.runtime then
-            has_runtime = true
-            break
+            runtime_records[#runtime_records + 1] = {
+                mark = record.mark,
+                op = record.op,
+                append = record.append,
+                restore = record.restore,
+                word = record.word,
+                code = record.code,
+                tx = record.tx,
+            }
         end
     end
-    if not has_runtime then return true, false end
-    local merged = {}
-    for _, record in ipairs(records or {}) do
-        merged[#merged + 1] = {
-            mark = record.mark,
-            op = record.op,
-            append = record.append,
-            restore = record.restore,
-            word = record.word,
-            code = record.code,
-            tx = record.tx,
-        }
+    if not runtime_records[1] then return true, false end
+    local appended_signature = read_first_line(runtime_ops_append_stamp_file()) or ""
+    if appended_signature ~= runtime_signature then
+        local ok, err = append_ops_records_to_pending(runtime_records)
+        if not ok then return nil, err end
+        write_file_atomic(runtime_ops_append_stamp_file(), { runtime_signature })
     end
-    merged = compact_pending_records(merged)
-    local ok, err = rewrite_ops_records(merged)
-    if not ok then return nil, err end
+    local ok, err
     ok, err = write_file_atomic(runtime_ops_file(), {})
     if not ok then return nil, err end
-    write_file_atomic(path("zzc/index.tsv"), {})
-    write_file_atomic(path("zzc/runtime_exact.tsv"), {})
+    write_file_atomic(runtime_exact_file(), {})
     write_file_atomic(effective_state_file(), {})
     pending_loaded = false
+    load_pending_cache_current()
+    return true, true
+end
+
+local function cleanup_appended_runtime_ops()
+    ensure_runtime_ops_file()
+    local records = load_pending_cache_current()
+    local runtime_signature = runtime_ops_signature()
+    local runtime_records = {}
+    for _, record in ipairs(records or {}) do
+        if record.runtime then
+            runtime_records[#runtime_records + 1] = record
+        end
+    end
+    if not runtime_records[1] then return true, false end
+    local appended_signature = read_first_line(runtime_ops_append_stamp_file()) or ""
+    if appended_signature ~= runtime_signature then
+        return true, false
+    end
+    local ok, err = write_file_atomic(runtime_ops_file(), {})
+    if not ok then return nil, err end
+    write_file_atomic(runtime_exact_file(), {})
+    write_file_atomic(effective_state_file(), {})
+    pending_loaded = false
+    load_pending_cache_current()
+    return true, true
+end
+
+local function apply_reset_marker()
+    local marker = reset_marker_from_file(reset_marker_file())
+    if not marker then return true, false end
+    local seen = reset_marker_from_file(reset_seen_file())
+    if seen and seen.reset_token == marker.reset_token then
+        return true, false
+    end
+    local header_lines = {}
+    for line in ops_header():gmatch("([^\n]*)\n") do
+        header_lines[#header_lines + 1] = line
+    end
+    local ok, err = write_file_atomic(pending_file(), header_lines)
+    if not ok then return nil, err end
+    for _, file_path in ipairs({
+        runtime_ops_file(),
+        runtime_exact_file(),
+        effective_state_file(),
+        runtime_ops_append_stamp_file(),
+    }) do
+        ok, err = write_file_atomic(file_path, {})
+        if not ok then return nil, err end
+    end
+    ok, err = write_file_atomic(reset_seen_file(), {
+        "version\t2",
+        "schema\txmjd6",
+        "mode\tfull_reset",
+        "reset_token\t" .. marker.reset_token,
+    })
+    if not ok then return nil, err end
+    ok, err = write_pending_version()
+    if not ok then return nil, err end
+    pending_loaded = false
+    pending_cache = {}
+    pending_by_code = {}
+    effective_projection_by_code = {}
+    effective_by_code = {}
     load_pending_cache_current()
     return true, true
 end
@@ -1087,25 +1218,19 @@ function M.flush_runtime_ops()
     return flush_runtime_ops_to_pending()
 end
 
+function M.cleanup_appended_runtime_ops()
+    return cleanup_appended_runtime_ops()
+end
+
+function M.apply_reset_marker()
+    return apply_reset_marker()
+end
+
 function M.maybe_flush_after_deploy(env)
-    local stamp = current_deploy_stamp(env)
-    if not stamp then return true, false end
-    local stamp_file = deploy_flush_stamp_file()
-    local current_signature = runtime_ops_signature()
-    local last_stamp, last_signature = parse_deploy_flush_marker(read_first_line(stamp_file))
-    if last_stamp == stamp and last_signature == current_signature then
-        return true, false
-    end
-    local flushed = false
-    if last_signature ~= current_signature then
-        local ok, changed_or_err = flush_runtime_ops_to_pending()
-        if not ok then return nil, changed_or_err end
-        flushed = changed_or_err == true
-        current_signature = runtime_ops_signature()
-    end
-    local wrote, err = write_file_atomic(stamp_file, { stamp .. "\t" .. current_signature })
-    if not wrote then return nil, err end
-    return true, flushed
+    local ok, changed_or_err = apply_reset_marker()
+    if not ok then return nil, changed_or_err end
+    if changed_or_err == true then return true, true end
+    return cleanup_appended_runtime_ops()
 end
 
 function M.reorder_words_at_code(words, code)
@@ -1151,8 +1276,10 @@ write_file_atomic = function(file_path, lines)
     end
     for _, line in ipairs(lines) do f:write(line, "\n") end
     f:close()
-    local removed = os.remove(file_path)
     local renamed = os.rename(tmp, file_path)
+    if renamed then return true end
+    os.remove(file_path)
+    renamed = os.rename(tmp, file_path)
     if not renamed then
         os.remove(tmp)
         return nil, "rename_failed:" .. file_path
@@ -1353,4 +1480,3 @@ function M.cover_for_probe(input, opts)
 end
 
 return M
-
