@@ -110,6 +110,7 @@ ascii_composer:
 # ============ 拼写 ============
 speller:
   auto_select: false   #true或者false
+  max_code_length: 32
   alphabet: "zyxwvutsrqponmlkjihgfedcba;'" # 修改为【"zyxwvutsrqponmlkjihgfedcba"】会直接上屏，但无法使用；+字母打快符。记得同步修改key_binder中semicolon和apostrophe绑定
   initials: "abcdefghijklmnopqrstuvwxyz;'"
   delimiter: " '"
