@@ -27,7 +27,7 @@ schema:
     u键开启全拼反查功能拼音查全码，新增笔画提示。
     i键开启英文单词联想输入模式。
     a键开启连打模式。
-  version: "20251127"
+  version: "20260629"
   dependencies:
     - xmjd6.cx
     - pinyin_simp
@@ -37,8 +37,8 @@ schema:
 # ============ 引擎 ============
 engine:
   processors:
-    - lua_processor@*zzc.xmjd6_zzc_processor
-    - lua_processor@*xmjd6_processor    # 按键处理（次选·空顶·顶功）
+    - lua_processor@*xmjd6/zzc.xmjd6_zzc_processor
+    - lua_processor@*xmjd6/xmjd6_processor    # 按键处理（次选·空顶·顶功）
     - ascii_composer
     - recognizer
     - key_binder
@@ -59,7 +59,7 @@ engine:
     - fallback_segmentor   # 回退分段
 
   translators:
-    - lua_translator@*xmjd6_core        # 低频扩展入口（计算器·时间转换）
+    - lua_translator@*xmjd6/xmjd6_core        # 低频扩展入口（计算器·时间转换）
     - punct_translator
     - table_translator
     - reverse_lookup_translator
@@ -69,13 +69,13 @@ engine:
     - script_translator@xmjd6gbk
 
   filters:
-    - lua_filter@*zzc.xmjd6_zzc_filter
-    - lua_filter@*xmjd6_completion        # 辅助码提示（需在reverse_lookup之前处理comment）
+    - lua_filter@*xmjd6/zzc.xmjd6_zzc_filter
+    - lua_filter@*xmjd6/xmjd6_completion        # 辅助码提示（需在reverse_lookup之前处理comment）
     - reverse_lookup_filter@reverse_lookup    # 统一反查（全拼+二分+GBK+万能符）
-    - lua_filter@*xmjd6_reverse_hint      # 万能符反查读音补全
-    - lua_filter@*xmjd6_filter            # 630提示（必须在emoji_cn之前）
+    - lua_filter@*xmjd6/xmjd6_reverse_hint      # 万能符反查读音补全
+    - lua_filter@*xmjd6/xmjd6_filter            # 630提示（必须在emoji_cn之前）
     # 原生 OpenCC 过滤器功能不够灵活，改用 lua 实现
-    - lua_filter@*xmjd6_opencc_filter
+    - lua_filter@*xmjd6/xmjd6_opencc_filter
     - uniquifier         # 去重
 
 # ============ 开关 ============

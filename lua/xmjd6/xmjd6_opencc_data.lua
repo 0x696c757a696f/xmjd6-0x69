@@ -180,7 +180,7 @@ local function load_lua_table(relative_path)
         return nil
     end
     if path == nil then
-        path = find_existing_path(build_project_candidates("opencc/Data/" .. relative_path))
+        path = find_existing_path(build_project_candidates("opencc/xmjd6/" .. relative_path))
         shared_static.path_cache[relative_path] = path or false
     end
     if not path then
