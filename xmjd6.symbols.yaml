@@ -1,6 +1,6 @@
 # Rime's punctuation and symbols
 # encoding: utf-8
-config_version: "2026-01-31"
+config_version: "2026-08-04"
 punctuator:
   full_shape:
     ' ' : { commit: '　' }
