@@ -1,7 +1,7 @@
 -- OpenCC 数据加载工具
--- 管理 opencc/Data Lua 表、短语分片缓存和 dataset 生命周期。
+-- 管理 opencc/xmjd6 Lua 表、短语分片缓存和 dataset 生命周期。
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
--- 更新：2026-05-29
+-- 更新：2026-08-04
 
 local M = {}
 local registry = require("xmjd6.common.xmjd6_cache_registry")

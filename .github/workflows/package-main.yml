@@ -9,7 +9,9 @@ on:
       - main
 
 env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  OPENCC_TONGGUI_URL: https://github.com/amorphobia/opencc-tonggui/releases/download/latest/opencc-tonggui.zip
+  OPENCC_TONGGUI_SHA256: 1b76a1028669b89d55a9055400e8be628014ea6f3b200b34b5e8a7d88f04e018
 
 jobs:
   build:
@@ -17,56 +19,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Get latest OpenCC pre-release asset URL
-      id: get_opencc_url
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const releases = await github.rest.repos.listReleases({
-            owner: 'amorphobia',
-            repo: 'opencc-tonggui',
-          });
-          const preRelease = releases.data.find(r => r.prerelease);
-          if (!preRelease) {
-             core.setFailed('No pre-release found for amorphobia/opencc-tonggui');
-             return;
-          }
-          console.log(`Found pre-release tag: ${preRelease.tag_name}`);
-          const asset = preRelease.assets.find(a => a.name.endsWith('.zip'));
-          if (!asset) {
-             core.setFailed('No zip asset found in the pre-release');
-             return;
-          }
-          console.log(`Download URL: ${asset.browser_download_url}`);
-          return asset.browser_download_url;
 
-    - name: Download and Setup OpenCC
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Validate source tree
       run: |
-        # 获取 URL
-        url="${{ steps.get_opencc_url.outputs.result }}"
-        
-        # 下载
-        echo "Downloading from $url..."
-        wget -q -O opencc_temp.zip "$url"
-        
-        # 解压
-        unzip -q opencc_temp.zip -d opencc_extract_temp
-        
-        # 移动文件 (智能判断解压结构)
-        echo "Copying files to opencc/xmjd6/..."
-        if [ -d "opencc_extract_temp/opencc" ]; then
-            cp -r opencc_extract_temp/opencc/* opencc/xmjd6/
-        else
-            cp -r opencc_extract_temp/* opencc/xmjd6/
-        fi
-        
-        # 清理临时垃圾
-        rm opencc_temp.zip
-        rm -rf opencc_extract_temp
-        
-        # 验证一下
-        ls -R opencc/xmjd6/
+        sudo apt-get update
+        sudo apt-get install -y lua5.4
+        python -m pip install -r requirements-dev.txt
+        python tools/validate_repo.py
+        lua5.4 tests/run.lua
+        python -m unittest discover -s tests -p 'test_*.py' -v
+
+    - name: Download verified OpenCC data
+      run: |
+        python tools/fetch_opencc.py \
+          --url "$OPENCC_TONGGUI_URL" \
+          --sha256 "$OPENCC_TONGGUI_SHA256" \
+          --destination opencc/xmjd6
 
     - uses: actions/upload-artifact@v4
       with:
@@ -77,5 +49,7 @@ jobs:
           !.github/**
           !.git*
           !yong*.*
-          !opencc_temp.zip
-          !opencc_extract_temp/**
+          !tests/**
+          !tools/**
+          !VERSION
+          !requirements-dev.txt

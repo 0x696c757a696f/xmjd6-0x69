@@ -1,7 +1,7 @@
 -- 天行键低频扩展核心调度入口
 -- 按输入类型懒加载日期时间核心或计算器核心，避免一次加载全部低频逻辑。
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
--- 更新：2026-05-29
+-- 更新：2026-08-04
 
 local M = {}
 
@@ -29,6 +29,8 @@ local default_password_len = 16
 local alpha_num_chars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 local symbol_chars = "!@#$%^&*()-_=+[]{}:,.?/"
 local strong_chars = alpha_num_chars .. symbol_chars
+local MODULE_NAMESPACE = "xmjd6."
+local MODULE_BASENAME = "xmjd6"
 
 local function is_cjk_codepoint(code)
     return (code >= 0x3400 and code <= 0x4DBF) or
@@ -78,7 +80,7 @@ local function get_module_prefix(env)
 end
 
 local function require_core(suffix, env)
-    return require(get_module_prefix(env) .. suffix)
+    return require(MODULE_NAMESPACE .. MODULE_BASENAME .. suffix)
 end
 
 local function load_time_core(env)

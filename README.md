@@ -42,28 +42,28 @@
    - 生僻字畅打模式。
    - 问候词库、诗词歌赋。
    - 长句慢打模式等。
-   - 快捷日期/时间/节气/大写/英文联想
+   - 快捷日期/时间/节气/大写/提交历史
 
 这些优化和新增功能旨在提升🐈星猫键道输入方案的实用性和用户体验，使之更加贴合用户的日常输入需求。
 
 ## 如何查看学习及相关链接
 1. **飞书笔记链接：** [飞书笔记 - 🐈星猫键道6](https://hu0w1jn4xq.feishu.cn/docx/ZgQ8deGPlozhWCxOyeucBvHJnPe)
-2. **GitHub 仓库链接：** [🐈星猫键道6 - GitHub](https://github.com/hugh7007/xmjd6-rere)
+2. **当前维护仓库：** [xmjd6-0x69 - GitHub](https://github.com/0x696c757a696f/xmjd6-0x69)
 3. **天行键 GitHub 仓库链接：**[📖天行键 - GitHub](https://github.com/wzxmer/rime-txjx)
 4. **星空键道 GitHub 仓库链接：**[📖星空键道6 - GitHub](https://github.com/xkinput/Rime_JD)
 
 ## 如何使用
 
-将 [GitHub Release](https://github.com/hugh7007/xmjd6-rere/releases/) 中的 [xmjd6.zip](https://github.com/hugh7007/xmjd6-rere/releases/latest/download/xmjd6.zip) 导入至 librime ≥ 1.9.0 的 Rime 输入法的用户文件夹中使用。
+将 [GitHub Release](https://github.com/0x696c757a696f/xmjd6-0x69/releases/) 中的 [xmjd6.zip](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/xmjd6.zip) 导入至 librime ≥ 1.9.0 的 Rime 输入法的用户文件夹中使用。
 
 - Windows：
   - 小狼毫
     - [小狼毫输入法测试版](https://github.com/rime/weasel/releases/tag/latest)
     - [小狼毫输入法 水龙月 Fork 版](https://github.com/Techince/weasel/releases/latest)，需要卸载原版后重启再安装。
     - 默认用户文件夹路径：`%APPDATA%\Rime`
-  - 小小输入法[星猫键道6绿色便携版](https://github.com/hugh7007/xmjd6-rere/releases/latest/download/yong-xmjd6-full.zip)，无需导入方案即可在 Windows 系统上轻量使用。使用 Ctrl + 空格激活输入法。
+  - 小小输入法[星猫键道6绿色便携版](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/yong-xmjd6-full.zip)，无需导入方案即可在 Windows 系统上轻量使用。使用 Ctrl + 空格激活输入法。
   - [玉兔毫](https://github.com/amorphobia/rabbit)
-    - 玉兔毫[星猫键道6绿色便携版](https://github.com/hugh7007/xmjd6-rere/releases/latest/download/Rabbit-xmjd6.zip)，无需导入方案即可在 Windows 系统上轻量使用。注意目录中不能有空格。
+    - 玉兔毫[星猫键道6绿色便携版](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/Rabbit-xmjd6.zip)，无需导入方案即可在 Windows 系统上轻量使用。注意目录中不能有空格。
 
 - macOS:
   - [鼠须管输入法测试版](https://github.com/rime/squirrel/releases/tag/latest)
@@ -198,8 +198,8 @@
 - iOS:
   - [元书输入法](https://apps.apple.com/app/id6744464701)
     - 可手动在“输入方案”中“下载方案”，下载地址：
-      - <https://github.com/hugh7007/xmjd6-rere/releases/latest/download/xmjd6.zip> （原始地址）
-      - <https://gh-proxy.com/https://github.com/hugh7007/xmjd6-rere/releases/latest/download/xmjd6.zip> （国内加速地址）
+      - <https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/xmjd6.zip> （原始地址）
+      - <https://gh-proxy.com/https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/xmjd6.zip> （国内加速地址）
       - 设置方案下后，点击下载按钮，完成后在“方案目录切换”中找到 RimeUserData 目录中选择刚才导入的方案名的目录，点击右上角 打开 即可。
       - 后续更新方案可以重新在“下载方案”中重新下载，然后重新在“方案目录切换”即可。
   - [仓输入法](https://apps.apple.com/app/id6446617683)
@@ -211,9 +211,9 @@
 - **词库开关：** `xmjd6.extended.dict.yaml`  
 - **扩展词库补充：** `xmjd6.fjcy.dict.yaml`  
 - **符号修改：** `xmjd6.symbols.yaml`  
-- **630规则文件：** `xmjd6.core.dict.yaml` 和 `xmjd6.buchong.dict.yaml`  
-- **快速索引：** `xmjd6.fuhao.dict.yaml`  
-- **自定义词库：** `xmjd6.zidingyi.dict.yaml`  
+- **630规则和快符：** `xmjd6.core.dict.yaml`
+- **自造词词库：** `xmjd6.zzc.dict.yaml`
+- **自定义补充词库：** `xmjd6.user.dict.yaml`
 - **个人高权限词库：** `xmjd6.user.dict.yaml`（权重最高，请谨慎添加）
 
 **注意事项：**
@@ -222,9 +222,32 @@
 #### 拓展功能一览：
 - **流式输入：** 支持连续句子输入，自动调频。
 - **u键：** 全拼反查功能（拼音查全码，新增笔画提示）。
-- **i键：** 开启英文联想输入。
+- **i键：** 调出最近提交历史，数量可在 `xmjd6.custom.yaml` 中配置。
+- **反斜杠键（`\`）：** 开启自造词模式，完整指令见 `zzc/自造词使用教程.md`。
 - **v键：** 二分反查功能（通过键道双拼拆分文字可查全码）。
 - **o键：** 超级繁体输入（基于键道规则的词库扩展）。
 - **注意：** 默认顶功开启，流式输入关闭。
 
-**方案来源：** Proud丶Cat、热热、浮生、千年蟲
+## 维护与验证
+
+提交或打包前运行：
+
+```bash
+python tools/validate_repo.py
+lua tests/run.lua
+python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+发布日统一更新 `VERSION` 和所有 YAML 版本字段：
+
+```bash
+python tools/update_versions.py 2026-08-04
+```
+
+词典合并后可清理完全相同的重复行：
+
+```bash
+python tools/dedupe_dictionaries.py
+```
+
+**方案来源：** Proud丶Cat、热热、浮生、千年蟲；上游项目为 [hugh7007/xmjd6-rere](https://github.com/hugh7007/xmjd6-rere)。

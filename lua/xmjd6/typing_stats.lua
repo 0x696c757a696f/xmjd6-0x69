@@ -2,7 +2,7 @@
 -- 输入 =tj 查看今日、近 7 天和累计统计。
 -- 数据保存在 user_data_dir/typing_stats.txt，每天一行，最多保留两年。
 
-local mem_cleaner = require("xmjd6.mem_cleaner")
+local cache_registry = require("xmjd6.common.xmjd6_cache_registry")
 
 local M = {}
 
@@ -221,6 +221,8 @@ local function release_stats_cache()
     st.last_key_time = nil
 end
 
+cache_registry.register("typing_stats", release_stats_cache)
+
 function M.init_processor(env)
     local context = env and env.engine and env.engine.context
     if context and context.commit_notifier then
@@ -229,8 +231,6 @@ function M.init_processor(env)
         end)
     end
 
-    -- env 级回调必须在 fini 注销，避免重新部署后持有失效的 env/closure。
-    env.mem_release = mem_cleaner.register(release_stats_cache)
 end
 
 function M.fini_processor(env)
@@ -240,8 +240,6 @@ function M.fini_processor(env)
         end)
         env.commit_connection = nil
     end
-    mem_cleaner.unregister(env.mem_release)
-    env.mem_release = nil
     flush(state())
 end
 

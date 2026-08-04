@@ -1,25 +1,15 @@
 -- 天行键低频扩展轻入口
 -- 首次触发时加载当前方案的 ext_core 并常驻，天文大表按需加载/释放。
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
--- 更新：2026-05-09
+-- 更新：2026-08-04
 
 local string_sub = string.sub
 
 local core
-local fallback_ext_core
+local EXT_CORE_MODULE = "xmjd6.xmjd6_ext_core"
 
-local function ext_core_module(env)
-    local source = debug and debug.getinfo and debug.getinfo(1, "S")
-    local source_path = source and source.source or ""
-    local name = source_path:match("([^/\\]+)%.lua$")
-    if name and name:match("_core$") then
-        return name:gsub("_core$", "_ext_core")
-    end
-    if not fallback_ext_core then
-        local schema_id = env and env.engine and env.engine.schema and env.engine.schema.schema_id
-        fallback_ext_core = ((schema_id and schema_id ~= "") and schema_id or "rime") .. "_ext_core"
-    end
-    return fallback_ext_core
+local function ext_core_module()
+    return EXT_CORE_MODULE
 end
 
 local function is_calendar_input(input)
@@ -105,4 +95,3 @@ local function fini(env)
 end
 
 return { func = translator, fini = fini }
-

@@ -1,6 +1,6 @@
 -- 文本映射过滤器
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
--- 更新：2026-06-03
+-- 更新：2026-08-04
 
 local M = {}
 local config_util = require("xmjd6.common.xmjd6_config")
@@ -312,7 +312,8 @@ local function append_split_items(out, raw_value, split_pat, split_mode, source_
         escaped_source = s_gsub(source_text, "[%-%.%+%[%]%(%)%$%^%%%?%*]", "%%%1")
     end
 
-    for part in s_gmatch(raw_value, split_pat) do
+    for raw_part in s_gmatch(raw_value, split_pat) do
+        local part = raw_part
         if split_mode == "emoji" then
             part = s_match(part, "^%s*(.-)%s*$") or part
             if escaped_source then
@@ -722,4 +723,3 @@ function M.func(input, env)
 end
 
 return M
-
