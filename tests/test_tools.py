@@ -167,6 +167,170 @@ columns:
                 operation_header,
             )
 
+    @unittest.skipUnless(sys.platform == "win32", "committed EXE is Windows-only")
+    def test_windows_merge_executable_runs_current_xmjd6_behavior(self) -> None:
+        repository = Path(__file__).resolve().parents[1]
+        dictionary_header = """# Rime dictionary
+---
+name: {name}
+version: "2026-08-04"
+sort: by_weight
+...
+"""
+        operation_header = """# Rime dictionary
+# encoding: utf-8
+---
+name: xmjd6.zzc
+version: "2026-08-04"
+sort: by_weight
+use_preset_vocabulary: false
+columns:
+  - text
+  - code
+...
+"""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            zzc_dir = root / "zzc"
+            zzc_dir.mkdir()
+            shutil.copy2(repository / "zzc" / "Win_词库合并.exe", zzc_dir)
+            (root / "xmjd6.cizu.dict.yaml").write_text(
+                dictionary_header.format(name="xmjd6.cizu"), encoding="utf-8"
+            )
+            (root / "xmjd6.fjcy.dict.yaml").write_text(
+                dictionary_header.format(name="xmjd6.fjcy"), encoding="utf-8"
+            )
+            (root / "xmjd6.zzc.dict(1).yaml").write_text(
+                operation_header + "100\tadd\tEXE当前逻辑\texedq\t+\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [str(zzc_dir / "Win_词库合并.exe")],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=60,
+                check=False,
+            )
+
+            self.assertEqual(
+                result.returncode,
+                0,
+                (result.stdout or "") + (result.stderr or ""),
+            )
+            merged = (root / "xmjd6.cizu.dict.yaml").read_text(encoding="utf-8")
+            self.assertIn("EXE当前逻辑\texedq", merged)
+            self.assertFalse((root / "xmjd6.zzc.dict(1).yaml").exists())
+            self.assertTrue((root / "xmjd6.zzc.dict.yaml").is_file())
+
+    @unittest.skipUnless(sys.platform == "win32", "committed EXE is Windows-only")
+    def test_windows_rollback_executable_restores_latest_merge(self) -> None:
+        repository = Path(__file__).resolve().parents[1]
+        dictionary_header = """# Rime dictionary
+---
+name: {name}
+version: "2026-08-04"
+sort: by_weight
+...
+"""
+        operation_header = """# Rime dictionary
+# encoding: utf-8
+---
+name: xmjd6.zzc
+version: "2026-08-04"
+sort: by_weight
+use_preset_vocabulary: false
+columns:
+  - text
+  - code
+...
+"""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            zzc_dir = root / "zzc"
+            zzc_dir.mkdir()
+            for executable in ("Win_词库合并.exe", "Win_撤回合并.exe"):
+                shutil.copy2(repository / "zzc" / executable, zzc_dir)
+            original_cizu = dictionary_header.format(name="xmjd6.cizu") + "原词\tycw\n"
+            (root / "xmjd6.cizu.dict.yaml").write_text(original_cizu, encoding="utf-8")
+            (root / "xmjd6.fjcy.dict.yaml").write_text(
+                dictionary_header.format(name="xmjd6.fjcy"), encoding="utf-8"
+            )
+            original_ops = operation_header + "100\tadd\t待撤回词\tdcht\t+\n"
+            (root / "xmjd6.zzc.dict.yaml").write_text(original_ops, encoding="utf-8")
+
+            merge = subprocess.run(
+                [str(zzc_dir / "Win_词库合并.exe")],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=60,
+                check=False,
+            )
+            self.assertEqual(merge.returncode, 0, (merge.stdout or "") + (merge.stderr or ""))
+            self.assertIn(
+                "待撤回词\tdcht",
+                (root / "xmjd6.cizu.dict.yaml").read_text(encoding="utf-8"),
+            )
+
+            rollback = subprocess.run(
+                [str(zzc_dir / "Win_撤回合并.exe")],
+                cwd=root,
+                input="1\nYES\n",
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=60,
+                check=False,
+            )
+
+            self.assertEqual(
+                rollback.returncode,
+                0,
+                (rollback.stdout or "") + (rollback.stderr or ""),
+            )
+            self.assertEqual(
+                (root / "xmjd6.cizu.dict.yaml").read_text(encoding="utf-8"),
+                original_cizu,
+            )
+            self.assertEqual(
+                (root / "xmjd6.zzc.dict.yaml").read_text(encoding="utf-8"),
+                original_ops,
+            )
+
+    def test_committed_windows_executables_match_sources_and_lock(self) -> None:
+        from tools.build_zzc_windows_exe import validate_committed_outputs
+
+        self.assertEqual(validate_committed_outputs(), [])
+
+    def test_windows_executables_are_binary_git_assets(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        attributes = (root / ".gitattributes").read_text(encoding="utf-8")
+
+        self.assertRegex(attributes, r"(?m)^\*\.exe\s+binary\s*$")
+
+    def test_package_and_release_run_windows_executable_checks(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        workflows = root / ".github" / "workflows"
+        for name in ("package-main.yml", "create-release.yml"):
+            workflow = (workflows / name).read_text(encoding="utf-8")
+            self.assertIn("windows-latest", workflow, name)
+            self.assertIn("test_windows_merge_executable_runs_current_xmjd6_behavior", workflow, name)
+            self.assertIn("test_windows_rollback_executable_restores_latest_merge", workflow, name)
+            self.assertIn("test_committed_windows_executables_match_sources_and_lock", workflow, name)
+            self.assertIn("python-version: '3.14.6'", workflow, name)
+            self.assertIn("pyinstaller==6.21.0", workflow, name)
+            self.assertIn("python tools/build_zzc_windows_exe.py", workflow, name)
+            self.assertIn("actions/upload-artifact@v7", workflow, name)
+            self.assertIn("actions/download-artifact@v7", workflow, name)
+            self.assertIn("name: zzc-windows-executables", workflow, name)
+
     def test_detects_generated_dictionary_drift(self) -> None:
         from tools import validate_repo
 
@@ -217,7 +381,7 @@ columns:
         for native_node24 in (
             "actions/checkout@v6",
             "actions/setup-python@v6",
-            "actions/upload-artifact@v6",
+            "actions/upload-artifact@v7",
             "actions/github-script@v9",
         ):
             self.assertIn(native_node24, workflows)

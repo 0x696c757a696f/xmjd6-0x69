@@ -339,6 +339,8 @@ Windows 用户可以在仓库根目录运行：
 python .\zzc\Windows_词库合并.py
 ```
 
+没有 Python 时可以直接双击 `zzc/Win_词库合并.exe`，需要撤回最近一次合并时双击 `zzc/Win_撤回合并.exe`。两个 EXE 均由当前 xmjd6 共享 Python 核心构建；`package-main` 和正式 Release 会先在 Windows Runner 上使用 Python 3.14.6 + PyInstaller 6.21.0 重新构建并实际执行合并、撤回测试，再把通过测试的 CI 产物交给最终打包，避免发布旧版或损坏的可执行文件。构建和校验方法见[合并脚本说明](zzc/README.md#重新构建-windows-exe)。
+
 ## 英文输入
 
 英文词典直接导入主词典，不需要 `xmjd6.en.schema.yaml`，也不需要切换方案。

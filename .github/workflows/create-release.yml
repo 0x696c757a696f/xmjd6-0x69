@@ -15,7 +15,37 @@ env:
   RABBIT_SHA256: 33a66a9a87845ea0eb78d552a8002c4a49902575f62422327032b29c4115a6ad
 
 jobs:
+  build-windows-executables:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.14.6'
+
+    - name: Install pinned executable builder
+      run: python -m pip install pyinstaller==6.21.0
+
+    - name: Build Windows executables from current Python sources
+      run: python tools/build_zzc_windows_exe.py
+
+    - name: Run rebuilt Windows executable checks
+      run: python -m unittest tests.test_tools.RepositoryValidationTests.test_windows_merge_executable_runs_current_xmjd6_behavior tests.test_tools.RepositoryValidationTests.test_windows_rollback_executable_restores_latest_merge tests.test_tools.RepositoryValidationTests.test_committed_windows_executables_match_sources_and_lock -v
+
+    - name: Upload rebuilt Windows executables
+      uses: actions/upload-artifact@v7
+      with:
+        name: zzc-windows-executables
+        path: |
+          zzc/Win_词库合并.exe
+          zzc/Win_撤回合并.exe
+        if-no-files-found: error
+        retention-days: 1
+
   release:
+    needs: build-windows-executables
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -42,6 +72,12 @@ jobs:
         python tools/validate_repo.py
         lua5.4 tests/run.lua
         python -m unittest discover -s tests -p 'test_*.py' -v
+
+    - name: Use Windows executables rebuilt by CI
+      uses: actions/download-artifact@v7
+      with:
+        name: zzc-windows-executables
+        path: zzc
 
     - name: Create directories
       run: |

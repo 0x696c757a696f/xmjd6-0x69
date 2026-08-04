@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "build": {
+    "date": "2026-08-04",
+    "python": "3.14.6",
+    "python_series": "3.14",
+    "pyinstaller": "6.21.0",
+    "platform": "Windows-64bit-intel"
+  },
+  "builder": {
+    "path": "tools/build_zzc_windows_exe.py",
+    "sha256": "1ebe046c8a2c693b1cc619f469c9d341fe3276bddda0cf76a6835905087678d5"
+  },
+  "executables": {
+    "zzc/Win_词库合并.exe": {
+      "source": "zzc/Linux_词库合并.py",
+      "source_sha256": "42acfc31b39de1be8c2af9155c749f0d585481d854136f58e7e3a717d6bf1167",
+      "sha256": "795db298f0be748c0041c03a81638511097076d4f2dad3a156e269f649ea5b85",
+      "size": 10151184,
+      "machine": "0x8664"
+    },
+    "zzc/Win_撤回合并.exe": {
+      "source": "zzc/Linux_撤回合并.py",
+      "source_sha256": "41c1917cd36f6e10d7b318722a5e26b803318d9bf3b44b4a6188a554e29bbb97",
+      "sha256": "1a95e67214d3af21d0a5c0681694704d2694ab2f978369e69956445f0648b1b1",
+      "size": 10129069,
+      "machine": "0x8664"
+    }
+  }
+}

@@ -11,7 +11,7 @@
 - Linux 撤回合并：运行 `python3 zzc/Linux_撤回合并.py`
 - iOS 合并：免费方案用 a-Shell 运行 `iOS_词库合并.py`，Pythonista 也可运行同一脚本
 
-Windows Python 入口只是薄包装，和 Linux 共用同一份可审查核心；现有 `.exe` 仅作为免安装入口保留，本次没有用不透明的上游二进制覆盖它。macOS 保留无扩展入口，Linux 保留 `.py` 脚本。
+Windows Python 入口只是薄包装，和 Linux 共用同一份可审查核心；两个 `.exe` 也直接从相同的 `Linux_*` 共享核心构建，不使用另一套算法或不透明的上游二进制。macOS 保留无扩展入口，Linux 保留 `.py` 脚本。
 
 旧的 `apply_zzc.py`、`gen_char_parts.py`、`.cmd`、`.bat` 入口已经废弃，不要恢复。
 
@@ -29,6 +29,24 @@ iOS 入口只负责路径配置和调用同一套合并核心，不另写合并�
 Linux/macOS 合并脚本按 Python 3.7+ 兼容写法维护，避免依赖 Python 3.9/3.10 专属运行时 API。
 
 `zzc/` 目录放脚本入口、README、说明附件和撤回备份；运行状态 TSV 放在同级 `zzc_state/`。
+
+## 重新构建 Windows EXE
+
+维护者应在 Windows 仓库根目录使用 Pixi 的隔离环境构建，不要直接上传来源不明的 EXE：
+
+```powershell
+pixi exec --spec "python=3.14.6" --spec "pyinstaller=6.21.0" python tools/build_zzc_windows_exe.py
+```
+
+生成器会直接冻结 `Linux_词库合并.py` 和 `Linux_撤回合并.py`，覆盖对应的 `Win_*.exe`，写入 `2026.08.04` Windows 文件版本，并更新 `tools/zzc_windows_executables.lock.json`。临时文件只写入被 Git 忽略的 `build/zzc-windows-exe/`。
+
+不安装 PyInstaller也可以检查已提交 EXE 是否匹配当前源码：
+
+```powershell
+python tools/build_zzc_windows_exe.py --check
+```
+
+校验会检查构建器与核心源码哈希、EXE 哈希和大小、PE 签名及 AMD64 架构。`package-main` 和正式 Release 会在 `windows-latest` 上使用相同的 Python 3.14.6 + PyInstaller 6.21.0 重新构建，再实际执行一次隔离的合并与撤回；通过测试的 CI 产物会覆盖工作流检出的 EXE 后进入最终压缩包。任何构建失败、二进制损坏或行为不符都会阻止打包。
 
 ## 当前 zzc 状态文件
 

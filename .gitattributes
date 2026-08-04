@@ -19,6 +19,7 @@ VERSION text eol=lf
 *.cmd text eol=crlf
 
 # Never run line-ending conversion on binary assets or release archives.
+*.exe  binary
 *.ico  binary
 *.png  binary
 *.jpg  binary
