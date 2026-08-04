@@ -44,6 +44,28 @@ class FetchOpenCCTests(unittest.TestCase):
 
 
 class RepositoryValidationTests(unittest.TestCase):
+    def test_detects_generated_dictionary_drift(self) -> None:
+        from tools import validate_repo
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            tools_dir = root / "tools"
+            tools_dir.mkdir()
+            (root / "generated.dict.yaml").write_text("changed\n", encoding="utf-8")
+            (tools_dir / "upstream_dictionaries.lock.json").write_text(
+                '{"generated":{"generated.dict.yaml":{"sha256":"expected"}}}\n',
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+
+            with patch.object(validate_repo, "ROOT", root):
+                validate_repo.validate_generated_dictionaries(errors)
+
+        self.assertEqual(
+            errors,
+            ["generated.dict.yaml: content differs from upstream dictionary lock"],
+        )
+
     def test_falls_back_to_lupa_when_luac_cannot_execute(self) -> None:
         from tools import validate_repo
 

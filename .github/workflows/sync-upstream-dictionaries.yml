@@ -1,0 +1,84 @@
+name: Sync upstream dictionaries
+
+on:
+  schedule:
+    # Weekly on Monday at 04:17 UTC; off the top of the hour to reduce delays.
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-upstream-dictionaries
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  BASE_BRANCH: ${{ github.event.repository.default_branch }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Detect and integrate upstream changes
+        shell: pwsh
+        run: ./tools/update_upstream_dictionaries.ps1 -Python python
+
+      - name: Detect generated changes
+        id: changes
+        shell: pwsh
+        run: |
+          $Changed = git status --porcelain -- `
+            xmjd6.danzi.dict.yaml `
+            xmjd6.ice.dict.yaml `
+            xmjd6.en.dict.yaml `
+            tools/upstream_dictionaries.lock.json
+          if ($Changed) {
+            "changed=true" >> $env:GITHUB_OUTPUT
+          }
+          else {
+            "changed=false" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Validate generated dictionaries
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4
+          python -m pip install -r requirements-dev.txt
+          python -m unittest discover -s tests -p 'test_*.py' -v
+          python tools/validate_repo.py
+          git diff --check
+
+      - name: Commit and open pull request
+        if: steps.changes.outputs.changed == 'true'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $Branch = "automation/upstream-dictionaries-$env:GITHUB_RUN_ID"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c $Branch
+          git add -- `
+            xmjd6.danzi.dict.yaml `
+            xmjd6.ice.dict.yaml `
+            xmjd6.en.dict.yaml `
+            tools/upstream_dictionaries.lock.json
+          git commit -m "chore: update upstream dictionaries"
+          git push origin "HEAD:refs/heads/$Branch"
+          gh pr create `
+            --base $env:BASE_BRANCH `
+            --head $Branch `
+            --title "chore: update upstream dictionaries" `
+            --body "Automated rebuild from newly detected upstream dictionary commits. The pinned hashes, generated checksums, deduplication, JianDao 6 priority assignment, and collision-rate cap have all been refreshed and validated."

@@ -210,6 +210,8 @@
 - **快捷功能配置：** `xmjd6.custom.yaml`  
 - **词库开关：** `xmjd6.extended.dict.yaml`  
 - **扩展词库补充：** `xmjd6.fjcy.dict.yaml`  
+- **雾凇上游转码词库：** `xmjd6.ice.dict.yaml`
+- **雾凇英文词库：** `xmjd6.en.dict.yaml`（输入 `i` 后进入英文）
 - **符号修改：** `xmjd6.symbols.yaml`  
 - **630规则和快符：** `xmjd6.core.dict.yaml`
 - **自造词词库：** `xmjd6.zzc.dict.yaml`
@@ -249,5 +251,55 @@ python tools/update_versions.py 2026-08-04
 ```bash
 python tools/dedupe_dictionaries.py
 ```
+
+同步锁定的键道单字表和雾凇词库：
+
+```bash
+python tools/sync_upstream_dictionaries.py --write
+```
+
+需要更新到两个上游分支的最新提交时运行：
+
+```bash
+python tools/sync_upstream_dictionaries.py --refresh --write
+```
+
+Windows 下推荐使用 PowerShell 7 增量更新器：
+
+```powershell
+& 'D:\Program Files\PowerShell\7\pwsh.exe' -File tools/update_upstream_dictionaries.ps1
+```
+
+它读取 `tools/upstream_dictionaries.lock.json` 中上次整合的 Git commit，使用
+本地裸仓库缓存比较该 commit 到上游最新 HEAD 的文件变化。只有锁定的词库
+源文件发生变化时才重新生成；生成仍基于最新完整快照，因此不会累积增量
+补丁造成的漂移。脚本在本机自动优先使用
+`D:\Dev\pixi\bin\python.exe`。只检查当前生成结果可运行：
+
+```powershell
+& 'D:\Program Files\PowerShell\7\pwsh.exe' -File tools/update_upstream_dictionaries.ps1 -CheckOnly
+```
+
+`.github/workflows/sync-upstream-dictionaries.yml` 每周一 04:17 UTC 自动检查，
+有变化时完成生成和验证并提交 PR，无变化则直接结束。首次使用前需要在
+GitHub 仓库的 **Settings → Actions → General → Workflow permissions** 中启用
+**Allow GitHub Actions to create and approve pull requests**；也可以随时在
+Actions 页面手动运行该工作流。
+
+同步器将 `amorphobia/rime-jiandao` 的 `01.danzi.txt` 生成为
+`xmjd6.danzi.dict.yaml`，并把 `iDvel/rime-ice` 的 `base`、`ext`、
+`others` 转成去重后的键道6编码。精确提交、生成文件校验值和许可证信息见
+`tools/upstream_dictionaries.lock.json` 与 `THIRD_PARTY.md`。
+
+同一个同步器还会合并 Rime-Ice 的 `en_dicts/en.dict.yaml` 与
+`en_dicts/en_ext.dict.yaml`，生成 `xmjd6.en.dict.yaml`。英文编码统一放在
+`i` 命名空间并直接导入 `xmjd6.extended`，因此不需要
+`xmjd6.en.schema.yaml`：按 `i` 后继续输入英文，第二个按键起预编辑区会隐藏
+入口字母 `i`，例如实际编码 `ihello` 显示为 `hello`。
+
+转码优先级为“本地词库 > base > ext > others”，同一来源内按上游权重和
+原始顺序排列。常用同音词优先占用短码，较低优先级词依次追加第 4～6 位
+笔画码；无法继续区分的候选会被删减，使合并后的重码率不高于现有本地
+词库，并限制新增词在同一编码下最多 8 个候选。
 
 **方案来源：** Proud丶Cat、热热、浮生、千年蟲；上游项目为 [hugh7007/xmjd6-rere](https://github.com/hugh7007/xmjd6-rere)。

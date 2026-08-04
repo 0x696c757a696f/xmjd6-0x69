@@ -53,16 +53,27 @@ def code_candidates(word: str, character_codes: Mapping[str, str]) -> list[str]:
     except KeyError as exc:
         raise ValueError(f"missing single-character code for {exc.args[0]!r}") from exc
 
-    if len(word) == 2:
+    return code_candidates_from_full_codes(full_codes)
+
+
+def code_candidates_from_full_codes(full_codes: Iterable[str]) -> list[str]:
+    """Generate word codes from position-specific full single-character codes."""
+    full_codes = list(full_codes)
+    if len(full_codes) < 2:
+        raise ValueError("word codes require at least two character codes")
+    if any(len(code) < 3 for code in full_codes):
+        raise ValueError("full single-character codes require at least three keys")
+
+    if len(full_codes) == 2:
         base = full_codes[0][:2] + full_codes[1][:2]
-    elif len(word) == 3:
+    elif len(full_codes) == 3:
         base = "".join(code[0] for code in full_codes)
     else:
         base = "".join(code[0] for code in full_codes[:3]) + full_codes[-1][0]
 
-    if len(word) == 2:
+    if len(full_codes) == 2:
         auxiliary = [full_codes[0][2], full_codes[1][2]]
-    elif len(word) == 3:
+    elif len(full_codes) == 3:
         auxiliary = [code[2] for code in full_codes]
     else:
         auxiliary = [full_codes[0][2], full_codes[1][2]]

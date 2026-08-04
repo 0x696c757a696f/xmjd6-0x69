@@ -982,6 +982,12 @@ local function _is_reverse_input(env, input)
     return env._rx_prefix[string_sub(input, 1, 1)] == true
 end
 
+local function _is_english_input(env, input)
+    local prefix = env and env._english_prefix
+    return type(prefix) == "string" and prefix ~= ""
+        and type(input) == "string" and string_sub(input, 1, #prefix) == prefix
+end
+
 local function _is_alpha_key(env, key, clean_key, kc)
     if (kc >= 65 and kc <= 90) or (kc >= 97 and kc <= 122) then return true end
     if type(key) == "string" and env._alpha[string_lower(key)] then return true end
@@ -1460,6 +1466,12 @@ local function processor(key_event, env)
     local plain_code_key = _plain_code_key(env, raw_key, clean_key, kc)
     local key = plain_code_key or raw_key
     local is_code_key = plain_code_key ~= nil or (env._alpha and env._alpha[key])
+    if is_code_key and _is_english_input(env, ctx.input or "") then
+        _topup_clear_pending_key(env)
+        env._af_seed = nil
+        _space_guard_clear(env)
+        return kNoop
+    end
     if _cold_start_push_code_key(env, ctx, key_event, plain_code_key, sf, caps_on) then
         return kAccepted
     end
@@ -1565,6 +1577,7 @@ local function init(env)
     env._tu_ac = config:get_bool("topup/auto_clear") or false
     env._tu_cmd = config:get_bool("topup/topup_command") or false
     env._tu_streaming = config:get_bool("translator/enable_sentence") or false
+    env._english_prefix = config:get_string("english/prefix") or "i"
     local schema_id = env.engine.schema.schema_id or ""
     env._rx_prefix = _collect_reverse_prefixes(config, schema_id, true)
     state.init_append(env, schema_id)
@@ -1602,6 +1615,7 @@ local function fini(env)
     env._tu_set = nil
     _topup_clear_queued_keys(env)
     env._rx_prefix = nil
+    env._english_prefix = nil
     env._append_input_key = nil
     env._append_suffix_key = nil
     env._af_seed = nil

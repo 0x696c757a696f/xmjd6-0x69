@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 import shutil
 import subprocess
@@ -173,6 +174,21 @@ def validate_python_syntax(errors: list[str]) -> None:
                 add_error(errors, path, f"invalid Python: {exc}")
 
 
+def validate_generated_dictionaries(errors: list[str]) -> None:
+    lock_path = ROOT / "tools" / "upstream_dictionaries.lock.json"
+    if not lock_path.is_file():
+        return
+    lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    for filename, metadata in lock.get("generated", {}).items():
+        path = ROOT / filename
+        if not path.is_file():
+            add_error(errors, lock_path, f"missing generated dictionary {filename}")
+            continue
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if digest != metadata.get("sha256"):
+            add_error(errors, path, "content differs from upstream dictionary lock")
+
+
 def main() -> int:
     errors: list[str] = []
     validate_layout(errors)
@@ -181,6 +197,7 @@ def main() -> int:
     validate_dictionaries(errors)
     validate_module_references(errors)
     validate_python_syntax(errors)
+    validate_generated_dictionaries(errors)
     lua_runtime = validate_lua_syntax(errors)
 
     if errors:

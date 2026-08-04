@@ -61,13 +61,6 @@ local function translator(input, seg, env)
         return
     end
 
-    if string_sub(input, 1, 1) == "i" then
-        core = core or require(ext_core_module(env))
-        if core.history_func and core.history_func(input, seg, env) then
-            return
-        end
-    end
-
     if string_sub(input, 1, 1) == "=" then
         local ctx = env and env.engine and env.engine.context
         if ctx and ctx.get_option and not ctx:get_option("jisuanqi") then

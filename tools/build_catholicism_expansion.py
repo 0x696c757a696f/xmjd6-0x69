@@ -157,7 +157,14 @@ def validate_phonetic_selections(
 
 
 def build_entries(root: Path = ROOT) -> BuildResult:
-    dictionary_paths = sorted(root.glob("*.dict.yaml"))
+    # xmjd6.ice is generated after, and deliberately has lower priority than,
+    # the curated Catholic dictionary. Letting its broad code coverage reserve
+    # codes here would make the curated output unstable on every upstream sync.
+    dictionary_paths = [
+        path
+        for path in sorted(root.glob("*.dict.yaml"))
+        if path.name != "xmjd6.ice.dict.yaml"
+    ]
     target = root / TARGET_NAME
     manifest_rows = load_manifest(root / MANIFEST_NAME)
     code_options = load_character_code_options(root / "xmjd6.danzi.dict.yaml")

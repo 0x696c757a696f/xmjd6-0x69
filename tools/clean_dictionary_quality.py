@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGET_NAMES = (
     "xmjd6.cizu.dict.yaml",
     "xmjd6.fjcy.dict.yaml",
+    "xmjd6.ice.dict.yaml",
     "pinyin_simp.dict.yaml",
 )
 

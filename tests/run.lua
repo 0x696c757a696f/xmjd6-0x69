@@ -73,7 +73,7 @@ local function base_env(options)
     }
 end
 
-test("lazy translator loads namespaced calculator, time and history modules", function()
+test("lazy translator leaves English i input to the main table", function()
     unload("xmjd6")
     _G.Candidate = candidate
     local yielded = {}
@@ -90,7 +90,9 @@ test("lazy translator loads namespaced calculator, time and history modules", fu
     translator.func("rq", seg, env)
     if #yielded == 0 then error("time translator yielded no candidates") end
 
+    yielded = {}
     translator.func("i", seg, env)
+    assert_equal(#yielded, 0, "English prefix must not yield history candidates")
 
     unload("xmjd6")
     local saved_debug = debug

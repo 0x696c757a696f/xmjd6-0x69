@@ -244,7 +244,9 @@ return {
         local input_len = #input_text
         local direct_symbols_input = input_text:sub(1, 1) == ";"
         local enabled = ctx and ctx:get_option("completion") or false
-        local allow_native_completion = enabled and not direct_symbols_input and input_len <= COMPLETION_MAX_CODE_LEN
+        local english_input = input_text:sub(1, 1) == "i"
+        local allow_native_completion = enabled and not direct_symbols_input
+            and (english_input or input_len <= COMPLETION_MAX_CODE_LEN)
         local allow_zzc_completion = allow_native_completion
         local danzi = env._danzi_first
         local reverse_lookup = nil
