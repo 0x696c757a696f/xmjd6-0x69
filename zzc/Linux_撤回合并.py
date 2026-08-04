@@ -8,6 +8,18 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 
 
+def configure_utf8_stdio() -> None:
+    """Keep Chinese paths printable in Windows and bundled executables."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="strict")
+        except (OSError, ValueError):
+            continue
+
+
 SCRIPT_PATH = Path(sys.executable if getattr(sys, "frozen", False) else __file__).resolve()
 START_DIR = SCRIPT_PATH.parent
 ZZC_DIR = START_DIR if START_DIR.name == "zzc" else START_DIR / "zzc"
@@ -101,6 +113,7 @@ def restore_log(log: Path) -> None:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     logs = latest_logs()
     if not logs:
         print("no rollback backup")

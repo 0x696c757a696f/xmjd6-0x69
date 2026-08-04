@@ -13,6 +13,18 @@ from time import perf_counter
 sys.dont_write_bytecode = True
 
 
+def configure_utf8_stdio() -> None:
+    """Keep Chinese paths printable in Windows and bundled executables."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="strict")
+        except (OSError, ValueError):
+            continue
+
+
 KEEP_ROLLBACKS = 3
 ZZC_DICT_NAME_RE = re.compile(r"^(?P<schema>.+)\.zzc\.dict(?:\((?P<number>\d+)\))?\.yaml$")
 
@@ -592,6 +604,7 @@ def clear_runtime_cache() -> None:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     started = perf_counter()
     print(f"scheme root: {ROOT}")
     print("zzc sources: " + ", ".join(path.name for path in OPS_SOURCES))

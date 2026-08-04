@@ -444,6 +444,37 @@ print("Win_撤回合并.exe", file=sys.stderr)
         self.assertEqual(result.stdout.decode("utf-8").strip(), "Win_词库合并.exe")
         self.assertEqual(result.stderr.decode("utf-8").strip(), "Win_撤回合并.exe")
 
+    def test_bundled_zzc_sources_reconfigure_stdio_to_utf8(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        scripts = (
+            root / "zzc" / "Linux_词库合并.py",
+            root / "zzc" / "Linux_撤回合并.py",
+        )
+        code = """
+import importlib.util
+import sys
+sys.stdout.reconfigure(encoding="cp1252", errors="strict")
+sys.stderr.reconfigure(encoding="cp1252", errors="strict")
+for index, path in enumerate(sys.argv[1:]):
+    spec = importlib.util.spec_from_file_location(f"zzc_utf8_{index}", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.configure_utf8_stdio()
+print("合并完成")
+print("撤回完成", file=sys.stderr)
+"""
+
+        result = subprocess.run(
+            [sys.executable, "-c", code, *(str(path) for path in scripts)],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+        self.assertEqual(result.stdout.decode("utf-8").strip(), "合并完成")
+        self.assertEqual(result.stderr.decode("utf-8").strip(), "撤回完成")
+
     def test_detects_generated_dictionary_drift(self) -> None:
         from tools import validate_repo
 

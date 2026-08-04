@@ -14,16 +14,16 @@
   "executables": {
     "zzc/Win_词库合并.exe": {
       "source": "zzc/Linux_词库合并.py",
-      "source_sha256": "42acfc31b39de1be8c2af9155c749f0d585481d854136f58e7e3a717d6bf1167",
-      "sha256": "bfce5976260634f4c42090f8ad635200f48521b0de35d89ebf8699ebcea3b27a",
-      "size": 10151518,
+      "source_sha256": "7f19086de90e1a55e3189a718a39c3745a464914e4347b81eccf4e3a2dbd58eb",
+      "sha256": "13d131d9edcc07400119701bfb1a62f79e0de07769f7ce25af5a7d8a461c8235",
+      "size": 10150910,
       "machine": "0x8664"
     },
     "zzc/Win_撤回合并.exe": {
       "source": "zzc/Linux_撤回合并.py",
-      "source_sha256": "41c1917cd36f6e10d7b318722a5e26b803318d9bf3b44b4a6188a554e29bbb97",
-      "sha256": "7f5827e20d2892527054bb88f7b1526fb8851a8f2fb9a568f5948f02ddeec931",
-      "size": 10132487,
+      "source_sha256": "f12e1b2d108e6cdb1d2bf3d55ce46970509baf43cba20d5fde83296318126140",
+      "sha256": "e62c26f3b2c7548a1eef7e14c863238c9902af779d92a343c6a398b3bf6ae669",
+      "size": 10132557,
       "machine": "0x8664"
     }
   }
