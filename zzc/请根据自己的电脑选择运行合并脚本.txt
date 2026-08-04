@@ -3,9 +3,11 @@ xmjd6 zzc 目录说明
 普通用户只需要按自己的电脑系统运行对应脚本。
 
 Windows:
+- Windows_词库合并.py（推荐使用 Pixi Python，调用当前可审查的合并核心）
+- Windows_撤回合并.py
 - Win_词库合并.exe
 - Win_撤回合并.exe
-- Windows 只需要双击 exe，不需要 Python。
+- 不安装 Python 时可双击 exe；维护者和 Pixi 用户优先使用 Python 入口。
 
 Mac:
 - Mac_词库合并
@@ -16,6 +18,13 @@ Linux:
 - Linux_词库合并.py
 - Linux_撤回合并.py
 - 需要电脑已安装 Python 3。
+
+iOS:
+- iOS_词库合并.py
+- 免费方案使用 a-Shell，Pythonista 也可以运行。
+- 把 Mac_词库合并 放在同目录或所选方案目录的 zzc/ 目录。
+- 首次运行选择最终方案目录；zzc_state 默认放在该目录下，不要分到两个同步位置。
+- 详细步骤见 a-Shell快捷指令合并说明.md 或 iOS快捷指令合并说明.md。
 
 重要文件:
 - ../xmjd6.zzc.dict.yaml

@@ -1,0 +1,83 @@
+name: Check rime-txjx implementation upstream
+
+on:
+  schedule:
+    - cron: "47 4 * * 1"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compare locked implementation commit
+        run: python tools/check_txjx_upstream.py --json > txjx-upstream-report.json
+
+      - name: Publish job summary
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path("txjx-upstream-report.json").read_text())
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as out:
+              out.write("## rime-txjx upstream check\n\n")
+              out.write(f"- Integrated: `{report['integrated_commit']}`\n")
+              out.write(f"- Current: `{report['current_commit']}`\n")
+              out.write(f"- Update available: `{report['update_available']}`\n")
+          PY
+
+      - name: Open or update review issue
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('txjx-upstream-report.json', 'utf8'));
+            if (!report.update_available) return;
+
+            const title = 'rime-txjx 上游实现有新提交待审查';
+            const compare = `https://github.com/wzxmer/rime-txjx/compare/${report.integrated_commit}...${report.current_commit}`;
+            const body = [
+              '自动检查发现已锁定的 rime-txjx 实现上游发生变化。',
+              '',
+              `- 已整合：\`${report.integrated_commit}\``,
+              `- 当前上游：\`${report.current_commit}\``,
+              `- [查看差异](${compare})`,
+              '',
+              '请重点审查锁文件列出的 source_paths，并继续保留 XMJD6 的模块命名空间、`i` 英文入口、OpenCC 目录和本地键道六顶功差异。不要直接覆盖本地文件。',
+            ].join('\n');
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = open.data.find(issue => issue.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+            }

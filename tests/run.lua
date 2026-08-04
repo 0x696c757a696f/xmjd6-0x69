@@ -190,6 +190,48 @@ test("typing statistics uses the shared cache registry", function()
     if not found then error("typing_stats cleaner was not registered") end
 end)
 
+test("modular input processor components load from the XMJD6 namespace", function()
+    local modules = {
+        "xmjd6.input.xmjd6_key_event",
+        "xmjd6.input.xmjd6_processor_state",
+        "xmjd6.input.xmjd6_commit_guard",
+        "xmjd6.input.xmjd6_ascii_input",
+        "xmjd6.input.xmjd6_direct_symbols",
+        "xmjd6.input.xmjd6_punctuation",
+        "xmjd6.input.xmjd6_topup",
+    }
+    for _, name in ipairs(modules) do
+        if type(require(name)) ~= "table" then
+            error(name .. " did not return a module table")
+        end
+    end
+    local processor = require("xmjd6.xmjd6_processor")
+    assert_equal(type(processor.init), "function", "processor init")
+    assert_equal(type(processor.func), "function", "processor func")
+    assert_equal(type(processor.fini), "function", "processor fini")
+end)
+
+test("ZZC operation chain recursively fills a deleted short-code gap", function()
+    local chain = require("xmjd6.zzc.xmjd6_zzc_chain")
+    local dictionary = {
+        abcd = { "原四码词" },
+        abcda = { "候补五码词" },
+        abcdao = { "候补六码词" },
+    }
+    local records, warning = chain.plan_delete({ "原四码词" }, "abcd", function(code)
+        return dictionary[code] or {}
+    end)
+
+    assert_equal(warning, nil, "chain warning")
+    assert_equal(records[1].op, "delete", "delete operation")
+    assert_equal(records[2].op, "move", "first compact operation")
+    assert_equal(records[2].word, "候补五码词", "first compact word")
+    assert_equal(records[2].code, "abcd", "first compact target")
+    assert_equal(records[4].op, "move", "recursive compact operation")
+    assert_equal(records[4].word, "候补六码词", "recursive compact word")
+    assert_equal(records[4].code, "abcda", "recursive compact target")
+end)
+
 local failed = 0
 for _, item in ipairs(tests) do
     local ok, err = xpcall(item.fn, debug.traceback)

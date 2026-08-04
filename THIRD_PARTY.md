@@ -1,4 +1,4 @@
-# Third-party dictionary sources
+# Third-party sources
 
 The generated dictionaries below retain their upstream provenance. Exact source
 commits and generated-file checksums are recorded in
@@ -46,3 +46,21 @@ normalized to reachable lowercase letter sequences and prefixed with `i` before
 the generated dictionary is imported into the main XMJD6 table. This removes
 the need for a separate auxiliary English schema while keeping English entries
 isolated from JianDao 6 codes.
+
+## Lua input and ZZZC implementation
+
+- Upstream: <https://github.com/wzxmer/rime-txjx>
+- Integrated commit: `da5635358e68d337f9858202b3fe5f7f14fc94d0`
+- Sources: modular input processor, ZZZC operation-chain implementation,
+  completion/reverse-hint optimizations, OpenCC lookup optimizations, newline
+  filter, merge scripts, documentation, and regression-test design
+- License: MIT
+- License copy: `licenses/rime-txjx-MIT.txt`
+- Integration lock: `tools/upstream_code.lock.json`
+
+The implementation is adapted rather than copied as a whole: module names are
+kept below `lua/xmjd6/`, state keys use the XMJD6 namespace, OpenCC assets stay
+below `opencc/xmjd6/`, and the main processor preserves this repository's `i`
+English prefix and JianDao 6 top-up behavior. TXJX dictionaries, schema files,
+root-level OpenCC data, opaque platform binaries, and project-specific release
+configuration are intentionally not imported.

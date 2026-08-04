@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import shutil
+import os
+import re
 import secrets
+import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -12,6 +14,7 @@ sys.dont_write_bytecode = True
 
 
 KEEP_ROLLBACKS = 3
+ZZC_DICT_NAME_RE = re.compile(r"^(?P<schema>.+)\.zzc\.dict(?:\((?P<number>\d+)\))?\.yaml$")
 
 
 def find_one(base: Path, pattern: str) -> Path:
@@ -21,14 +24,8 @@ def find_one(base: Path, pattern: str) -> Path:
     return matches[0]
 
 
-def strip_suffix(text: str, suffix: str) -> str:
-    if text.endswith(suffix):
-        return text[:-len(suffix)]
-    return text
-
-
 def target_dict_name_options(prefix: str) -> list[list[str]]:
-    if prefix.startswith("xmjd6"):
+    if prefix.startswith("txjx"):
         return [[f"{prefix}.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
     if prefix.startswith("xmjd"):
         return [[f"{prefix}.cizu.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
@@ -48,42 +45,86 @@ def resolve_target_dicts(root: Path, prefix: str) -> list[Path]:
     return out
 
 
-def has_target_dicts(base: Path, schema: str) -> bool:
-    return all(path.exists() for path in resolve_target_dicts(base, schema))
+def has_primary_target_dict(base: Path, schema: str) -> bool:
+    return resolve_target_dicts(base, schema)[0].exists()
 
 
-def discover_layout() -> tuple[Path, Path, Path, str]:
-    script_path = Path(sys.executable if getattr(sys, "frozen", False) else __file__).resolve()
-    start_dir = script_path.parent
-    search_dirs = [start_dir, start_dir.parent]
-    op_candidates = []
-    for base in search_dirs:
-        op_candidates += sorted(base.glob("*.zzc.dict.yaml"))
+def parse_zzc_dict_name(path: Path) -> tuple[str, bool] | None:
+    match = ZZC_DICT_NAME_RE.fullmatch(path.name)
+    if not match:
+        return None
+    return match.group("schema"), match.group("number") is not None
+
+
+def discover_ops_files(search_dirs: list[Path]) -> list[tuple[Path, str, bool]]:
+    candidates: list[tuple[Path, str, bool]] = []
     seen: set[Path] = set()
-    unique_ops: list[Path] = []
-    for path in op_candidates:
-        resolved = path.resolve()
-        if resolved not in seen:
+    for base in search_dirs:
+        if not base.exists():
+            continue
+        for path in sorted(base.iterdir(), key=lambda item: item.name):
+            parsed = parse_zzc_dict_name(path)
+            if not path.is_file() or not parsed:
+                continue
+            resolved = path.resolve()
+            if resolved in seen:
+                continue
             seen.add(resolved)
-            unique_ops.append(resolved)
-    if not unique_ops:
-        raise FileNotFoundError(f"missing *.zzc.dict.yaml in {start_dir} or {start_dir.parent}")
+            schema, numbered = parsed
+            candidates.append((resolved, schema, numbered))
+    return candidates
 
-    for ops_path in unique_ops:
-        schema = strip_suffix(ops_path.name, ".zzc.dict.yaml")
+
+def ops_family(
+    candidates: list[tuple[Path, str, bool]],
+    selected: Path,
+    schema: str,
+) -> tuple[Path, ...]:
+    return tuple(
+        path
+        for path, candidate_schema, _ in candidates
+        if candidate_schema == schema and path.parent == selected.parent
+    )
+
+
+def discover_layout() -> tuple[Path, Path, Path, tuple[Path, ...], str]:
+    root_override = os.environ.get("XMJD6_ZZC_ROOT")
+    if root_override:
+        start_dir = Path(root_override).expanduser().resolve()
+        if not start_dir.exists():
+            raise FileNotFoundError(f"missing scheme root: {start_dir}")
+        search_dirs = [start_dir]
+        ops_search_dirs = [start_dir, start_dir / "zzc"]
+    else:
+        script_path = Path(sys.executable if getattr(sys, "frozen", False) else __file__).resolve()
+        start_dir = script_path.parent
+        search_dirs = [start_dir, start_dir.parent]
+        ops_search_dirs = search_dirs
+    op_candidates = discover_ops_files(ops_search_dirs)
+    if not op_candidates:
+        raise FileNotFoundError(
+            f"missing *.zzc.dict.yaml or *.zzc.dict(number).yaml in {start_dir} or {start_dir.parent}"
+        )
+
+    for ops_path, schema, _ in op_candidates:
         for root in search_dirs:
-            if has_target_dicts(root, schema):
+            if has_primary_target_dict(root, schema):
                 zzc_dir = root / "zzc" if (root / "zzc").exists() else ops_path.parent
-                return root, zzc_dir, ops_path, schema
-    ops_path = unique_ops[0]
-    schema = strip_suffix(ops_path.name, ".zzc.dict.yaml")
+                ops_path = ops_path.parent / f"{schema}.zzc.dict.yaml"
+                return root, zzc_dir, ops_path, ops_family(op_candidates, ops_path, schema), schema
+    selected, schema, _ = op_candidates[0]
+    ops_path = selected.parent / f"{schema}.zzc.dict.yaml"
     root = ops_path.parent.parent if ops_path.parent.name == "zzc" else ops_path.parent
     zzc_dir = root / "zzc" if (root / "zzc").exists() else ops_path.parent
-    return root, zzc_dir, ops_path, schema
+    return root, zzc_dir, ops_path, ops_family(op_candidates, ops_path, schema), schema
 
 
-ROOT, ZZC_DIR, OPS, SCHEMA = discover_layout()
-STATE_DIR = ROOT / "zzc_state"
+ROOT, ZZC_DIR, OPS, OPS_SOURCES, SCHEMA = discover_layout()
+STATE_DIR = (
+    Path(os.environ["XMJD6_ZZC_STATE_DIR"]).expanduser().resolve()
+    if os.environ.get("XMJD6_ZZC_STATE_DIR")
+    else ROOT / "zzc_state"
+)
 ROLLBACK_DIR = ZZC_DIR / "撤回合并"
 RUNTIME_EXACT = STATE_DIR / "runtime_exact.tsv"
 RUNTIME_OPS = STATE_DIR / "runtime_ops.tsv"
@@ -183,7 +224,7 @@ def ops_header() -> str:
             "# encoding: utf-8",
             "---",
             f"name: {SCHEMA}.zzc",
-            'version: "2026-06-20"',
+            'version: "2026-08-04"',
             "sort: by_weight",
             "use_preset_vocabulary: false",
             "columns:",
@@ -220,7 +261,8 @@ def rebuild_char_parts() -> int:
 
 def load_ops() -> list[dict[str, str]]:
     ops: list[dict[str, str]] = []
-    for source in (OPS, RUNTIME_OPS, LEGACY_RUNTIME_OPS, LEGACY_ROOT_OPS, LEGACY_OPS, LEGACY_PENDING):
+    sources = (*OPS_SOURCES, RUNTIME_OPS, LEGACY_RUNTIME_OPS, LEGACY_ROOT_OPS, LEGACY_OPS, LEGACY_PENDING)
+    for source in sources:
         if not source.exists():
             continue
         for line in read_text(source).splitlines():
@@ -403,16 +445,20 @@ def insert_rows_by_code(
     return inserted_by_path
 
 
-def prune_rollback_logs() -> None:
-    if not ROLLBACK_DIR.exists():
-        return
+def prune_rollback_logs(rollback_dir: Path | None = None) -> list[Path]:
+    rollback_dir = rollback_dir or ROLLBACK_DIR
+    if not rollback_dir.exists():
+        return []
     logs = sorted(
-        [p for p in ROLLBACK_DIR.iterdir() if p.is_dir() and p.name.lower() != "logs"],
+        [p for p in rollback_dir.iterdir() if p.is_dir() and p.name.lower() != "logs"],
         key=lambda p: p.name,
         reverse=True,
     )
+    removed = []
     for old in logs[KEEP_ROLLBACKS:]:
-        shutil.rmtree(old, ignore_errors=True)
+        shutil.rmtree(old)
+        removed.append(old)
+    return removed
 
 
 def backup_if_exists(path: Path, backup_dir: Path, manifest: list[str], key: str) -> None:
@@ -425,7 +471,7 @@ def backup_if_exists(path: Path, backup_dir: Path, manifest: list[str], key: str
 
 
 def create_rollback_log(ops_count: int, keep_count: int) -> Path:
-    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
     log_dir = ROLLBACK_DIR / stamp
     dict_dir = log_dir / "dicts"
     state_dir = log_dir / "state"
@@ -442,7 +488,8 @@ def create_rollback_log(ops_count: int, keep_count: int) -> Path:
         "target_paths=" + "|".join(str(p) for p in TARGET_DICTS if p.exists()),
     ]
 
-    backup_if_exists(OPS, state_dir, manifest, "state_path")
+    for ops_path in OPS_SOURCES:
+        backup_if_exists(ops_path, state_dir, manifest, "state_path")
     backup_if_exists(RUNTIME_OPS, state_dir, manifest, "state_path")
     backup_if_exists(EFFECTIVE_STATE, state_dir, manifest, "state_path")
     backup_if_exists(RUNTIME_EXACT, state_dir, manifest, "state_path")
@@ -525,6 +572,17 @@ def clear_ops() -> None:
     touch_cache_version()
 
 
+def remove_numbered_ops() -> int:
+    removed = 0
+    for path in OPS_SOURCES:
+        parsed = parse_zzc_dict_name(path)
+        if not parsed or not parsed[1] or not path.exists():
+            continue
+        path.unlink()
+        removed += 1
+    return removed
+
+
 def clear_runtime_cache() -> None:
     removed = 0
     for group_file in list(STATE_DIR.glob("group_*.tsv")) + list(ZZC_DIR.glob("group_*.tsv")):
@@ -538,6 +596,10 @@ def clear_runtime_cache() -> None:
 def main() -> int:
     started = perf_counter()
     print(f"scheme root: {ROOT}")
+    print("zzc sources: " + ", ".join(path.name for path in OPS_SOURCES))
+    pruned = prune_rollback_logs()
+    if pruned:
+        print(f"pruned rollback backups: {len(pruned)}")
     char_count = rebuild_char_parts()
     print(f"rebuilt char_parts.tsv: {char_count} chars")
 
@@ -545,6 +607,14 @@ def main() -> int:
     keep_rows = final_rows_from_ops(ops)
     print(f"pending ops: {len(ops)}; final rows: {len(keep_rows)}")
     if not ops:
+        numbered_sources = [path for path in OPS_SOURCES if parse_zzc_dict_name(path)[1]]
+        if numbered_sources:
+            log_dir = create_rollback_log(0, 0)
+            print(f"rollback backup: {log_dir.relative_to(ZZC_DIR)}")
+            write_text(OPS, ops_header())
+            removed = remove_numbered_ops()
+            print(f"consolidated zzc files: removed={removed}")
+            return 0
         print("no zzc ops to merge")
         return 0
 
@@ -555,6 +625,9 @@ def main() -> int:
     clear_ops()
     clear_runtime_cache()
     write_reset_marker()
+    removed = remove_numbered_ops()
+    if removed:
+        print(f"removed numbered zzc files: {removed}")
     print(f"merge done: {perf_counter() - started:.1f}s")
     return 0
 

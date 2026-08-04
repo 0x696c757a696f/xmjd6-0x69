@@ -70,23 +70,79 @@
 
 这里的 `i` 同时也是“竖”的辅助码；只有当它位于输入开头时，才作为英文入口。
 
-## 常用入口与快捷功能
+## 如何使用
 
-| 输入或按键 | 功能 |
+### 基础输入与反查入口
+
+| 想做什么 | 输入方式 | 示例或说明 |
+| --- | --- | --- |
+| 输入中文 | 直接输入键道6编码 | 空格上屏首选，数字选择对应候选；达到顶功条件时自动上屏 |
+| 输入英文 | `i` + 英文字母 | `ihello` 的预编辑和候选均显示 `hello`，第二键开始隐藏入口 `i` |
+| 用全拼查键道码 | `u` + 全拼 | 适合知道读音、忘记键道编码时使用；候选注释显示键道码 |
+| 拆字查不会读的字 | `v` + 二分编码 | 使用二分反查定位汉字，并显示键道码 |
+| 查繁体和生僻字 | `o` + 编码 | 进入 GBK/扩展单字词典；此入口不追加 Emoji |
+| 输入快符 | `;` + 字母编码 | 开启“快符开”后使用；叶节点可直接上屏，行为可在 custom 文件中调整 |
+| 使用计算器 | `=` + 表达式 | 未显示候选菜单时输入，例如 `=1+2*3`；有候选菜单时 `=` 是下一页 |
+| 查看打字统计 | `=tj` | 显示累计字数、速度等本地统计信息 |
+| 输入日期时间 | 输入 `rq` 等日期码 | 日期、时间候选由 Lua 动态生成 |
+| 使用自造词 | `\` 进入指令模式 | 详见[自造词使用教程](zzc/自造词使用教程.md) |
+
+`u`、`v`、`o` 是反查专用入口，不参与 Emoji 转换；普通中文编码才会在开启 Emoji 后附加表情候选。`i` 只有位于输入开头时才是英文入口，在中文编码的第 2～6 位仍按“竖”笔画码处理。
+
+### 候选、翻页和方案切换
+
+| 按键 | 条件 | 行为 |
+| --- | --- | --- |
+| `Space` | 有候选 | 上屏当前选中候选 |
+| `1`～`5` | 有候选 | 选择本页对应序号；候选页大小默认是 5 |
+| `Tab` | 有候选 | 选择第 2 个候选 |
+| `-` | 有候选 | 上一页 |
+| `=` | 有候选 | 下一页；没有候选时可作为计算器入口 |
+| `F6` | 任意状态 | 切换到下一个输入方案 |
+| `F7` | 任意状态 | 切换简体/繁体输出 |
+| `Ctrl + \` | 任意状态 | 开启或关闭 Emoji 候选 |
+
+### 功能开关和默认状态
+
+重新部署后，方案选单中的开关状态由 [`xmjd6.custom.yaml`](xmjd6.custom.yaml) 控制：
+
+| 开关 | 默认 | 作用 |
+| --- | :---: | --- |
+| 中文/英文 | 中文 | 整体 ASCII 模式；平时输英文无需切换，直接使用 `i` 入口 |
+| 简体/繁體 | 简体 | OpenCC 简繁转换，也可按 `F7` 切换 |
+| 简约/逐码展示 | 逐码展示 | 是否显示逐码补全候选 |
+| 简约/表情展示 | 表情展示 | 是否给普通中文候选追加 Emoji |
+| 快符关/快符开 | 快符开 | 是否启用 `;` 快符入口 |
+| `;` 次选 | 关闭 | 是否把分号用作次选键；与快符习惯有关 |
+| 计算关/计算开 | 计算开 | 是否启用 `=` 计算器和工具入口 |
+| 空顶关/空顶开 | 关闭 | 是否启用空码顶功 |
+| 简约/630提示 | 630提示 | 是否显示 630 规则辅助提示 |
+| 地球文/火星文 | 地球文 | 是否启用火星文转换 |
+| 半角/全角 | 半角 | 标点和字符宽度 |
+
+默认启用键道顶功、逐码补全、Emoji、快符、计算器和 630 提示，默认关闭流式整句输入。若 Emoji 没出现，依次确认“表情展示”已开启、输入的是普通中文编码而不是 `u/v/o` 反查、文件已完整复制到 `opencc/xmjd6/`，然后重新部署。
+
+### 自造词指令速查
+
+| 指令 | 作用 |
 | --- | --- |
-| `i` + 英文字母 | 英文词库；输入第二键后隐藏入口 `i` |
-| `u` + 全拼 | 全拼反查，显示对应键道编码 |
-| `v` + 二分编码 | 二分反查，用于不会读的字 |
-| `o` + 编码 | GBK、繁体和生僻字扩展入口 |
-| `\` | 自造词入口，详见 [`zzc/自造词使用教程.md`](zzc/自造词使用教程.md) |
-| `;` + 编码 | 快符入口 |
-| `=` + 表达式 | 计算器及工具入口 |
-| `=tj` | 查看打字统计 |
-| `rq` | 日期候选 |
-| `F7` | 切换简体/繁体 |
-| `Ctrl + \` | 切换 Emoji |
+| `编码\自造词\` | 空码时新增；已有首选时替换首选，并把原词递归顺延到更长编码 |
+| `\自造词3`～`\自造词6` | 指定 3～6 码造词，达到码长后自动结束 |
+| `编码\+自造词\` | 追加为当前编码的重码候选 |
+| `编码\-数字\` | 删除指定序号候选；省略数字时删除首选 |
+| `编码\数字\` | 将指定序号候选置顶或前移 |
+| `编码\<\` | 把当前候选前移一码，并递归整理被占用的编码 |
+| `编码\++数字\` | 从可恢复候选列表恢复指定项 |
+| `\--\` | 撤回最近一次尚未合并的自造词操作 |
+| `\!!!\` | 清空全部尚未合并的自造词操作 |
 
-默认启用顶功、逐码补全、Emoji、快符、计算器和 630 提示；默认关闭流式整句输入。具体默认状态可在 [`xmjd6.custom.yaml`](xmjd6.custom.yaml) 中修改。
+输入法会在会话结束时把运行时操作安全追加到 `xmjd6.zzc.dict.yaml`；要永久整理进正式词库，再运行 `zzc/` 中对应平台的合并脚本。完整的保存、跨设备同步、合并和撤回流程见[自造词使用教程](zzc/自造词使用教程.md)和[合并脚本说明](zzc/README.md)。
+
+Windows/Pixi 用户可以直接运行：
+
+```powershell
+& 'D:\Dev\pixi\bin\python.exe' zzc\Windows_词库合并.py
+```
 
 ## 英文输入
 
@@ -192,6 +248,14 @@ Windows 下推荐使用 PowerShell 7：
 
 `.github/workflows/sync-upstream-dictionaries.yml` 每周一 04:17 UTC 自动检查，有变化时运行测试并创建 PR。首次启用自动 PR 前，需要在仓库的 **Settings → Actions → General → Workflow permissions** 中允许 GitHub Actions 创建 Pull Request。
 
+Lua 与自造词实现参考 [wzxmer/rime-txjx](https://github.com/wzxmer/rime-txjx)，已整合的 commit、审查目录和明确排除项记录在 [`tools/upstream_code.lock.json`](tools/upstream_code.lock.json)。这部分不能像纯词库一样无损自动重建，因为必须保留 XMJD6 的命名空间、英文 `i` 入口和顶功差异；因此每周检查只会创建待审查 Issue，不会盲目覆盖本地代码：
+
+```powershell
+& 'D:\Dev\pixi\bin\python.exe' tools/check_txjx_upstream.py
+```
+
+对应工作流是 `.github/workflows/check-txjx-upstream.yml`，不包含任何本机绝对仓库路径，在 GitHub Actions 的 checkout 目录中运行。
+
 第三方来源、固定版本和许可证见 [`THIRD_PARTY.md`](THIRD_PARTY.md) 与 [`licenses/`](licenses/)。
 
 ## 维护与验证
@@ -205,6 +269,7 @@ $python = 'D:\Dev\pixi\bin\python.exe'
 & $python tools/validate_repo.py
 & $python tools/clean_dictionary_quality.py --check
 & $python tools/sync_upstream_dictionaries.py --check
+& $python tools/check_txjx_upstream.py
 git diff --check
 ```
 
@@ -235,6 +300,8 @@ git diff --check
 ├─ xmjd6.extended.dict.yaml          词库入口
 ├─ xmjd6.*.dict.yaml                 本地与生成词库
 ├─ lua/xmjd6/                        Lua 处理器、翻译器和过滤器
+│  ├─ input/                         模块化按键、顶功、标点和快符处理
+│  └─ zzc/                           自造词运行时、候选和操作链
 ├─ opencc/xmjd6/                     OpenCC 命名空间数据
 ├─ tools/                             生成、同步、清理和验证工具
 ├─ tests/                             Python 与 Lua 回归测试
@@ -257,4 +324,4 @@ git diff --check
 - 天行键参考：[wzxmer/rime-txjx](https://github.com/wzxmer/rime-txjx)
 - 当前方案上游：[hugh7007/xmjd6-rere](https://github.com/hugh7007/xmjd6-rere)
 
-本仓库包含来自多个上游项目的材料。Rime-Jiandao 单字数据使用 AGPL-3.0-or-later，Rime-Ice 词库使用 GPL-3.0；具体来源、固定 commit 和许可证文本以 [`THIRD_PARTY.md`](THIRD_PARTY.md) 为准。
+本仓库包含来自多个上游项目的材料。Rime-Jiandao 单字数据使用 AGPL-3.0-or-later，Rime-Ice 词库使用 GPL-3.0，rime-txjx 参考实现使用 MIT；具体来源、固定 commit 和许可证文本以 [`THIRD_PARTY.md`](THIRD_PARTY.md) 为准。

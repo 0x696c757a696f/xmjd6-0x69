@@ -124,7 +124,10 @@ def validate_module_references(errors: list[str]) -> None:
     for path in sorted(ROOT.glob("*.yaml")):
         text = path.read_text(encoding="utf-8-sig")
         for module in COMPONENT_RE.findall(text):
-            target = ROOT / "lua" / (module.replace(".", "/") + ".lua")
+            # Rime permits an explicit component namespace after the module,
+            # for example ``lua_filter@*pkg/filter@filter_namespace``.
+            module_path = module.split("@", 1)[0]
+            target = ROOT / "lua" / (module_path.replace(".", "/") + ".lua")
             if not target.is_file():
                 add_error(errors, path, f"Lua component {module!r} does not resolve to {target.relative_to(ROOT)}")
 
@@ -189,6 +192,27 @@ def validate_generated_dictionaries(errors: list[str]) -> None:
             add_error(errors, path, "content differs from upstream dictionary lock")
 
 
+def validate_upstream_code_lock(errors: list[str]) -> None:
+    lock_path = ROOT / "tools" / "upstream_code.lock.json"
+    if not lock_path.is_file():
+        return
+    try:
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        add_error(errors, lock_path, f"invalid JSON: {exc}")
+        return
+    for name, metadata in lock.get("upstreams", {}).items():
+        commit = metadata.get("commit", "")
+        if not re.fullmatch(r"[0-9a-f]{40}", commit):
+            add_error(errors, lock_path, f"{name} commit must be a full 40-character Git hash")
+        license_path = ROOT / metadata.get("license_file", "")
+        if not license_path.is_file():
+            add_error(errors, lock_path, f"{name} license file is missing")
+        for relative in metadata.get("local_paths", []):
+            if not (ROOT / relative).exists():
+                add_error(errors, lock_path, f"{name} local path is missing: {relative}")
+
+
 def main() -> int:
     errors: list[str] = []
     validate_layout(errors)
@@ -198,6 +222,7 @@ def main() -> int:
     validate_module_references(errors)
     validate_python_syntax(errors)
     validate_generated_dictionaries(errors)
+    validate_upstream_code_lock(errors)
     lua_runtime = validate_lua_syntax(errors)
 
     if errors:

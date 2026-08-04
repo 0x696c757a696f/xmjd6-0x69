@@ -77,7 +77,8 @@ engine:
     - lua_filter@*xmjd6/xmjd6_reverse_hint      # 万能符反查读音补全
     - lua_filter@*xmjd6/xmjd6_filter            # 630提示（必须在emoji_cn之前）
     # 原生 OpenCC 过滤器功能不够灵活，改用 lua 实现
-    - lua_filter@*xmjd6/xmjd6_opencc_filter
+    - lua_filter@*xmjd6/xmjd6_opencc_filter@xmjd6_opencc_filter
+    - lua_filter@*xmjd6/xmjd6_newline
     - uniquifier         # 去重
 
 # ============ 开关 ============
@@ -108,6 +109,8 @@ switches:
 ascii_composer:
   switch_key:
     Caps_Lock: noop
+    Shift_L: commit_code
+    Shift_R: commit_code
 
 # ============ 拼写 ============
 speller:
@@ -279,7 +282,6 @@ recognizer:
   #import_preset: default
   patterns:
     email: "^[A-Za-z][-_.0-9A-Za-z]*@.*$"
-    uppercase: "[A-Z][-_+.'0-9A-Za-z]*$"
     url: "^(www[.]|https?:|ftp[.:]|mailto:|file:).*$|^[a-z]+[.].+$"
     reverse_lookup: "[a-z`]*`+[a-z`]*"
     expression: "^=[^;']+$"

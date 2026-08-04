@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "updated": "2026-08-04",
+  "upstreams": {
+    "rime-txjx": {
+      "repository": "https://github.com/wzxmer/rime-txjx.git",
+      "ref": "refs/heads/main",
+      "commit": "da5635358e68d337f9858202b3fe5f7f14fc94d0",
+      "license": "MIT",
+      "license_file": "licenses/rime-txjx-MIT.txt",
+      "integration": "adapted",
+      "source_paths": [
+        "lua/input",
+        "lua/zzc",
+        "lua/txjx_completion.lua",
+        "lua/txjx_newline.lua",
+        "lua/txjx_opencc_data.lua",
+        "lua/txjx_opencc_filter.lua",
+        "lua/txjx_processor.lua",
+        "lua/txjx_reverse_hint.lua",
+        "tests",
+        "zzc"
+      ],
+      "local_paths": [
+        "lua/xmjd6/input",
+        "lua/xmjd6/zzc",
+        "lua/xmjd6/xmjd6_completion.lua",
+        "lua/xmjd6/xmjd6_newline.lua",
+        "lua/xmjd6/xmjd6_opencc_data.lua",
+        "lua/xmjd6/xmjd6_opencc_filter.lua",
+        "lua/xmjd6/xmjd6_processor.lua",
+        "lua/xmjd6/xmjd6_reverse_hint.lua",
+        "zzc"
+      ],
+      "excluded": [
+        "TXJX dictionaries and schemas",
+        "root-level OpenCC assets",
+        "platform executables",
+        "upstream workflows and release configuration"
+      ]
+    }
+  }
+}

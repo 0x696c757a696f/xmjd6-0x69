@@ -9,8 +9,11 @@ patch:
   speller/auto_select: false         # 自动上屏开关，默认关闭
   hint_text: ''                      # 顶功提示符（在''中间添加符号，例如 '🔞'）
   menu/page_size: 5                  # 候选项数
-  xmjd6/history_size: 5              # i键历史候选保存数量
   xmjd6/direct_symbols_fast_leaf: false # 设置成false后，快符会顶功上屏补全候选内容
+  xmjd6_completion/max_scan_candidates: 50      # 每次最多扫描的原始候选数；0 表示不限
+  xmjd6_completion/max_deferred_candidates: 30  # 单字优先时最多暂存的词候选数；0 表示不限
+  reverse_hint/use_pron_map: true                # 优先直接读取 cx 字典，减少逐候选反查
+  reverse_hint/pron_map_file: xmjd6.cx.dict.yaml
   
   # menu/alternative_select_labels: ["〡", "〢", " 〣", " 〤", " 〥", " 〦", " 〧", " 〨", " 〩", ""]
   # menu/alternative_select_keys: ASDFGHJKL  # 如编码字符占用数字键，则需另设选字键
@@ -36,7 +39,8 @@ patch:
   #   @3 ascii_composer  @4 recognizer  @5 key_binder  @6 speller  @7 punctuator
   #   @8 selector  @9 navigator  @10 express_editor
   # filters 索引：@0 xmjd6_zzc_filter  @1 xmjd6_completion  @2 reverse_lookup
-  #   @3 xmjd6_reverse_hint  @4 xmjd6_filter  @5 xmjd6_opencc_filter  @6 uniquifier
+  #   @3 xmjd6_reverse_hint  @4 xmjd6_filter  @5 xmjd6_opencc_filter
+  #   @6 xmjd6_newline  @7 uniquifier
 
   # ==================== 流式输入配置 ====================
   # 如需启用流式输入，请取消以下注释（删除行首 # 和空格）
