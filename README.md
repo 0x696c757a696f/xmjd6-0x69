@@ -39,6 +39,28 @@
 
 部署失败或更新后仍显示旧候选时，请先确认文件放在正确的用户目录，再从输入法菜单执行一次“重新部署”。
 
+### 东风破（plum）安装与更新
+
+仓库根目录提供了 `recipe.yaml`，可由东风破直接安装或更新。Linux、macOS 以及带 Bash 的环境可执行：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rime/plum/master/rime-install | bash -s -- 0x696c757a696f/xmjd6-0x69
+```
+
+Windows 可从小狼毫菜单打开“输入法设定／获取更多输入方案”，输入：
+
+```text
+0x696c757a696f/xmjd6-0x69
+```
+
+也可以在已经安装东风破的命令行中运行 `rime-install 0x696c757a696f/xmjd6-0x69`。安装完成后仍需重新部署。配方只复制 Rime 运行所需的 YAML、`lua/xmjd6/`、`opencc/xmjd6/` 和必要的自造词部件表；它通过东风破补丁把 `xmjd6` 安全加入现有方案列表，不直接覆盖用户的 `*.custom.yaml`。仓库测试、构建脚本、EXE、`xmjd6_user.txt`、`*.userdb` 和自造词运行记录都不会被安装或覆盖。
+
+### 中州韵助手（rimetool）兼容性
+
+本方案已补齐中州韵助手用于识别和编辑方案的主要结构：`default.yaml` 与 `default.custom.yaml` 都列出 `xmjd6`，schema 内有方案名、完整开关状态及显式 `reset`、本方案快捷键和 `menu/page_size`；各词典也都有明确的 `text`、`code` 等列和实际编码。
+
+可以用中州韵助手调整 schema、候选数、开关和客户端外观。不过，本仓库为了让宗派词库及大型词库仍可人工审阅，在部分码表正文保留了分类注释；中州韵助手的兼容约定不建议正文注释，因此不建议在其中对这些大型码表执行“全库重写”。正常浏览、Rime 编译和输入不受影响。`melt_eng`、`custom_phrase` 是雾凇方案专用的节点，本方案的英文入口和用户词功能实现不同，不添加无效的同名占位配置。
+
 ### 便携发行包
 
 - Windows 小小输入法：[yong-xmjd6-full.zip](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/yong-xmjd6-full.zip)

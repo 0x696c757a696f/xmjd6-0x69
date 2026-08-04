@@ -1,0 +1,29 @@
+# encoding: utf-8
+---
+recipe:
+  Rx: all
+  description: >-
+    安装或更新星猫键道6；保留用户自定义配置、用户数据库和自造词运行状态。
+install_files: >-
+  default.yaml
+  Hamster.yaml
+  liangfen*.yaml
+  pinyin_simp*.yaml
+  squirrel.yaml
+  weasel.yaml
+  xmjd6.*.dict.yaml
+  xmjd6.*.schema.yaml
+  xmjd6.schema.yaml
+  xmjd6.symbols.yaml
+  lua/xmjd6/*.lua
+  lua/xmjd6/*/*.lua
+  opencc/xmjd6/*.lua
+  zzc_state/char_parts.tsv
+  exclude_iCloud_rime_files.txt
+  include_iCloud_rime_files.txt
+  include_keyboard_rime_files.txt
+patch_files:
+  default.custom.yaml:
+    - patch/+:
+        schema_list/+/+:
+          - schema: xmjd6

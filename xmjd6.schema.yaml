@@ -85,26 +85,37 @@ engine:
 switches:
   - name: ascii_mode  # custom.yaml的开关0
     states: [ 中文, 英文 ]
+    reset: 0
   - name: jffh  # custom.yaml的开关1
     states: [ 简体, 繁體 ]
+    reset: 0
   - name: completion  # custom.yaml的开关2
     states: [ 简约, 逐码展示 ]
+    reset: 1
   - name: emoji_cn  # custom.yaml的开关3
     states: [ 简约, 表情展示 ]
+    reset: 1
   - name: direct_symbols  # custom.yaml的开关4
     states: [ 快符关, 快符开 ]
+    reset: 1
   - name: smarttwo  # custom.yaml的开关5
     states: [ ";次选关", ";次选开" ]
+    reset: 0
   - name: jisuanqi  # custom.yaml的开关6
     states: [ 计算关, 计算开 ]
+    reset: 1
   - name: auto_fallback  # custom.yaml的开关7
     states: [ 空顶关, 空顶开 ]
+    reset: 0
   - name: sbb_hint  # custom.yaml的开关8
     states: [ 简约, 630提示 ]
+    reset: 1
   - name: mars  # custom.yaml的开关9
     states: [ 地球文, 火星文 ] #火星文
+    reset: 0
   - name: full_shape  # custom.yaml的开关10
     states: [ 半角, 全角 ]
+    reset: 0
 
 ascii_composer:
   switch_key:

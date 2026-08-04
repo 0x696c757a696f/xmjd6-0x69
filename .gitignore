@@ -35,8 +35,7 @@ rime_console
 rime_deployer
 rime_patch
 
-# These two files are repository templates/data despite matching user patterns.
-!xmjd6_user.txt
+# This file is a repository template despite matching the user-data pattern.
 !xmjd6.user.dict.yaml
 
 # Local products made by the release workflow

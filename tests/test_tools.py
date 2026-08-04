@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import fnmatch
 import importlib.util
 import shutil
 import subprocess
@@ -48,6 +49,84 @@ class FetchOpenCCTests(unittest.TestCase):
 
 
 class RepositoryValidationTests(unittest.TestCase):
+    def test_generated_xmjd6_user_text_database_is_not_distributed(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+
+        self.assertFalse((root / "xmjd6_user.txt").exists())
+        ignored = subprocess.run(
+            ["git", "check-ignore", "-q", "--no-index", "xmjd6_user.txt"],
+            cwd=root,
+            check=False,
+        )
+        self.assertEqual(ignored.returncode, 0)
+
+    def test_plum_recipe_installs_every_rime_runtime_file(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        recipe = (root / "recipe.yaml").read_text(encoding="utf-8")
+        install_block = recipe.split("install_files: >-", 1)[1].split(
+            "patch_files:", 1
+        )[0]
+        patterns = install_block.split()
+
+        runtime_files = [
+            *root.glob("*.yaml"),
+            *(root / "lua" / "xmjd6").rglob("*.lua"),
+            *(root / "opencc" / "xmjd6").rglob("*.lua"),
+        ]
+        runtime_names = {
+            path.relative_to(root).as_posix()
+            for path in runtime_files
+            if path.name != "recipe.yaml" and not path.name.endswith(".custom.yaml")
+        }
+        installed_names = {
+            name
+            for name in runtime_names
+            if any(fnmatch.fnmatchcase(name, pattern) for pattern in patterns)
+        }
+
+        self.assertEqual(installed_names, runtime_names)
+        self.assertFalse(
+            any(fnmatch.fnmatchcase("recipe.yaml", pattern) for pattern in patterns)
+        )
+        for custom_name in (
+            "default.custom.yaml",
+            "squirrel.custom.yaml",
+            "weasel.custom.yaml",
+            "xmjd6.custom.yaml",
+        ):
+            self.assertFalse(
+                any(fnmatch.fnmatchcase(custom_name, pattern) for pattern in patterns),
+                custom_name,
+            )
+        self.assertIn("patch_files:", recipe)
+        self.assertIn("default.custom.yaml:", recipe)
+        self.assertIn("- schema: xmjd6", recipe)
+
+    def test_main_schema_exposes_explicit_switch_defaults_for_rimetool(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        schema = (root / "xmjd6.schema.yaml").read_text(encoding="utf-8")
+        expected_defaults = {
+            "ascii_mode": 0,
+            "jffh": 0,
+            "completion": 1,
+            "emoji_cn": 1,
+            "direct_symbols": 1,
+            "smarttwo": 0,
+            "jisuanqi": 1,
+            "auto_fallback": 0,
+            "sbb_hint": 1,
+            "mars": 0,
+            "full_shape": 0,
+        }
+
+        for name, reset in expected_defaults.items():
+            self.assertIn(
+                f"- name: {name}",
+                schema,
+            )
+            switch_block = schema.split(f"- name: {name}", 1)[1].split("- name:", 1)[0]
+            self.assertIn(f"reset: {reset}", switch_block, name)
+
     def test_explicit_lua_component_namespace_resolves_module_path(self) -> None:
         from tools import validate_repo
 
