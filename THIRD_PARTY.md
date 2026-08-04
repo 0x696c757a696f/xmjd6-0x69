@@ -4,6 +4,18 @@ The generated dictionaries below retain their upstream provenance. Exact source
 commits and generated-file checksums are recorded in
 `tools/upstream_dictionaries.lock.json`.
 
+## `xmjd6.protestantism.dict.yaml` Bible terminology
+
+- Reference text: 1919 Chinese Union Version (`ChiUns`)
+- Source information: <https://www.crosswire.org/sword/modules/ModInfo.jsp?modName=ChiUns>
+- Distribution status: Public Domain
+
+Only reviewed book names, proper names, places, and fixed terminology are used;
+the biblical text and dictionary definitions are not redistributed. Online
+theological and Bible dictionaries whose redistribution terms are unclear are
+manual verification sources only. The complete review policy and links are in
+`tools/christian_traditions_sources.md`.
+
 ## `xmjd6.danzi.dict.yaml`
 
 - Upstream: <https://github.com/amorphobia/rime-jiandao>

@@ -1,1 +1,42 @@
-* text eol=lf
+# Let Git detect binary files; keep repository text deterministic on every OS.
+* text=auto eol=lf
+
+# Source and data formats used by this repository
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.json text eol=lf
+*.lua  text eol=lf
+*.py   text eol=lf
+*.ps1  text eol=lf
+*.sh   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.ini  text eol=lf
+VERSION text eol=lf
+
+# Native Windows scripts conventionally require CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Never run line-ending conversion on binary assets or release archives.
+*.ico  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.zip  binary
+*.7z   binary
+*.bin  binary
+*.pdf  binary
+
+# Generated upstream/curated outputs: keep them versioned, but let GitHub fold
+# their very large diffs and exclude them from repository language statistics.
+xmjd6.danzi.dict.yaml        linguist-generated=true
+xmjd6.ice.dict.yaml          linguist-generated=true
+xmjd6.en.dict.yaml           linguist-generated=true
+xmjd6.protestantism.dict.yaml linguist-generated=true
+xmjd6.orthodoxy.dict.yaml     linguist-generated=true
+xmjd6.oriental.dict.yaml      linguist-generated=true
+xmjd6.assyrian.dict.yaml      linguist-generated=true
+opencc/xmjd6/*.lua            linguist-generated=true

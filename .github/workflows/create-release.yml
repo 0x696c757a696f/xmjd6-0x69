@@ -125,7 +125,7 @@ jobs:
 
     - name: Convert .dict.yaml files to .txt using Bash
       run: |
-        for dict_file in xmjd6.core.dict.yaml xmjd6.danzi.dict.yaml xmjd6.catholicism.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.ice.dict.yaml xmjd6.en.dict.yaml
+        for dict_file in xmjd6.core.dict.yaml xmjd6.danzi.dict.yaml xmjd6.catholicism.dict.yaml xmjd6.protestantism.dict.yaml xmjd6.orthodoxy.dict.yaml xmjd6.oriental.dict.yaml xmjd6.assyrian.dict.yaml xmjd6.cizu.dict.yaml xmjd6.fjcy.dict.yaml xmjd6.ice.dict.yaml xmjd6.en.dict.yaml
         do
           base=$(basename "$dict_file")
           if [[ "$base" == *.dict.yaml ]]; then
@@ -157,6 +157,10 @@ jobs:
         cat Rime/xmjd6.danzi.txt \
             Rime/xmjd6.cizu.txt \
             Rime/xmjd6.catholicism.txt \
+            Rime/xmjd6.protestantism.txt \
+            Rime/xmjd6.orthodoxy.txt \
+            Rime/xmjd6.oriental.txt \
+            Rime/xmjd6.assyrian.txt \
             Rime/xmjd6.core.txt \
             Rime/xmjd6.fjcy.txt \
             Rime/xmjd6.ice.txt \

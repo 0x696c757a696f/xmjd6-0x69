@@ -1,11 +1,31 @@
+# Operating systems and editors
 .DS_Store
+Thumbs.db
+Desktop.ini
 **/.idea/
 .vscode/
+*.swp
+*.swo
+*~
+
+# Python tooling and local environments
 __pycache__/
 *.py[cod]
-build/
-sync/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+.pixi/
+
+# Rime deployment caches and per-machine state
+/build/
+/sync/
 *.userdb/
+*.userdb.*
 installation.yaml
 user.yaml
 *user.txt
@@ -14,4 +34,25 @@ user.yaml
 rime_console
 rime_deployer
 rime_patch
+
+# These two files are repository templates/data despite matching user patterns.
+!xmjd6_user.txt
+!xmjd6.user.dict.yaml
+
+# Local products made by the release workflow
+/Rime/
+/Rabbit/
+/mb/
+/.yong/
+/yong_temp/
+/dazhu.txt
+/xmjd6.zip
+/Rabbit-xmjd6.zip
+/yong-xmjd6.zip
+/yong-xmjd6-full.zip
+/rabbit-v*.zip
+/yong-win.7z
+/yong.ini
+
+# Downloaded archives not intended as repository sources
 *.7z

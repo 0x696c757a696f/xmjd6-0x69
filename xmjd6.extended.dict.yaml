@@ -44,6 +44,10 @@ import_tables:
 # ---------------------------------------
 # 扩展：补充码表
   - xmjd6.catholicism
+  - xmjd6.protestantism
+  - xmjd6.orthodoxy
+  - xmjd6.oriental
+  - xmjd6.assyrian
 # ---------------------------------------
 # 扩展：链接等
 #  - xmjd6.lianjie

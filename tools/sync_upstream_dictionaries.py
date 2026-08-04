@@ -48,8 +48,22 @@ LOCAL_WORD_DICTIONARIES = (
     "xmjd6.zzc.dict.yaml",
     "xmjd6.cizu.dict.yaml",
     "xmjd6.catholicism.dict.yaml",
+    "xmjd6.protestantism.dict.yaml",
+    "xmjd6.orthodoxy.dict.yaml",
+    "xmjd6.oriental.dict.yaml",
+    "xmjd6.assyrian.dict.yaml",
     "xmjd6.core.dict.yaml",
     "xmjd6.fjcy.dict.yaml",
+)
+
+# Curated specialty dictionaries must remain collision-free even when every
+# legal suffix of a low-priority ICE row is occupied. In that situation the
+# ICE row is omitted instead of sharing the specialty term's final six-key code.
+STRICT_LOCAL_COLLISION_DICTIONARIES = (
+    "xmjd6.protestantism.dict.yaml",
+    "xmjd6.orthodoxy.dict.yaml",
+    "xmjd6.oriental.dict.yaml",
+    "xmjd6.assyrian.dict.yaml",
 )
 
 RIME_ICE_FILES = (
@@ -702,8 +716,10 @@ def build_ice_rows(
     pinyin_prefixes: dict[str, str],
     local_words: set[str],
     occupied: dict[str, set[str]],
+    protected_local_codes: set[str] | None = None,
 ) -> tuple[list[GeneratedRow], Counter[str]]:
     stats: Counter[str] = Counter()
+    protected_local_codes = protected_local_codes or set()
     local_occupied = {code: set(words) for code, words in occupied.items()}
     working_occupied: dict[str, set[str]] = defaultdict(set)
     working_occupied.update(
@@ -763,6 +779,9 @@ def build_ice_rows(
                 break
         if selected is None:
             selected = item.candidates[-1]
+            if selected in protected_local_codes:
+                stats["skipped_protected_local_collision"] += 1
+                continue
             stats["unavoidable_code_collisions"] += 1
         working_occupied[selected].add(row.word)
         generated.append(
@@ -862,12 +881,19 @@ def build(
     pinyin_readings = load_pinyin_readings(root / "pinyin_simp.dict.yaml")
     pinyin_prefixes = build_pinyin_prefixes(character_codes, pinyin_readings)
     local_words, occupied = load_local_vocabulary(root)
+    protected_local_codes = {
+        code
+        for filename in STRICT_LOCAL_COLLISION_DICTIONARIES
+        if (root / filename).is_file()
+        for _, code in iter_dictionary_rows(root / filename)
+    }
     ice_rows, stats = build_ice_rows(
         source_texts,
         character_codes,
         pinyin_prefixes,
         local_words,
         occupied,
+        protected_local_codes,
     )
     english_occupied = set(occupied)
     english_occupied.update(row.code for row in ice_rows)

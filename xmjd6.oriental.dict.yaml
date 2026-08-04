@@ -1,0 +1,91 @@
+# Rime dictionary
+# encoding: utf-8
+#
+# 东方正统教会专有词汇
+# 收录经审核的传统专有词；新教词库另含《和合本》标准译语。
+---
+name: xmjd6.oriental
+version: "2026-08-04"
+sort: original
+use_preset_vocabulary: false
+columns:
+  - text
+  - code
+...
+
+# 编码由 tools/build_christian_traditions.py 按键道六码规则生成。
+# 逐码避开固定本地词典；ICE 随后重建并为专题词让出合法码。
+# 固定词典中无空闲合法码的词不收录；三卷《和合本》书名为审核例外。
+# 审核清单：tools/christian_traditions_2026.txt
+
+# -------------------- 东方正统教会：非加尔西顿传统与各成员教会 --------------------
+东方正统教会	dfqhvo
+东方正统派	dfqpvo
+非加尔西顿教会	fjxhia
+前三次大公会议	qscyo
+合性论	hxlioo
+合性基督论	hxjlio
+米亚非西斯主义	myfyo
+圣济利禄基督论	ejllaa
+科普特正教会	kpthuo
+亚历山大科普特正教会	ylehvv
+安提阿叙利亚正教会	xtxhoi
+亚美尼亚使徒教会	ymnhvo
+埃奇米阿津圣座	xqmzv
+基利基雅圣座	jljzv
+厄立特里亚正统台瓦西多教会	xlthvo
+马兰卡拉正统叙利亚教会	mlkha
+台瓦西多	twxd
+西叙利亚礼仪	xxlyvi
+盖兹礼	gzloo
+科普特历	kptluo
+哈奇卡尔	hqkxo
+十字架石	ezjeuo
+圣马尔谷礼仪	emxyaa
+亚历山大礼仪	yleyvv
+马兰卡拉礼	mlkl
+
+# -------------------- 东方正统教会：科普特、亚美尼亚、叙利亚与台瓦西多传统 --------------------
+亚历山大教宗	ylezvv
+科普特教宗	kptzu
+圣马尔谷圣座	emxza
+科普特语	kptyu
+科普特圣乐	kptyuo
+阿格佩亚	xgpy
+科普特时辰经	kptju
+科普特圣周	kptf
+圣格里高利科普特礼仪	egly
+圣济利禄科普特礼仪	ejlyaa
+科普特修道传统	kptt
+科普特十字架	kptjuo
+亚美尼亚卡托利科斯	ymns
+埃奇米阿津母座	xqmzvv
+巴达拉克	bdlka
+神圣巴达拉克	eebko
+亚美尼亚圣咏	ymnyvo
+亚美尼亚教历	ymnlv
+亚美尼亚十字架石	ymne
+圣格里高利启蒙者	eglfa
+安提阿及全东方牧首	xtxeo
+圣雅各礼仪	eygy
+神圣库罗波	eekboa
+示希莫祈祷书	exmev
+贝特加佐圣乐集	btjj
+台瓦西多基督论	twxla
+盖兹语	gzyoo
+盖兹礼仪	gzlyoo
+塔博特	tbtvu
+蒂姆卡特节	dmkjia
+梅斯克尔节	mskjv
+拉利贝拉岩石教堂	llbt
+八十一卷正典	beydu
+马兰卡拉教会	mlkhao
+马兰卡拉正教	mlkja
+马兰卡拉都主教	mlkjao
+印度卡托利科斯	ydksu
+圣多马十字架	edmja
+纳斯拉尼	nsln
+迦克墩后分裂	jkdlau
+道成肉身之一性	djrx
+济利禄公式	jllea
+塞维鲁基督论	swllo

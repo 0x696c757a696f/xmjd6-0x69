@@ -364,20 +364,28 @@ python .\zzc\Windows_词库合并.py
 | `xmjd6.danzi.dict.yaml` | 36,214 | 上游键道单字表 |
 | `xmjd6.cizu.dict.yaml` | 191,398 | 本地基础词组 |
 | `xmjd6.catholicism.dict.yaml` | 3,514 | Catholicism、礼仪、神学与东方礼词汇 |
+| `xmjd6.protestantism.dict.yaml` | 219 | 新教信条、宗派神学及《和合本》词汇 |
+| `xmjd6.orthodoxy.dict.yaml` | 88 | 东正教礼仪、圣像、灵修与教会制度专有词汇 |
+| `xmjd6.oriental.dict.yaml` | 68 | 东方正统教会、合性论传统与成员教会专有词汇 |
+| `xmjd6.assyrian.dict.yaml` | 71 | 东方亚述教会、东叙利亚礼与景教史专有词汇 |
 | `xmjd6.core.dict.yaml` | 921 | 630 规则、快符和核心候选 |
 | `xmjd6.fjcy.dict.yaml` | 514,033 | 附加扩展词组 |
-| `xmjd6.ice.dict.yaml` | 374,045 | Rime-Ice 中文精简补充词库 |
+| `xmjd6.ice.dict.yaml` | 373,902 | Rime-Ice 中文精简补充词库 |
 | `xmjd6.en.dict.yaml` | 23,610 | Rime-Ice 英文词库 |
-| **合计** | **1,143,735** | 不含动态自造词和个人词库 |
+| **合计** | **1,144,038** | 不含动态自造词和个人词库 |
 
-`xmjd6.ice` 定位为本地词库之后的精简补充库。同步过滤器不会直接删除 2～3 字词；它会排除上游低权重长尾、批量数字/年份模板、8 字以上 `ext` 整句及 12 字以上超长词，当前比未精简版本减少 71,001 条。药品名称是例外：片、胶囊、颗粒、注射液、口服液、滴眼液、喷雾剂等剂型词不会因词频低或名称过长被过滤，并在重码预算中优先保留。编码时短词优先占用基础码，长词和低频同码词尽量追加笔画码；随后再按照 `base → ext → others` 和上游权重排序。低优先级重码词会被删减，合并后的中文重码率不会高于同步前的本地基准；新增词在同一码下最多保留 8 个候选。这些过滤规则写在同步器中，因此以后拉取上游时不会重新混入。
+四个非天主教传统词库以具有宗派辨识度的信条、礼仪、制度、正式教会名称和历史术语为主体，不靠“祷告”“教会”“基督徒”等泛用词凑量。`xmjd6.protestantism` 另收经审核的《和合本》书卷名、人地名和固定译语，以《和合本》的“马太、约翰、使徒行传、启示录”等新教译名为准，不混入《思高本》译名。东正教、东方正统教会、东方亚述教会和东方礼天主教会分别维护，避免把相近的叙利亚礼、圣像或牧首制度词汇混错归属；东方正统部分不用不准确的“一性论”作为自称。多段人名使用间隔号显示，例如“马丁·路德”，编码时不计间隔号。核对来源和授权边界见 [`tools/christian_traditions_sources.md`](tools/christian_traditions_sources.md)。
+
+这些专题词由 [`tools/christian_traditions_2026.txt`](tools/christian_traditions_2026.txt) 审核，生成器依次尝试键道六码的基础码和首笔辅助码。固定本地词典没有空闲合法码时通常不收录；专题词确定后再重建低优先级 `xmjd6.ice`，让 ICE 词移到更长的合法码或按既有重码预算淘汰。唯一例外是“哥林多后书”“帖撒罗尼迦后书”“雅各书”三卷《和合本》正式书名：前两组的前书与后书在标准规则下拥有完全相同的全部候选，后一卷的全部候选已被固定旧词占用，因此人工审核后使用最终六码并保持专题词优先。除此三项外，四个专题词库没有新增异词同码。
+
+`xmjd6.ice` 定位为本地词库之后的精简补充库。同步过滤器不会直接删除 2～3 字词；它会排除上游低权重长尾、批量数字/年份模板、8 字以上 `ext` 整句及 12 字以上超长词，当前比未精简版本减少 71,144 条。药品名称是例外：片、胶囊、颗粒、注射液、口服液、滴眼液、喷雾剂等剂型词不会因词频低或名称过长被过滤，并在重码预算中优先保留。编码时短词优先占用基础码，长词和低频同码词尽量追加笔画码；随后再按照 `base → ext → others` 和上游权重排序。低优先级重码词会被删减，合并后的中文重码率不会高于同步前的本地基准；新增词在同一码下最多保留 8 个候选。这些过滤规则写在同步器中，因此以后拉取上游时不会重新混入。
 
 ### 词库加载顺序
 
 [`xmjd6.extended.dict.yaml`](xmjd6.extended.dict.yaml) 控制词库导入。当前主要顺序为：
 
 ```text
-user → zzc → danzi → cizu → catholicism → core → fjcy → ice → en
+user → zzc → danzi → cizu → catholicism → protestantism → orthodoxy → oriental → assyrian → core → fjcy → ice → en
 ```
 
 本地词库优先于自动生成的上游词库。`xmjd6.user.dict.yaml` 权限最高，适合保存个人常用词；加入大量通用词前应优先考虑对应的专题或基础词库。
@@ -481,11 +489,15 @@ python .\tools\dedupe_dictionaries.py
 python .\tools\clean_dictionary_quality.py --check
 
 # 重新生成 Catholicism 扩展并整理分区
-python .\tools\build_catholicism_expansion.py
+python .\tools\build_catholicism_expansion.py --write
 python .\tools\organize_catholicism_legacy.py
+
+# 重建四个基督宗派专题词库；随后重建 ICE 以重新避让本地码位
+python .\tools\build_christian_traditions.py --write
+python .\tools\sync_upstream_dictionaries.py --write
 ```
 
-仓库验证会检查 YAML、Lua、生成文件哈希、目录命名空间和关键配置。当前测试同时覆盖键道6词组编码、飞键规则、Catholicism 分类、词库质量、上游去重、重码上限、英文 `i` 命名空间及自动同步工作流。
+仓库验证会检查 YAML、Lua、生成文件哈希、目录命名空间和关键配置。当前测试同时覆盖键道6词组编码、飞键规则、Catholicism 分类、四个基督宗派专题词库、专题词跨库零重码、词库质量、上游去重、重码上限、英文 `i` 命名空间及自动同步工作流。
 
 ## 项目结构
 

@@ -1,0 +1,94 @@
+# Rime dictionary
+# encoding: utf-8
+#
+# 东方亚述教会与东方教会专有词汇
+# 收录经审核的传统专有词；新教词库另含《和合本》标准译语。
+---
+name: xmjd6.assyrian
+version: "2026-08-04"
+sort: original
+use_preset_vocabulary: false
+columns:
+  - text
+  - code
+...
+
+# 编码由 tools/build_christian_traditions.py 按键道六码规则生成。
+# 逐码避开固定本地词典；ICE 随后重建并为专题词让出合法码。
+# 固定词典中无空闲合法码的词不收录；三卷《和合本》书名为审核例外。
+# 审核清单：tools/christian_traditions_2026.txt
+
+# -------------------- 东方亚述教会：东叙利亚礼、教会制度与景教史 --------------------
+东方亚述教会	dfyhv
+神圣使徒大公东方亚述教会	eeeh
+古东方教会	gdfhuv
+波斯教会	bsjha
+卡托利科斯牧首	ktlei
+东方卡托利科斯	dfksv
+塞琉西亚泰西封	slxfo
+东方总主教	dfzjvo
+阿代和马里礼仪	xdhya
+阿代马里感恩祭	xdmja
+神圣奉献礼	eeflo
+库尔巴纳	kxbno
+圣酵圣事	ejeeav
+尼西比斯学派	nxbp
+埃德萨学派	xdsp
+摩普绥提亚的狄奥多若	mpsro
+聂斯多留	nsdlv
+聂斯脱里派	nstpv
+大秦景教	dqjjvv
+景教碑	jjbou
+大秦景教流行中国碑	dqjbv
+尊经	zwjgo
+宣元至本经	xyfjo
+序听迷诗所经	xtmjoo
+
+# -------------------- 东方亚述教会：圣事、礼仪、神学与东叙利亚遗产 --------------------
+东叙利亚传统	dxlt
+东叙利亚语	dxly
+古典叙利亚语	gdxyui
+东叙利亚字母	dxlm
+库尔巴纳卡迪沙	kxbe
+神圣库尔巴纳	eekn
+阿代与马里感恩经	xdyja
+阿代与马里奉献礼	xdylai
+圣酵更新礼	ejglav
+十字圣号圣事	ezee
+傅油圣事	fyeeia
+公共解罪礼	ggjlu
+拉泽圣事	lzeeia
+角油	jcydua
+圣坛祝圣礼	etql
+契约之子	qyfz
+契约之女	qyfn
+东叙利亚修道传统	dxltv
+巴拜大帝	bbdda
+巴拜基督论	bbjla
+克诺玛	knmuo
+帕索帕	pspiu
+两性一位格	lxygvo
+纳尔塞	nxsauo
+阿弗拉哈特	xflta
+尼西比斯的阿布迪绍	nxbe
+提摩太二世牧首	tmteio
+玛尔·阿布迪绍	mxxe
+玛尔·丁哈四世	mxdev
+亚述东方教会	yedhv
+塞琉西亚泰西封卡托利科斯	slxso
+泰西封会议	txfy
+波斯基督教	bsjjav
+萨珊王朝基督教	sewjiv
+唐代景教	tdjjo
+元代景教	ydjjvi
+蒙元景教	myjji
+景教十字架	jjejou
+景教墓碑	jjmbo
+泉州景教	qfjjuo
+高昌景教	gjjjo
+敦煌景教文献	dhjxo
+景教经文	jjjwou
+三威蒙度赞	swmzv
+大秦景教碑颂并序	dqjxv
+拉班·扫马	lbsm
+雅巴拉哈三世	ybleva

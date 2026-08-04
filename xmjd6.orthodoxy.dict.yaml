@@ -1,0 +1,111 @@
+# Rime dictionary
+# encoding: utf-8
+#
+# 东正教专有词汇
+# 收录经审核的传统专有词；新教词库另含《和合本》标准译语。
+---
+name: xmjd6.orthodoxy
+version: "2026-08-04"
+sort: original
+use_preset_vocabulary: false
+columns:
+  - text
+  - code
+...
+
+# 编码由 tools/build_christian_traditions.py 按键道六码规则生成。
+# 逐码避开固定本地词典；ICE 随后重建并为专题词让出合法码。
+# 固定词典中无空闲合法码的词不收录；三卷《和合本》书名为审核例外。
+# 审核清单：tools/christian_traditions_2026.txt
+
+# -------------------- 东正教：礼仪、圣像传统、灵修与教会制度 --------------------
+正教会	qjhvui
+东正教会	dqjh
+正教徒	qjtvu
+拜占庭正教	bqtj
+普世牧首	peme
+普世牧首区	pemq
+自主教会	zqjh
+五牧首区	wmeqv
+金口若望礼仪	jkryi
+巴西略礼仪	bxlyav
+预祭礼仪	yjlya
+圣像屏	expaia
+辅祭门	fjmvu
+东正教祈祷绳	dqjev
+静修主义	jxqyv
+赫西卡主义	hxkyvv
+神化教义	ehjy
+非受造之光	fezg
+帕拉马神学	plmx
+阿索斯山	xssea
+圣山修道院	eexya
+七次大公会议	qcdyvo
+诞神女	denooa
+诞神女安眠节	denjo
+显圣容节	xerj
+十架举荣节	ejjjua
+修士大司祭	xedjiv
+君士坦丁堡普世牧首区	jetqa
+亚历山大正教会	ylehv
+安提阿正教会	xtxho
+耶路撒冷牧首区	ylsq
+俄罗斯正教会	xlshii
+塞尔维亚正教会	sxwho
+罗马尼亚正教会	lmnhia
+保加利亚正教会	bjlhia
+格鲁吉亚正教会	gljhv
+塞浦路斯正教会	splh
+希腊正教	xlqjuu
+阿尔巴尼亚正教会	xxbhau
+波兰正教会	blqha
+捷克和斯洛伐克正教会	jkhhi
+
+# -------------------- 东正教：礼仪周期、礼仪书、圣像与自治制度 --------------------
+地方正教会	dfqhv
+正教会共融	qjhrv
+自主教会诏书	zqje
+自治教会诏书	zfjeu
+圣膏制备权	egfq
+美国正教会	mgqhoi
+北马其顿正教会	bmqhia
+奥赫里德总主教区	xhlquv
+芬兰正教会	flqhi
+日本正教会	rbqh
+西奈正教会	xnqh
+预备礼	yblauo
+慕道者礼仪	mdfyi
+信友礼仪	xylyi
+小入堂式	xrtei
+大入堂式	drtev
+子夜祷	zydao
+第一时辰祷	dyeduv
+第三时辰祷	dsedu
+第九时辰祷	djeduu
+帕尼希达	pnxdi
+阿卡提斯特圣颂	xktsai
+特罗帕里	tlplui
+孔塔基昂	ktjx
+普罗基门	pljmo
+三圣颂	sesvau
+大斋三歌经	dfsjv
+五旬经	wxjvua
+月课经	ykjuoa
+八调经	bdjuoa
+普罗斯福拉	plslo
+圣饼印	ebyauu
+羔羊印	gyyoou
+十二大节	exdju
+宽恕主日	keqroa
+奶酪周	nlfavu
+众圣主日	feqria
+神圣能量	eenlo
+神化之路	ehfloi
+静修祈祷	jxqdv
+守心祈祷	exqdo
+圣像神学	exexa
+圣像角	exjaiu
+基督全能者圣像	jdqxvi
+圣像破坏运动	expd
+首席荣誉	exryo
+独立教会诏书	dljeuo
