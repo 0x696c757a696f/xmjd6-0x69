@@ -37,6 +37,7 @@ schema:
 # ============ 引擎 ============
 engine:
   processors:
+    - lua_processor@*xmjd6/typing_stats_processor  # 打字统计计键，须在可能吞键的 processor 之前
     - lua_processor@*xmjd6/zzc.xmjd6_zzc_processor
     - lua_processor@*xmjd6/xmjd6_processor    # 按键处理（次选·空顶·顶功）
     - ascii_composer
@@ -59,6 +60,7 @@ engine:
     - fallback_segmentor   # 回退分段
 
   translators:
+    - lua_translator@*xmjd6/typing_stats_translator  # =tj 查看打字统计
     - lua_translator@*xmjd6/xmjd6_core        # 低频扩展入口（计算器·时间转换）
     - punct_translator
     - table_translator
@@ -321,5 +323,4 @@ layout:
 menu:
   page_size: 5 # 请到 xmjd6.custom.yaml 去修改
   comment_format: []
-
 

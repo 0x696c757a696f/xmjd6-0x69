@@ -2,7 +2,7 @@
 -- 作者：@浮生 https://github.com/wzxmer/rime-xmjd6
 -- 更新：2026-07-02
 
-local core = require("zzc.xmjd6_zzc_core")
+local core = require("xmjd6.zzc.xmjd6_zzc_core")
 
 local kAccepted = 1
 local kNoop = 2
