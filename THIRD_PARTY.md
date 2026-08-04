@@ -47,6 +47,20 @@ the generated dictionary is imported into the main xmjd6 table. This removes
 the need for a separate auxiliary English schema while keeping English entries
 isolated from JianDao 6 codes.
 
+## `opencc/xmjd6/xmjd6_emoji_extra_*`
+
+- Upstream: <https://github.com/iDvel/rime-ice>
+- Source: `opencc/emoji.txt`
+- License: GNU General Public License 3.0
+- License copy: `licenses/rime-ice-GPL-3.0.txt`
+
+The synchronization tool excludes keys already present in the adapted TXJX
+Emoji tables, then emits the remaining Rime-Ice mappings as an
+xmjd6-namespaced Lua overlay. Single-character entries, a first-character
+phrase index, and the phrase shard are generated separately so the existing
+lazy OpenCC provider can load the data without replacing the original
+mappings. No locally invented Emoji combinations are added.
+
 ## Lua input and ZZZC implementation
 
 - Upstream: <https://github.com/wzxmer/rime-txjx>

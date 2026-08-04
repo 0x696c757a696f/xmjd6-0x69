@@ -27,7 +27,21 @@ LOCK_PATH = ROOT / "tools" / "upstream_dictionaries.lock.json"
 DANZI_TARGET = ROOT / "xmjd6.danzi.dict.yaml"
 ICE_TARGET = ROOT / "xmjd6.ice.dict.yaml"
 ENGLISH_TARGET = ROOT / "xmjd6.en.dict.yaml"
-TARGETS = (DANZI_TARGET, ICE_TARGET, ENGLISH_TARGET)
+EMOJI_EXTRA_CHARS_TARGET = ROOT / "opencc" / "xmjd6" / "xmjd6_emoji_extra_chars.lua"
+EMOJI_EXTRA_INDEX_TARGET = (
+    ROOT / "opencc" / "xmjd6" / "xmjd6_emoji_extra_phrases_index.lua"
+)
+EMOJI_EXTRA_PHRASES_TARGET = (
+    ROOT / "opencc" / "xmjd6" / "xmjd6_emoji_extra_phrases_0.lua"
+)
+TARGETS = (
+    DANZI_TARGET,
+    ICE_TARGET,
+    ENGLISH_TARGET,
+    EMOJI_EXTRA_CHARS_TARGET,
+    EMOJI_EXTRA_INDEX_TARGET,
+    EMOJI_EXTRA_PHRASES_TARGET,
+)
 
 LOCAL_WORD_DICTIONARIES = (
     "xmjd6.user.dict.yaml",
@@ -49,10 +63,133 @@ RIME_ICE_ENGLISH_FILES = (
     ("en_ext", "en_dicts/en_ext.dict.yaml"),
 )
 
+RIME_ICE_EMOJI_FILE = ("emoji", "opencc/emoji.txt")
+
+
 # Keep pathological template families from filling a candidate menu even when
 # the aggregate collision budget has room. Existing local rows are never
 # removed; this cap only controls additional Rime-Ice rows.
 MAX_COMBINED_CANDIDATES_PER_CODE = 8
+
+# Rime-Ice is a fallback vocabulary here, not the primary xmjd6 lexicon. Keep
+# short lexical items, but trim the long tail that is expensive to deploy and
+# can still be entered naturally as shorter segments. The upstream ``ext``
+# dictionary assigns every row the same weight, so length and template shape
+# are the only stable signals available for that source.
+ICE_BASE_LOW_WEIGHT_MAX = 10
+ICE_BASE_LOW_WEIGHT_MIN_LENGTH = 4
+ICE_EXT_MAX_LENGTH = 7
+ICE_ABSOLUTE_MAX_LENGTH = 11
+ICE_NUMERALS = frozenset("零〇一二三四五六七八九十百千万亿兆两壹贰叁肆伍陆柒捌玖拾佰仟")
+ICE_NUMERIC_SUFFIXES = (
+    "年",
+    "年代",
+    "年度",
+    "月份",
+    "月",
+    "日",
+    "号",
+    "届",
+    "级",
+    "章",
+    "条",
+    "期",
+    "册",
+    "卷",
+    "岁",
+)
+ICE_MEDICINE_DOSAGE_FORMS = (
+    "片剂",
+    "含片",
+    "咀嚼片",
+    "泡腾片",
+    "分散片",
+    "缓释片",
+    "控释片",
+    "肠溶片",
+    "舌下片",
+    "胶囊",
+    "软胶囊",
+    "硬胶囊",
+    "胶丸",
+    "颗粒",
+    "颗粒剂",
+    "冲剂",
+    "滴丸",
+    "散剂",
+    "粉剂",
+    "注射液",
+    "注射剂",
+    "粉针剂",
+    "口服液",
+    "口服溶液",
+    "滴眼液",
+    "滴耳液",
+    "滴鼻液",
+    "混悬液",
+    "雾化液",
+    "膏剂",
+    "眼膏",
+    "乳膏",
+    "软膏",
+    "凝胶",
+    "凝胶剂",
+    "栓",
+    "栓剂",
+    "糖浆",
+    "糖浆剂",
+    "合剂",
+    "酊",
+    "酊剂",
+    "喷雾剂",
+    "气雾剂",
+    "吸入剂",
+    "洗剂",
+    "搽剂",
+    "贴剂",
+    "膜剂",
+    "灌肠剂",
+)
+ICE_AMBIGUOUS_MEDICINE_FORMS = ("片", "丸", "散", "膏")
+ICE_NON_MEDICINE_SUFFIXES = (
+    "图片",
+    "照片",
+    "相片",
+    "唱片",
+    "影片",
+    "宣传片",
+    "纪录片",
+    "切片",
+    "碎片",
+    "卡片",
+    "名片",
+    "芯片",
+    "镜片",
+    "叶片",
+    "瓦片",
+    "肉片",
+    "鱼片",
+    "鸡片",
+    "肚片",
+    "鳝片",
+    "螺片",
+    "萝卜片",
+    "面片",
+    "扩散",
+    "离散",
+    "聚散",
+    "云散",
+    "吹散",
+    "走散",
+    "失散",
+    "疏散",
+    "解散",
+    "消散",
+    "肉丸",
+    "鱼丸",
+    "弹丸",
+    "睾丸",
+)
 
 # Syllables with no unambiguous monophonic anchor in pinyin_simp. Values are
 # the corresponding Jiandao double-pinyin prefixes in 01.danzi.txt.
@@ -100,6 +237,7 @@ class GeneratedRow:
     weight: int
     source_priority: int
     order: int
+    is_medicine: bool = False
 
 
 @dataclass(frozen=True)
@@ -107,6 +245,9 @@ class BuildResult:
     danzi_text: str
     ice_text: str
     english_text: str
+    emoji_extra_chars_text: str
+    emoji_extra_index_text: str
+    emoji_extra_phrases_text: str
     stats: dict[str, int]
 
 
@@ -220,6 +361,45 @@ def iter_rime_ice_rows(text: str, source: str, priority: int):
         order += 1
 
 
+def is_likely_medicine_name(word: str) -> bool:
+    """Recognize drug names by unambiguous administration/dosage wording."""
+    if word.startswith("注射用") and len(word) > len("注射用"):
+        return True
+    if len(word) < 4 or word.endswith(ICE_NON_MEDICINE_SUFFIXES):
+        return False
+    return word.endswith(ICE_MEDICINE_DOSAGE_FORMS) or word.endswith(
+        ICE_AMBIGUOUS_MEDICINE_FORMS
+    )
+
+
+def ice_low_value_reason(row: SourceRow) -> str | None:
+    """Classify conservative long-tail rows excluded from the ICE fallback."""
+    word = row.word
+    if row.source == "ext":
+        numeric_core = word
+        for suffix in ICE_NUMERIC_SUFFIXES:
+            if word.endswith(suffix):
+                numeric_core = word[: -len(suffix)]
+                break
+        if len(numeric_core) >= 2 and all(char in ICE_NUMERALS for char in numeric_core):
+            return "numeric_template"
+    # Drug names are valuable specialist vocabulary even when upstream
+    # frequency is low or the full generic name is unusually long.
+    if is_likely_medicine_name(word):
+        return None
+    if len(word) > ICE_ABSOLUTE_MAX_LENGTH:
+        return "overlong"
+    if (
+        row.source == "base"
+        and len(word) >= ICE_BASE_LOW_WEIGHT_MIN_LENGTH
+        and row.weight <= ICE_BASE_LOW_WEIGHT_MAX
+    ):
+        return "rare_base"
+    if row.source == "ext" and len(word) > ICE_EXT_MAX_LENGTH:
+        return "long_ext"
+    return None
+
+
 def select_full_codes(
     row: SourceRow,
     character_codes: dict[str, tuple[str, ...]],
@@ -303,6 +483,10 @@ def prune_ice_collisions(
     total_rows = local_rows + len(selected)
     combined_collision_rows = local_collision_rows
 
+    # Medicine names are intentionally exempt from the slim filter. Give
+    # them first claim on the existing collision budget without raising the
+    # repository's collision-rate ceiling.
+    collision_candidates.sort(key=lambda row: not row.is_medicine)
     for row in collision_candidates:
         current_count = counts[row.code]
         if current_count >= max_candidates_per_code:
@@ -428,6 +612,90 @@ def render_english(
     return "\n".join(header + [f"{word}\t{code}" for word, code in rows]) + "\n"
 
 
+LUA_MAPPING_KEY_RE = re.compile(r'^\s*\["((?:\\.|[^"\\])*)"\]\s*=')
+
+
+def lua_unescape_key(value: str) -> str:
+    return value.replace(r'\"', '"').replace(r"\\", "\\")
+
+
+def lua_quote(value: str) -> str:
+    return (
+        value.replace("\\", "\\\\")
+        .replace('"', r'\"')
+        .replace("\n", r"\n")
+        .replace("\r", r"\r")
+    )
+
+
+def load_base_emoji_keys(root: Path) -> set[str]:
+    emoji_root = root / "opencc" / "xmjd6"
+    paths = [emoji_root / "xmjd6_emoji_chars.lua"]
+    paths.extend(
+        emoji_root / f"xmjd6_emoji_phrases_{suffix}.lua"
+        for suffix in "0123456789abcdef"
+    )
+    keys: set[str] = set()
+    for path in paths:
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            match = LUA_MAPPING_KEY_RE.match(line)
+            if match:
+                keys.add(lua_unescape_key(match.group(1)))
+    return keys
+
+
+def build_emoji_extra(
+    source_text: str, root: Path, lock: dict[str, Any]
+) -> tuple[str, str, str, Counter[str]]:
+    """Build a non-overwriting Rime-Ice Emoji overlay for the Lua filter."""
+    stats: Counter[str] = Counter()
+    base_keys = load_base_emoji_keys(root)
+    rows: dict[str, str] = {}
+    for line in source_text.splitlines():
+        if not line or line.lstrip().startswith("#") or "\t" not in line:
+            continue
+        key, value = line.split("\t", 1)
+        if not key or not value:
+            continue
+        stats["emoji_source_rows"] += 1
+        if key in base_keys:
+            stats["emoji_deduplicated_local"] += 1
+            continue
+        if key in rows:
+            stats["emoji_deduplicated_upstream"] += 1
+            continue
+        rows[key] = value
+
+    chars = {key: value for key, value in rows.items() if len(key) == 1}
+    phrases = {key: value for key, value in rows.items() if len(key) > 1}
+    index = {key[0]: "0" for key in phrases}
+    stats["emoji_extra_char_rows"] = len(chars)
+    stats["emoji_extra_index_rows"] = len(index)
+    stats["emoji_extra_phrase_rows"] = len(phrases)
+    stats["emoji_extra_rows"] = len(rows)
+
+    source = lock["sources"]["rime_ice"]
+    header = [
+        "-- xmjd6 Rime-Ice Emoji 增补数据",
+        "-- Generated from iDvel/rime-ice; do not edit by hand.",
+        f"-- Source commit: {source['commit']}",
+        f"-- 更新：{lock['generated_on']}",
+        "",
+        "return {",
+    ]
+
+    def render_table(mapping: dict[str, str]) -> str:
+        body = [
+            f'  ["{lua_quote(key)}"] = "{lua_quote(mapping[key])}",'
+            for key in sorted(mapping)
+        ]
+        return "\n".join(header + body + ["}", ""])
+
+    return render_table(chars), render_table(index), render_table(phrases), stats
+
+
 def build_ice_rows(
     source_texts: dict[str, str],
     character_codes: dict[str, tuple[str, ...]],
@@ -463,6 +731,12 @@ def build_ice_rows(
             if is_rejected(row.word, ""):
                 stats["skipped_rejected"] += 1
                 continue
+            if is_likely_medicine_name(row.word):
+                stats["recognized_medicine_names"] += 1
+            low_value_reason = ice_low_value_reason(row)
+            if low_value_reason is not None:
+                stats[f"skipped_low_value_{low_value_reason}"] += 1
+                continue
             full_codes = select_full_codes(row, character_codes, pinyin_prefixes)
             if full_codes is None:
                 stats["skipped_unencodable"] += 1
@@ -476,6 +750,7 @@ def build_ice_rows(
         pending,
         key=lambda item: (
             item.source_row.source_priority,
+            len(item.source_row.word),
             -item.source_row.weight,
             item.source_row.order,
         ),
@@ -497,12 +772,14 @@ def build_ice_rows(
                 weight=row.weight,
                 source_priority=row.source_priority,
                 order=row.order,
+                is_medicine=is_likely_medicine_name(row.word),
             )
         )
 
     stats["generated_before_collision_pruning"] = len(generated)
     generated, pruning_stats = prune_ice_collisions(generated, local_occupied)
     stats.update(pruning_stats)
+    stats["generated_medicine_names"] = sum(row.is_medicine for row in generated)
     generated.sort(
         key=lambda row: (
             row.code,
@@ -530,7 +807,8 @@ def render_ice(
         "# Local dictionaries take precedence; duplicate text is excluded.",
         "# Priority: local > base > ext > others; higher source weight first.",
         "# Common homophones keep short codes; lower-priority ones add stroke keys.",
-        "# Unaligned, unencodable, and rejected entries are skipped.",
+        "# Slim fallback profile: never directly filter 2-3 character words.",
+        "# Unaligned, unencodable, rejected, and low-value entries are skipped.",
         f"# Source rows: {stats['source_rows']}",
         f"# Generated rows: {stats['generated_rows']}",
         f"# Rows before collision pruning: {stats['generated_before_collision_pruning']}",
@@ -539,6 +817,12 @@ def render_ice(
         f"# Skipped unaligned: {stats['skipped_unaligned']}",
         f"# Skipped unencodable: {stats['skipped_unencodable']}",
         f"# Skipped rejected: {stats['skipped_rejected']}",
+        f"# Recognized medicine names kept: {stats['recognized_medicine_names']}",
+        f"# Generated medicine names: {stats['generated_medicine_names']}",
+        f"# Skipped low-value numeric templates: {stats['skipped_low_value_numeric_template']}",
+        f"# Skipped low-weight base entries: {stats['skipped_low_value_rare_base']}",
+        f"# Skipped long ext entries: {stats['skipped_low_value_long_ext']}",
+        f"# Skipped overlong entries: {stats['skipped_low_value_overlong']}",
         f"# Full-code collisions before pruning: {stats['unavoidable_code_collisions']}",
         f"# Skipped by collision-rate budget: {stats['skipped_collision_budget']}",
         f"# Skipped by per-code candidate cap: {stats['skipped_candidate_cap']}",
@@ -569,7 +853,9 @@ def build(
     )
     source_texts = {
         source_name: read_source(ice_source, relative_path, rime_ice_root)
-        for source_name, relative_path in RIME_ICE_FILES + RIME_ICE_ENGLISH_FILES
+        for source_name, relative_path in (
+            RIME_ICE_FILES + RIME_ICE_ENGLISH_FILES + (RIME_ICE_EMOJI_FILE,)
+        )
     }
 
     character_codes = parse_danzi_rows(danzi_source_text)
@@ -587,10 +873,20 @@ def build(
     english_occupied.update(row.code for row in ice_rows)
     english_rows, english_stats = build_english_rows(source_texts, english_occupied)
     stats.update(english_stats)
+    (
+        emoji_extra_chars_text,
+        emoji_extra_index_text,
+        emoji_extra_phrases_text,
+        emoji_stats,
+    ) = build_emoji_extra(source_texts["emoji"], root, lock)
+    stats.update(emoji_stats)
     return BuildResult(
         danzi_text=render_danzi(danzi_source_text, lock),
         ice_text=render_ice(ice_rows, stats, lock),
         english_text=render_english(english_rows, stats, lock),
+        emoji_extra_chars_text=emoji_extra_chars_text,
+        emoji_extra_index_text=emoji_extra_index_text,
+        emoji_extra_phrases_text=emoji_extra_phrases_text,
         stats=dict(stats),
     )
 
@@ -611,6 +907,18 @@ def update_generated_metadata(
         ENGLISH_TARGET.name: {
             "sha256": sha256_text(result.english_text),
             "rows": result.stats["english_generated_rows"],
+        },
+        "opencc/xmjd6/xmjd6_emoji_extra_chars.lua": {
+            "sha256": sha256_text(result.emoji_extra_chars_text),
+            "rows": result.stats["emoji_extra_char_rows"],
+        },
+        "opencc/xmjd6/xmjd6_emoji_extra_phrases_index.lua": {
+            "sha256": sha256_text(result.emoji_extra_index_text),
+            "rows": result.stats["emoji_extra_index_rows"],
+        },
+        "opencc/xmjd6/xmjd6_emoji_extra_phrases_0.lua": {
+            "sha256": sha256_text(result.emoji_extra_phrases_text),
+            "rows": result.stats["emoji_extra_phrase_rows"],
         },
     }
     lock["statistics"] = dict(sorted(result.stats.items()))
@@ -672,6 +980,9 @@ def main() -> int:
         DANZI_TARGET: result.danzi_text,
         ICE_TARGET: result.ice_text,
         ENGLISH_TARGET: result.english_text,
+        EMOJI_EXTRA_CHARS_TARGET: result.emoji_extra_chars_text,
+        EMOJI_EXTRA_INDEX_TARGET: result.emoji_extra_index_text,
+        EMOJI_EXTRA_PHRASES_TARGET: result.emoji_extra_phrases_text,
     }
     changed = [
         path

@@ -21,7 +21,8 @@
         "cn_dicts/ext.dict.yaml",
         "cn_dicts/others.dict.yaml",
         "en_dicts/en.dict.yaml",
-        "en_dicts/en_ext.dict.yaml"
+        "en_dicts/en_ext.dict.yaml",
+        "opencc/emoji.txt"
       ]
     }
   },
@@ -31,34 +32,58 @@
       "rows": 36214
     },
     "xmjd6.ice.dict.yaml": {
-      "sha256": "e364c5183a098aa5f418e38da6f446d6137e3909e8eba34482293046804a3260",
-      "rows": 445046
+      "sha256": "ed67a444b22c66c713d2e00d5a9ddbfb22c26bd52ccb8b3b2c6c15a0fbf91d70",
+      "rows": 374045
     },
     "xmjd6.en.dict.yaml": {
       "sha256": "6668fcb95193b977465ff8c7b500be4a525320cdab980152aad5128b1e14e3e7",
       "rows": 23610
+    },
+    "opencc/xmjd6/xmjd6_emoji_extra_chars.lua": {
+      "sha256": "8f88433aebdfb70133700e74860cf8b4dac9fe9f8705fd4f64c7e2fad57130aa",
+      "rows": 34
+    },
+    "opencc/xmjd6/xmjd6_emoji_extra_phrases_index.lua": {
+      "sha256": "8de5454a8ea53c3fbf68fcb51fe97fb39a666f97fd0551b01af719dffed0a6e6",
+      "rows": 886
+    },
+    "opencc/xmjd6/xmjd6_emoji_extra_phrases_0.lua": {
+      "sha256": "b1efdfa11ef9aa9fe539c87b05b12535fe836d71057ce367cf2e39c168453c23",
+      "rows": 2482
     }
   },
   "statistics": {
-    "combined_collision_rows": 59730,
-    "combined_rows": 1154445,
+    "combined_collision_rows": 56056,
+    "combined_rows": 1083444,
     "deduplicated_local": 273225,
     "deduplicated_upstream": 2578,
+    "emoji_deduplicated_local": 2341,
+    "emoji_extra_char_rows": 34,
+    "emoji_extra_index_rows": 886,
+    "emoji_extra_phrase_rows": 2482,
+    "emoji_extra_rows": 2516,
+    "emoji_source_rows": 4857,
     "english_deduplicated_upstream": 249,
     "english_generated_rows": 23610,
     "english_skipped_local_code_collision": 2,
     "english_source_rows": 23861,
-    "generated_before_collision_pruning": 604619,
-    "generated_rows": 445046,
-    "ice_collision_rows": 6905,
+    "generated_before_collision_pruning": 500537,
+    "generated_medicine_names": 3597,
+    "generated_rows": 374045,
+    "ice_collision_rows": 3287,
     "local_collision_rows": 36704,
     "local_rows": 709399,
-    "skipped_candidate_cap": 241,
-    "skipped_collision_budget": 159332,
+    "recognized_medicine_names": 3640,
+    "skipped_candidate_cap": 42,
+    "skipped_collision_budget": 126450,
+    "skipped_low_value_long_ext": 5884,
+    "skipped_low_value_numeric_template": 18153,
+    "skipped_low_value_overlong": 2190,
+    "skipped_low_value_rare_base": 78572,
     "skipped_rejected": 328,
     "skipped_unaligned": 677,
-    "skipped_unencodable": 1391,
+    "skipped_unencodable": 674,
     "source_rows": 882818,
-    "unavoidable_code_collisions": 172505
+    "unavoidable_code_collisions": 137221
   }
 }

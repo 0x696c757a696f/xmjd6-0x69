@@ -72,6 +72,201 @@
 
 ## 如何使用
 
+### 各客户端安装、导入与更新
+
+所有标准 Rime 客户端都使用同一份 [`xmjd6.zip`](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/xmjd6.zip)。区别只在用户文件夹位置和客户端的导入方式：
+
+| 平台 | 推荐客户端 | 安装方式 | 更新后必须做的操作 |
+| --- | --- | --- | --- |
+| Windows | 小狼毫、玉兔毫、小小输入法 | 解压到用户目录，或下载对应便携包 | 重新部署；便携版按说明启动 |
+| macOS | 鼠须管、Fcitx5 macOS | 解压到对应 Rime 用户目录 | 重新部署 |
+| Linux | Fcitx5 + Rime + librime-lua | 安装组件后解压到 Fcitx5 Rime 目录 | 重启 Fcitx5 并重新部署 |
+| Android | 同文、Fcitx5 for Android | 通过应用配置管理或系统文件选择器导入 | 在应用内重新部署 |
+| iOS | 元书、仓输入法 | 使用应用内下载方案或在线方案导入 | 切换到新方案目录并重新部署 |
+
+无论使用哪个客户端，都不要只复制根目录的 YAML 文件：`lua/xmjd6/` 和 `opencc/xmjd6/` 也必须保持原目录结构一起导入，否则顶功、自造词、英文、Emoji 和简繁转换可能不完整。
+
+#### Windows
+
+**小狼毫 Weasel**
+
+1. 安装[小狼毫正式版](https://github.com/rime/weasel/releases/latest)或[小狼毫测试版](https://github.com/rime/weasel/releases/tag/latest)。也可使用[水龙月 Fork 版](https://github.com/Techince/weasel/releases/latest)；从原版切换到 Fork 版时，建议先卸载原版并重启系统。
+2. 从 Release 下载 `xmjd6.zip`，解压后把压缩包内的文件和目录复制到 `%APPDATA%\Rime`。
+3. 在小狼毫菜单中执行“重新部署”。
+4. 打开方案选单，选择“星猫键道”。
+5. 更新方案时覆盖同名方案文件即可；个人词汇应放在 `xmjd6.user.dict.yaml`，个人配置写在 `*.custom.yaml`，然后重新部署。
+
+**小小输入法便携版**
+
+1. 下载 [`yong-xmjd6-full.zip`](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/yong-xmjd6-full.zip)。
+2. 解压后运行包内的小小输入法，不需要另外导入 Rime 方案。
+3. 默认使用 `Ctrl + Space` 激活输入法。
+4. `yong-xmjd6.zip` 只包含配置和码表，适合已经安装小小输入法的用户；`yong-xmjd6-full.zip` 才包含完整便携程序。
+
+**玉兔毫 Rabbit**
+
+1. 下载 [`Rabbit-xmjd6.zip`](https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/Rabbit-xmjd6.zip)。
+2. 解压到路径中不含空格的目录。
+3. 运行玉兔毫并选择星猫键道；该包已经带入方案文件，不需要再复制 `xmjd6.zip`。
+
+#### macOS
+
+**鼠须管 Squirrel**
+
+1. 安装[鼠须管正式版](https://github.com/rime/squirrel/releases/latest)或[测试版](https://github.com/rime/squirrel/releases/tag/latest)。
+2. 下载并解压 `xmjd6.zip`，把全部内容复制到 `~/Library/Rime`。
+3. 从鼠须管菜单执行“重新部署”，再在方案选单中选择“星猫键道”。
+
+**Fcitx5 macOS**
+
+1. 安装[小企鹅输入法 macOS 版（中州韵版）](https://github.com/fcitx-contrib/fcitx5-macos-installer/blob/master/README.zh-CN.md)。
+2. 把方案完整复制到 `~/.local/share/fcitx5/rime/`。
+3. 重启 Fcitx5 或重新部署 Rime。
+
+#### Linux：Fcitx5 + Rime
+
+需要同时安装 Fcitx5、Rime 插件和 Lua 支持。不同发行版的软件包名称可能略有差异，下面是常见安装命令：
+
+| 发行版 | 安装命令或说明 |
+| --- | --- |
+| Arch / Manjaro / EndeavourOS | `sudo pacman -S fcitx5-im fcitx5-rime fcitx5-configtool librime-lua` |
+| Ubuntu / Debian / Linux Mint | `sudo apt install fcitx5 fcitx5-rime librime-lua` |
+| Fedora | `sudo dnf install fcitx5 fcitx5-rime librime-lua` |
+| RHEL / AlmaLinux / Rocky Linux | 先启用 EPEL；RHEL/Rocky 9 再启用 CRB，然后安装 `fcitx5 fcitx5-rime librime-lua` |
+| Deepin / UOS | 如仍使用 Fcitx4，先卸载旧组件，再安装 `fcitx5 fcitx5-rime librime-lua` |
+| Flatpak | `flatpak install org.fcitx.Fcitx5 org.fcitx.Fcitx5.Addon.Rime` |
+
+安装方案：
+
+1. 将 `xmjd6.zip` 完整解压到 `~/.local/share/fcitx5/rime/`。
+2. Flatpak 版通常使用 `~/.var/app/org.fcitx.Fcitx5/data/fcitx5/rime/`。
+3. 打开 Fcitx5 配置工具，添加“中州韵”或 Rime 输入法。
+4. 重启 Fcitx5，并从 Rime 菜单执行重新部署。
+
+桌面环境配置需要按实际会话选择：
+
+**KDE Plasma / Wayland**
+
+1. 打开“系统设置 → 虚拟键盘”，选择 Fcitx 5。
+2. 可在 `/etc/environment` 中补充：
+
+   ```text
+   XMODIFIERS=@im=fcitx
+   GLFW_IM_MODULE=fcitx
+   CLUTTER_IM_MODULE=fcitx
+   ECORE_IMF_MODULE=fcitx
+   QT_IM_MODULES="wayland;fcitx;ibus"
+   ```
+
+3. Wayland 会话下不建议通过任务栏菜单反复“重启”输入法；修改环境变量后注销并重新登录更可靠。
+
+**GNOME / Budgie / Debian 系桌面**
+
+1. 运行 `im-config -n fcitx5`。
+2. GNOME/Budgie 如未正确使用 Fcitx5，可运行：
+
+   ```bash
+   gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"
+   ```
+
+3. 必要时在 `/etc/environment` 中加入：
+
+   ```text
+   GTK_IM_MODULE=fcitx
+   QT_IM_MODULE=fcitx
+   XMODIFIERS=@im=fcitx
+   SDL_IM_MODULE=fcitx
+   GLFW_IM_MODULE=fcitx
+   CLUTTER_IM_MODULE=fcitx
+   ECORE_IMF_MODULE=fcitx
+   QT_IM_MODULES="wayland;fcitx;ibus"
+   ```
+
+**Xfce / LXQt / LXDE / MATE 等 X11 桌面**
+
+1. 确认 Fcitx5 随桌面会话自动启动；LXQt 可在“会话设置 → 自动启动”中添加，其他桌面可在“会话和启动”中添加 `fcitx5`。
+2. 在 `/etc/environment` 或用户级 `~/.xprofile` 中设置上面的输入法环境变量。
+
+**i3wm / awesome / bspwm 等平铺窗口管理器**
+
+在 `~/.xprofile` 中加入：
+
+```bash
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=fcitx
+export CLUTTER_IM_MODULE=fcitx
+export ECORE_IMF_MODULE=fcitx
+export QT_IM_MODULES="wayland;fcitx;ibus"
+```
+
+然后为窗口管理器添加自动启动：
+
+| 窗口管理器 | 配置示例 |
+| --- | --- |
+| i3wm | 在 `~/.config/i3/config` 加入 `exec --no-startup-id fcitx5 -d` |
+| awesome | 在 `~/.config/awesome/rc.lua` 加入 `awful.spawn.with_shell("fcitx5 -d")` |
+| bspwm | 在 `~/.config/bspwm/bspwmrc` 加入 `fcitx5 -d &` |
+
+**Electron / Chrome / VS Code**
+
+- XWayland 模式通常最稳，不额外添加启动参数，让应用读取 `GTK_IM_MODULE` 或 `XMODIFIERS`。
+- 必须使用原生 Wayland 时，KDE/KWin 可尝试：
+
+  ```text
+  --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --wayland-text-input-version=1
+  ```
+
+- GNOME 或其他桌面可尝试将最后一项改成 `--wayland-text-input-version=3`。
+
+#### Android
+
+**同文输入法 Trime**
+
+1. 安装[同文输入法](https://github.com/osfans/trime/releases/latest)。
+2. 在应用设置中打开“配置管理 → 用户文件夹”。
+3. 先选择或初始化默认用户文件夹，再把 `xmjd6.zip` 的完整内容导入 `/storage/emulated/0/rime/`。
+4. 返回配置管理执行部署，然后选择星猫键道。
+
+**Fcitx5 for Android**
+
+1. 安装[Fcitx5 for Android](https://github.com/fcitx5-android/fcitx5-android)及 Rime 插件；需要测试构建时可使用[主程序构建](https://jenkins.fcitx-im.org/job/android/job/fcitx5-android/)、[Rime 插件构建](https://jenkins.fcitx-im.org/job/android/job/fcitx5-android-plugin-rime/)和[更新器](https://jenkins.fcitx-im.org/job/android/job/fcitx5-android-updater/)。
+2. 在小企鹅输入法中添加中州韵后，Rime 数据目录通常位于应用数据中的 `files/data/rime/`。
+3. 推荐通过 Android 系统 DocumentsUI 管理文件：打开系统文件选择器，在侧边栏选择“小企鹅输入法5”，进入其数据目录后复制完整方案，不需要 root 或 ADB。
+4. 返回应用重新部署 Rime。
+
+#### iOS
+
+**元书输入法**
+
+1. 在“输入方案”中选择“下载方案”。
+2. 使用以下任一地址：
+
+   - 原始地址：<https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/xmjd6.zip>
+   - 国内网络可用代理地址：<https://gh-proxy.com/https://github.com/0x696c757a696f/xmjd6-0x69/releases/latest/download/xmjd6.zip>
+
+3. 下载完成后进入“方案目录切换”，在 `RimeUserData` 中选择刚导入的方案目录，点击右上角“打开”。
+4. 后续更新时重新下载方案，再回到“方案目录切换”选择更新后的目录并重新部署。
+5. 使用 iCloud 联动和自造词合并时，继续阅读[自造词使用教程](zzc/自造词使用教程.md)。
+
+**仓输入法**
+
+1. 安装[仓输入法](https://apps.apple.com/app/id6446617683)。
+2. 使用应用内在线方案下载功能导入星猫键道。
+3. 导入或更新后重新部署，并在应用中切换到对应方案。
+
+#### 客户端更新与排错
+
+| 现象 | 优先检查 |
+| --- | --- |
+| 方案选单里没有星猫键道 | `xmjd6.schema.yaml` 是否位于当前客户端真正使用的 Rime 用户目录；是否执行重新部署 |
+| 中文能输入，但顶功、自造词或计算器失效 | `lua/xmjd6/` 是否完整，客户端是否带 `librime-lua` |
+| 没有 Emoji、简繁或火星文 | `opencc/xmjd6/` 是否完整，功能开关是否开启，是否重新部署 |
+| 更新后仍出现旧候选 | 确认没有导入到另一个用户目录；重新部署，必要时退出并重启客户端 |
+| 个人词或设置被覆盖 | 个人内容应写入 `xmjd6.user.dict.yaml` 和 `*.custom.yaml`，不要直接改自动生成词典 |
+
 ### 基础输入与反查入口
 
 | 想做什么 | 输入方式 | 示例或说明 |
@@ -120,7 +315,7 @@
 | 地球文/火星文 | 地球文 | 是否启用火星文转换 |
 | 半角/全角 | 半角 | 标点和字符宽度 |
 
-默认启用键道顶功、逐码补全、Emoji、快符、计算器和 630 提示，默认关闭流式整句输入。若 Emoji 没出现，依次确认“表情展示”已开启、输入的是普通中文编码而不是 `u/v/o` 反查、文件已完整复制到 `opencc/xmjd6/`，然后重新部署。
+默认启用键道顶功、逐码补全、Emoji、快符、计算器和 630 提示，默认关闭流式整句输入。Emoji 使用 Lua 懒加载：保留原有 txjx 映射，并追加 2,516 个来自 Rime-Ice 的不重复关键词，涵盖更多情绪别名、手势、人物、动物、食物、交通、旗帜和新版 Emoji。若 Emoji 没出现，依次确认“表情展示”已开启、输入的是普通中文编码而不是 `u/v/o` 反查、文件已完整复制到 `opencc/xmjd6/`，然后重新部署。
 
 ### 自造词指令速查
 
@@ -138,10 +333,10 @@
 
 输入法会在会话结束时把运行时操作安全追加到 `xmjd6.zzc.dict.yaml`；要永久整理进正式词库，再运行 `zzc/` 中对应平台的合并脚本。完整的保存、跨设备同步、合并和撤回流程见[自造词使用教程](zzc/自造词使用教程.md)和[合并脚本说明](zzc/README.md)。
 
-Windows/Pixi 用户可以直接运行：
+Windows 用户可以在仓库根目录运行：
 
 ```powershell
-& 'D:\Dev\pixi\bin\python.exe' zzc\Windows_词库合并.py
+python .\zzc\Windows_词库合并.py
 ```
 
 ## 英文输入
@@ -171,11 +366,11 @@ Windows/Pixi 用户可以直接运行：
 | `xmjd6.catholicism.dict.yaml` | 3,514 | Catholicism、礼仪、神学与东方礼词汇 |
 | `xmjd6.core.dict.yaml` | 921 | 630 规则、快符和核心候选 |
 | `xmjd6.fjcy.dict.yaml` | 514,033 | 附加扩展词组 |
-| `xmjd6.ice.dict.yaml` | 445,046 | Rime-Ice 中文词库转码结果 |
+| `xmjd6.ice.dict.yaml` | 374,045 | Rime-Ice 中文精简补充词库 |
 | `xmjd6.en.dict.yaml` | 23,610 | Rime-Ice 英文词库 |
-| **合计** | **1,214,736** | 不含动态自造词和个人词库 |
+| **合计** | **1,143,735** | 不含动态自造词和个人词库 |
 
-`xmjd6.ice` 会先排除本地已有词，再按照 `base → ext → others` 和上游权重分配编码。低优先级重码词会被删减，合并后的中文重码率不会高于同步前的本地基准；新增词在同一码下最多保留 8 个候选。
+`xmjd6.ice` 定位为本地词库之后的精简补充库。同步过滤器不会直接删除 2～3 字词；它会排除上游低权重长尾、批量数字/年份模板、8 字以上 `ext` 整句及 12 字以上超长词，当前比未精简版本减少 71,001 条。药品名称是例外：片、胶囊、颗粒、注射液、口服液、滴眼液、喷雾剂等剂型词不会因词频低或名称过长被过滤，并在重码预算中优先保留。编码时短词优先占用基础码，长词和低频同码词尽量追加笔画码；随后再按照 `base → ext → others` 和上游权重排序。低优先级重码词会被删减，合并后的中文重码率不会高于同步前的本地基准；新增词在同一码下最多保留 8 个候选。这些过滤规则写在同步器中，因此以后拉取上游时不会重新混入。
 
 ### 词库加载顺序
 
@@ -224,26 +419,28 @@ patch:
 | [amorphobia/rime-jiandao](https://github.com/amorphobia/rime-jiandao) | `dicts/01.danzi.txt` | `xmjd6.danzi.dict.yaml` |
 | [iDvel/rime-ice](https://github.com/iDvel/rime-ice) | `cn_dicts/base`、`ext`、`others` | `xmjd6.ice.dict.yaml` |
 | [iDvel/rime-ice](https://github.com/iDvel/rime-ice) | `en_dicts/en`、`en_ext` | `xmjd6.en.dict.yaml` |
+| [iDvel/rime-ice](https://github.com/iDvel/rime-ice) | `opencc/emoji.txt` | `opencc/xmjd6/xmjd6_emoji_extra_*` |
 
 同步器不会盲目追踪浮动的 `main`/`master` 内容。锁文件保存已经整合的 Git commit 和生成文件 SHA-256；更新器比较“上次 commit → 当前 HEAD”，只有目标源文件变化时才按最新完整快照重建，避免长期累积补丁造成漂移。
 
 Windows 下推荐使用 PowerShell 7：
 
 ```powershell
-& 'D:\Program Files\PowerShell\7\pwsh.exe' -File tools/update_upstream_dictionaries.ps1
+pwsh -File .\tools\update_upstream_dictionaries.ps1
 ```
 
-脚本会自动优先使用 `D:\Dev\pixi\bin\python.exe`。只验证锁定内容、不刷新上游：
+脚本默认使用当前 `PATH` 中的 Python；也可以通过 `-Python` 传入自己的解释器。只验证锁定内容、不刷新上游：
 
 ```powershell
-& 'D:\Program Files\PowerShell\7\pwsh.exe' -File tools/update_upstream_dictionaries.ps1 -CheckOnly
+pwsh -File .\tools\update_upstream_dictionaries.ps1 -CheckOnly
+pwsh -File .\tools\update_upstream_dictionaries.ps1 -Python .\.venv\Scripts\python.exe
 ```
 
 也可以直接使用 Python：
 
 ```powershell
-& 'D:\Dev\pixi\bin\python.exe' tools/sync_upstream_dictionaries.py --check
-& 'D:\Dev\pixi\bin\python.exe' tools/sync_upstream_dictionaries.py --refresh --write
+python .\tools\sync_upstream_dictionaries.py --check
+python .\tools\sync_upstream_dictionaries.py --refresh --write
 ```
 
 `.github/workflows/sync-upstream-dictionaries.yml` 每周一 04:17 UTC 自动检查，有变化时运行测试并创建 PR。首次启用自动 PR 前，需要在仓库的 **Settings → Actions → General → Workflow permissions** 中允许 GitHub Actions 创建 Pull Request。
@@ -251,7 +448,7 @@ Windows 下推荐使用 PowerShell 7：
 Lua 与自造词实现参考 [wzxmer/rime-txjx](https://github.com/wzxmer/rime-txjx)，已整合的 commit、审查目录和明确排除项记录在 [`tools/upstream_code.lock.json`](tools/upstream_code.lock.json)。这部分不能像纯词库一样无损自动重建，因为必须保留 xmjd6 的命名空间、英文 `i` 入口和顶功差异；因此每周检查只会创建待审查 Issue，不会盲目覆盖本地代码：
 
 ```powershell
-& 'D:\Dev\pixi\bin\python.exe' tools/check_txjx_upstream.py
+python .\tools\check_txjx_upstream.py
 ```
 
 对应工作流是 `.github/workflows/check-txjx-upstream.yml`，不包含任何本机绝对仓库路径，在 GitHub Actions 的 checkout 目录中运行。
@@ -260,16 +457,14 @@ Lua 与自造词实现参考 [wzxmer/rime-txjx](https://github.com/wzxmer/rime-t
 
 ## 维护与验证
 
-本项目的 Python 工具统一建议使用 Pixi 环境中的解释器：
+本项目的 Python 工具需要 Python 3.11 或更新版本。可以使用系统 Python、虚拟环境或 Pixi；先激活相应环境，再在仓库根目录执行：
 
 ```powershell
-$python = 'D:\Dev\pixi\bin\python.exe'
-
-& $python -m unittest discover -s tests -p 'test_*.py' -v
-& $python tools/validate_repo.py
-& $python tools/clean_dictionary_quality.py --check
-& $python tools/sync_upstream_dictionaries.py --check
-& $python tools/check_txjx_upstream.py
+python -m unittest discover -s tests -p 'test_*.py' -v
+python .\tools\validate_repo.py
+python .\tools\clean_dictionary_quality.py --check
+python .\tools\sync_upstream_dictionaries.py --check
+python .\tools\check_txjx_upstream.py
 git diff --check
 ```
 
@@ -277,17 +472,17 @@ git diff --check
 
 ```powershell
 # 将 VERSION 和 YAML version 更新到指定日期
-& $python tools/update_versions.py 2026-08-04
+python .\tools\update_versions.py 2026-08-04
 
 # 清理完全相同的词典记录
-& $python tools/dedupe_dictionaries.py
+python .\tools\dedupe_dictionaries.py
 
 # 检查或修复词库质量（单字表不在清理范围内）
-& $python tools/clean_dictionary_quality.py --check
+python .\tools\clean_dictionary_quality.py --check
 
 # 重新生成 Catholicism 扩展并整理分区
-& $python tools/build_catholicism_expansion.py
-& $python tools/organize_catholicism_legacy.py
+python .\tools\build_catholicism_expansion.py
+python .\tools\organize_catholicism_legacy.py
 ```
 
 仓库验证会检查 YAML、Lua、生成文件哈希、目录命名空间和关键配置。当前测试同时覆盖键道6词组编码、飞键规则、Catholicism 分类、词库质量、上游去重、重码上限、英文 `i` 命名空间及自动同步工作流。

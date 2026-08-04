@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import tempfile
 import unittest
 from collections import defaultdict
 from pathlib import Path
@@ -8,8 +9,12 @@ from pathlib import Path
 from tools.sync_upstream_dictionaries import (
     GeneratedRow,
     PINYIN_PREFIX_OVERRIDES,
+    SourceRow,
     build_english_rows,
+    build_emoji_extra,
     build_ice_rows,
+    ice_low_value_reason,
+    is_likely_medicine_name,
     load_lock,
     prune_ice_collisions,
     render_danzi,
@@ -26,6 +31,75 @@ def source_text(*rows: str) -> str:
 
 
 class UpstreamDictionaryTests(unittest.TestCase):
+    def test_emoji_extra_adds_rime_ice_rows_without_overwriting_local_data(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            emoji_root = root / "opencc" / "xmjd6"
+            emoji_root.mkdir(parents=True)
+            (emoji_root / "xmjd6_emoji_chars.lua").write_text(
+                'return {\n  ["笑"] = "😁",\n}\n', encoding="utf-8"
+            )
+            (emoji_root / "xmjd6_emoji_phrases_0.lua").write_text(
+                'return {\n  ["你好"] = "👋",\n}\n', encoding="utf-8"
+            )
+            chars, index, phrases, stats = build_emoji_extra(
+                "笑\t笑 😄\n你好\t你好 👋\n嗅\t嗅 👃\n熬夜\t熬夜 🫩\n",
+                root,
+                load_lock(),
+            )
+
+        self.assertNotIn('["笑"]', chars)
+        self.assertNotIn('["你好"]', phrases)
+        self.assertIn('["嗅"] = "嗅 👃"', chars)
+        self.assertIn('["熬夜"] = "熬夜 🫩"', phrases)
+        self.assertIn('["熬"] = "0"', index)
+        self.assertEqual(stats["emoji_source_rows"], 4)
+        self.assertEqual(stats["emoji_deduplicated_local"], 2)
+        self.assertEqual(stats["emoji_extra_rows"], 2)
+
+    def test_ice_slim_profile_only_removes_clear_long_tail_rows(self) -> None:
+        def row(word: str, weight: int, source: str) -> SourceRow:
+            return SourceRow(word, (), weight, source, 0, 0)
+
+        self.assertIsNone(ice_low_value_reason(row("低频词", 1, "base")))
+        self.assertIsNone(ice_low_value_reason(row("正常四字", 11, "base")))
+        self.assertIsNone(ice_low_value_reason(row("七个字以内正常", 100, "ext")))
+        self.assertEqual(
+            ice_low_value_reason(row("低频四字", 10, "base")), "rare_base"
+        )
+        self.assertEqual(
+            ice_low_value_reason(row("二〇二六年", 100, "ext")),
+            "numeric_template",
+        )
+        self.assertEqual(
+            ice_low_value_reason(row("超过七个字的扩展短语", 100, "ext")),
+            "long_ext",
+        )
+        self.assertEqual(
+            ice_low_value_reason(row("这是一个长度超过十一字的完整句子", 999, "base")),
+            "overlong",
+        )
+
+    def test_ice_slim_profile_keeps_low_frequency_medicine_names(self) -> None:
+        medicine_names = (
+            "阿莫西林片",
+            "奥美拉唑胶囊",
+            "苯巴比妥钠注射液",
+            "盐酸左氧氟沙星滴眼液",
+            "注射用醋酸卡泊芬净",
+        )
+        for word in medicine_names:
+            with self.subTest(word=word):
+                row = SourceRow(word, (), 1, "base", 0, 0)
+                self.assertTrue(is_likely_medicine_name(word))
+                self.assertIsNone(ice_low_value_reason(row))
+
+        self.assertFalse(is_likely_medicine_name("纪录片"))
+        self.assertFalse(is_likely_medicine_name("保存图片"))
+        self.assertFalse(is_likely_medicine_name("被动扩散"))
+        self.assertFalse(is_likely_medicine_name("爆炒肉片"))
+        self.assertFalse(is_likely_medicine_name("普通四字词"))
+
     def test_position_specific_codes_follow_confirmed_fly_key_rules(self) -> None:
         self.assertEqual(
             code_candidates_from_full_codes(("zfu", "qjo", "qlv")),
@@ -109,6 +183,44 @@ class UpstreamDictionaryTests(unittest.TestCase):
         self.assertEqual(codes["新词"], "xbck")
         self.assertEqual(codes["心辞"], "xbckv")
 
+    def test_short_words_take_base_codes_before_long_phrases(self) -> None:
+        sources = {
+            "base": source_text(
+                "甲乙丙丁\tjia yi bing ding\t9999",
+                "短语\tduan yu\t1",
+            ),
+            "ext": source_text(),
+            "others": source_text(),
+        }
+        character_codes = {
+            "甲": ("aba",),
+            "乙": ("bba",),
+            "丙": ("cca",),
+            "丁": ("dda",),
+            "短": ("aba",),
+            "语": ("cda",),
+        }
+        prefixes = {
+            "jia": "ab",
+            "yi": "bb",
+            "bing": "cc",
+            "ding": "dd",
+            "duan": "ab",
+            "yu": "cd",
+        }
+
+        rows, _ = build_ice_rows(
+            sources,
+            character_codes,
+            prefixes,
+            set(),
+            defaultdict(set),
+        )
+
+        codes = {row.word: row.code for row in rows}
+        self.assertEqual(codes["短语"], "abcd")
+        self.assertEqual(codes["甲乙丙丁"], "abcda")
+
     def test_collision_pruning_does_not_exceed_local_rate(self) -> None:
         local = {f"l{index}": {f"词{index}"} for index in range(98)}
         local["shared"] = {"甲", "乙"}
@@ -127,6 +239,30 @@ class UpstreamDictionaryTests(unittest.TestCase):
 
         self.assertIn("高频", {row.word for row in selected})
         self.assertNotIn("低频", {row.word for row in selected})
+        self.assertLessEqual(
+            stats["combined_collision_rows"] * stats["local_rows"],
+            stats["local_collision_rows"] * stats["combined_rows"],
+        )
+
+    def test_collision_budget_prefers_medicine_over_ordinary_long_tail(self) -> None:
+        local = {f"l{index}": {f"词{index}"} for index in range(98)}
+        local["shared"] = {"甲", "乙"}
+        rows = [
+            GeneratedRow(f"唯一{index}", f"new{index}", 100, 0, index)
+            for index in range(100)
+        ]
+        rows.extend(
+            [
+                GeneratedRow("普通长尾", "new0", 100, 0, 100),
+                GeneratedRow("阿莫西林片", "new1", 1, 0, 101, True),
+            ]
+        )
+
+        selected, stats = prune_ice_collisions(rows, local)
+        selected_words = {row.word for row in selected}
+
+        self.assertIn("阿莫西林片", selected_words)
+        self.assertNotIn("普通长尾", selected_words)
         self.assertLessEqual(
             stats["combined_collision_rows"] * stats["local_rows"],
             stats["local_collision_rows"] * stats["combined_rows"],
@@ -202,6 +338,23 @@ class UpstreamDictionaryTests(unittest.TestCase):
         }
         self.assertEqual(english_codes & local_codes, set())
 
+    def test_rime_ice_emoji_overlay_is_loaded_by_the_existing_lua_filter(self) -> None:
+        schema = (ROOT / "xmjd6.schema.yaml").read_text(encoding="utf-8")
+        chars = (
+            ROOT / "opencc" / "xmjd6" / "xmjd6_emoji_extra_chars.lua"
+        ).read_text(encoding="utf-8")
+        phrases = (
+            ROOT / "opencc" / "xmjd6" / "xmjd6_emoji_extra_phrases_0.lua"
+        ).read_text(encoding="utf-8")
+        lock = load_lock()
+
+        self.assertIn('dataset_name: "xmjd6_emoji_extra"', schema)
+        self.assertIn('["嗅"] = "嗅 👃"', chars)
+        self.assertIn('["熬夜"] = "熬夜 🫩"', phrases)
+        self.assertIn('["指纹"] = "指纹 🫆"', phrases)
+        self.assertGreater(lock["statistics"]["emoji_extra_rows"], 2_000)
+        self.assertIn("opencc/emoji.txt", lock["sources"]["rime_ice"]["files"])
+
     def test_release_conversion_includes_ice_dictionary(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "create-release.yml").read_text(
             encoding="utf-8"
@@ -217,7 +370,8 @@ class UpstreamDictionaryTests(unittest.TestCase):
         )
         self.assertIn('"diff", "--name-only"', script)
         self.assertIn('"--refresh-source"', script)
-        self.assertIn("D:\\Dev\\pixi\\bin\\python.exe", script)
+        self.assertIn("Get-Command python", script)
+        self.assertNotIn("D:\\", script)
 
     def test_scheduled_sync_opens_a_validated_pull_request(self) -> None:
         workflow = (

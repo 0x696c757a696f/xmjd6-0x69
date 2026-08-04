@@ -18,13 +18,7 @@ $LockPath = Join-Path $PSScriptRoot "upstream_dictionaries.lock.json"
 $SyncScript = Join-Path $PSScriptRoot "sync_upstream_dictionaries.py"
 
 if (-not $Python) {
-    $LocalPixiPython = "D:\Dev\pixi\bin\python.exe"
-    if (Test-Path -LiteralPath $LocalPixiPython) {
-        $Python = $LocalPixiPython
-    }
-    else {
-        $Python = (Get-Command python -ErrorAction Stop).Source
-    }
+    $Python = (Get-Command python -ErrorAction Stop).Source
 }
 
 function Invoke-Checked {

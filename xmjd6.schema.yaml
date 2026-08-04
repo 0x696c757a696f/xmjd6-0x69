@@ -171,6 +171,13 @@ xmjd6_opencc_filter:
       comment_mode: none
       split: emoji
       tags: [ abc, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
+    - option: emoji_cn
+      dataset_name: "xmjd6_emoji_extra"
+      prefix: "emoji/"
+      mode: append
+      comment_mode: none
+      split: emoji
+      tags: [ abc, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
     - option: mars
       dataset_name: "xmjd6_martian"
       prefix: "mars/"

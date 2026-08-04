@@ -211,6 +211,83 @@ test("modular input processor components load from the xmjd6 namespace", functio
     assert_equal(type(processor.fini), "function", "processor fini")
 end)
 
+test("Rime-Ice emoji overlay is available through the lazy Lua provider", function()
+    unload("xmjd6.xmjd6_opencc_data")
+    local data = require("xmjd6.xmjd6_opencc_data")
+    data.set_context("", "xmjd6")
+    local provider = data.create_provider("xmjd6_emoji_extra", "raw")
+    assert_equal(provider:fetch("嗅"), "嗅 👃", "extra emoji char")
+    assert_equal(provider:fetch("熬夜"), "熬夜 🫩", "extra emoji phrase")
+    assert_equal(provider:fetch("指纹"), "指纹 🫆", "extra emoji alias")
+    provider:release()
+end)
+
+test("new Rime-Ice emoji is appended to the actual candidate stream", function()
+    unload("xmjd6.xmjd6_opencc_filter")
+    unload("xmjd6.xmjd6_opencc_data")
+    local data = require("xmjd6.xmjd6_opencc_data")
+    local filter = require("xmjd6.xmjd6_opencc_filter")
+    data.set_context("", "xmjd6")
+
+    local segment = {
+        tag = "abc",
+        has_tag = function(self, tag) return self.tag == tag end,
+    }
+    local context = {
+        input = "abcd",
+        composition = { back = function() return segment end },
+        get_option = function(_, name) return name == "emoji_cn" end,
+        is_composing = function() return true end,
+    }
+    local function emoji_rule(dataset)
+        return {
+            triggers = { "emoji_cn" },
+            tags = { abc = true },
+            prefix = "emoji/",
+            mode = "append",
+            comment_mode = "none",
+            split_mode = "emoji",
+            provider = data.create_provider(dataset, "raw"),
+            lookup_cache_prefix = dataset .. "\0raw\0emoji/\0",
+        }
+    end
+    local env = {
+        chain = true,
+        split_pattern = "([^|]+)",
+        comment_format = "〔%s〕",
+        rules = {
+            emoji_rule("xmjd6_emoji"),
+            emoji_rule("xmjd6_emoji_extra"),
+        },
+        _reverse_tags = { "reverse_lookup" },
+        _reverse_prefixes = {},
+        engine = {
+            context = context,
+            schema = { page_size = 5 },
+        },
+    }
+    local source_candidates = { candidate("phrase", 0, 4, "熬夜", "") }
+    local input = {
+        iter = function()
+            local index = 0
+            return function()
+                index = index + 1
+                return source_candidates[index]
+            end
+        end,
+    }
+    local yielded = {}
+    _G.Candidate = candidate
+    _G.yield = function(cand) yielded[#yielded + 1] = cand end
+
+    filter.func(input, env)
+
+    assert_equal(yielded[1] and yielded[1].text, "熬夜", "source candidate")
+    assert_equal(yielded[2] and yielded[2].text, "🫩", "appended new emoji")
+    assert_equal(#yielded, 2, "candidate count")
+    filter.fini(env)
+end)
+
 test("ZZC operation chain recursively fills a deleted short-code gap", function()
     local chain = require("xmjd6.zzc.xmjd6_zzc_chain")
     local dictionary = {

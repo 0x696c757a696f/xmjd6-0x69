@@ -2,8 +2,8 @@
 
 ## 平台入口
 
-- Windows/Pixi 合并：运行 `D:\Dev\pixi\bin\python.exe zzc\Windows_词库合并.py`
-- Windows/Pixi 撤回：运行 `D:\Dev\pixi\bin\python.exe zzc\Windows_撤回合并.py`
+- Windows/Python 合并：运行 `python .\zzc\Windows_词库合并.py`
+- Windows/Python 撤回：运行 `python .\zzc\Windows_撤回合并.py`
 - Windows 免 Python 入口：双击现有 `Win_词库合并.exe` / `Win_撤回合并.exe`
 - macOS 合并：运行 `Mac_词库合并`
 - macOS 撤回合并：运行 `Mac_撤回合并`
