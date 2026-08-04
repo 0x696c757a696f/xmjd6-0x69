@@ -1582,7 +1582,6 @@ sort: by_weight
 尒	mi	9
 冪	mi	10
 櫁	mi	12
-汩	mi	12
 脒	mi	14
 麋	mi	14
 嘧	mi	15
@@ -2385,7 +2384,6 @@ sort: by_weight
 躉	dun	1
 遯	dun	2
 鈍	dun	2
-不	dun	3
 楯	dun	3
 潡	dun	3
 砘	dun	5
@@ -4049,7 +4047,7 @@ sort: by_weight
 旎	ni	29
 铌	ni	44
 睨	ni	45
-袮	ni	51
+袮	mi	51
 溺	ni	64
 霓	ni	145
 匿	ni	149
@@ -10585,7 +10583,7 @@ sort: by_weight
 蓲	xu	0
 欨	xu	1
 鄦	xu	1
-胊	xu	1
+胊	qu	1
 蚼	xu	1
 殈	xu	1
 訹	xu	1
@@ -13004,7 +13002,6 @@ sort: by_weight
 秫	shu	14
 術	shu	16
 殳	shu	19
-沐	shu	21
 輸	shu	24
 沭	shu	27
 菽	shu	27
@@ -13902,7 +13899,6 @@ sort: by_weight
 嘈	cao	84
 糙	cao	215
 艹	cao	231
-肏	cao	298
 槽	cao	997
 曹	cao	2791
 操	cao	7451
@@ -32501,8 +32497,6 @@ sort: by_weight
 均无	jun wu	155
 鸡吧	ji ba	135
 即把	ji ba	151
-几把	ji ba	325
-鸡巴	ji ba	1647
 祭拜	ji bai	111
 击败	ji bai	1199
 几百	ji bai	2542
@@ -39383,7 +39377,6 @@ sort: by_weight
 织女	zhi nv	152
 之女	zhi nv	238
 侄女	zhi nv	391
-支那	zhi na	142
 指南	zhi nan	1621
 稚嫩	zhi nen	356
 职能	zhi neng	2175
@@ -41773,8 +41766,6 @@ sort: by_weight
 衰弱	shuai ruo	187
 摔在	shuai zai	129
 摔死	shuai si	185
-煞笔	sha bi	207
-傻逼	sha bi	1836
 纱布	sha bu	496
 沙盘	sha pan	117
 傻冒	sha mao	137
@@ -55438,7 +55429,6 @@ sort: by_weight
 小数点	xiao shu dian	127
 小说家	xiao shuo jia	191
 小人物	xiao ren wu	322
-小日本	xiao ri ben	834
 小日子	xiao ri zi	142
 小组赛	xiao zu sai	424
 小作坊	xiao zuo fang	121
@@ -63708,7 +63698,6 @@ sort: by_weight
 忍无可忍	ren wu ke ren	296
 人物形象	ren wu xing xiang	164
 日本东京	ri ben dong jing	148
-日本鬼子	ri ben gui zi	217
 日本经济	ri ben jing ji	210
 日本企业	ri ben qi ye	145
 日本政府	ri ben zheng fu	433

@@ -128,16 +128,8 @@ def validate_module_references(errors: list[str]) -> None:
                 add_error(errors, path, f"Lua component {module!r} does not resolve to {target.relative_to(ROOT)}")
 
 
-def validate_lua_syntax(errors: list[str]) -> str:
+def validate_lua_with_lupa(errors: list[str]) -> str:
     files = sorted((ROOT / "lua").rglob("*.lua")) + sorted((ROOT / "opencc").rglob("*.lua"))
-    compiler = shutil.which("luac5.4") or shutil.which("luac")
-    if compiler:
-        for path in files:
-            result = subprocess.run([compiler, "-p", str(path)], capture_output=True, text=True)
-            if result.returncode:
-                add_error(errors, path, (result.stderr or result.stdout).strip())
-        return Path(compiler).name
-
     try:
         from lupa import LuaRuntime
     except ImportError:
@@ -151,6 +143,25 @@ def validate_lua_syntax(errors: list[str]) -> str:
         if not ok:
             add_error(errors, path, str(message))
     return "Lupa/Lua " + str(runtime.eval("_VERSION"))
+
+
+def validate_lua_syntax(errors: list[str]) -> str:
+    files = sorted((ROOT / "lua").rglob("*.lua")) + sorted((ROOT / "opencc").rglob("*.lua"))
+    compiler = shutil.which("luac5.4") or shutil.which("luac")
+    if compiler:
+        try:
+            for path in files:
+                result = subprocess.run(
+                    [compiler, "-p", str(path)], capture_output=True, text=True
+                )
+                if result.returncode:
+                    add_error(errors, path, (result.stderr or result.stdout).strip())
+        except OSError:
+            pass
+        else:
+            return Path(compiler).name
+
+    return validate_lua_with_lupa(errors)
 
 
 def validate_python_syntax(errors: list[str]) -> None:

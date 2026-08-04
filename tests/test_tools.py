@@ -4,6 +4,7 @@ import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 
 class FetchOpenCCTests(unittest.TestCase):
@@ -40,6 +41,28 @@ class FetchOpenCCTests(unittest.TestCase):
 
             with self.assertRaises(ValueError):
                 extract_opencc_archive(archive, root / "opencc" / "xmjd6")
+
+
+class RepositoryValidationTests(unittest.TestCase):
+    def test_falls_back_to_lupa_when_luac_cannot_execute(self) -> None:
+        from tools import validate_repo
+
+        errors: list[str] = []
+        with (
+            patch.object(validate_repo.shutil, "which", return_value="luac.EXE"),
+            patch.object(validate_repo.subprocess, "run", side_effect=PermissionError(5)),
+            patch.object(
+                validate_repo,
+                "validate_lua_with_lupa",
+                return_value="Lupa/Lua 5.5",
+                create=True,
+            ) as fallback,
+        ):
+            runtime = validate_repo.validate_lua_syntax(errors)
+
+        self.assertEqual(runtime, "Lupa/Lua 5.5")
+        self.assertEqual(errors, [])
+        fallback.assert_called_once_with(errors)
 
 
 if __name__ == "__main__":
