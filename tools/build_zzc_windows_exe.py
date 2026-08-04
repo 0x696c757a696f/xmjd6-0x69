@@ -24,6 +24,19 @@ PYINSTALLER_VERSION = "6.21.0"
 PE_AMD64 = 0x8664
 
 
+def configure_utf8_stdio() -> None:
+    """Keep Chinese paths printable even when Windows defaults to cp1252."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="strict")
+        except (OSError, ValueError):
+            # Embedded hosts may expose immutable standard streams.
+            continue
+
+
 @dataclass(frozen=True)
 class ExecutableTarget:
     source: Path
@@ -242,6 +255,7 @@ def validate_committed_outputs() -> list[str]:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--check",

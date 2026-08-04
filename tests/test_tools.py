@@ -410,6 +410,40 @@ columns:
             self.assertIn("actions/download-artifact@v7", workflow, name)
             self.assertIn("name: zzc-windows-executables", workflow, name)
 
+    def test_every_python_workflow_forces_utf8_io(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        workflows = root / ".github" / "workflows"
+
+        for path in workflows.glob("*.yml"):
+            workflow = path.read_text(encoding="utf-8")
+            if "actions/setup-python@" not in workflow:
+                continue
+            self.assertIn('PYTHONUTF8: "1"', workflow, path.name)
+            self.assertIn('PYTHONIOENCODING: "utf-8"', workflow, path.name)
+
+    def test_windows_executable_builder_reconfigures_stdio_to_utf8(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        code = """
+import sys
+sys.stdout.reconfigure(encoding="cp1252", errors="strict")
+sys.stderr.reconfigure(encoding="cp1252", errors="strict")
+from tools.build_zzc_windows_exe import configure_utf8_stdio
+configure_utf8_stdio()
+print("Win_词库合并.exe")
+print("Win_撤回合并.exe", file=sys.stderr)
+"""
+
+        result = subprocess.run(
+            [sys.executable, "-c", code],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr.decode(errors="replace"))
+        self.assertEqual(result.stdout.decode("utf-8").strip(), "Win_词库合并.exe")
+        self.assertEqual(result.stderr.decode("utf-8").strip(), "Win_撤回合并.exe")
+
     def test_detects_generated_dictionary_drift(self) -> None:
         from tools import validate_repo
 
