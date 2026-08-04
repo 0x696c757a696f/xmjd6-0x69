@@ -82,11 +82,22 @@ engine:
     - uniquifier         # 去重
 
 # ============ 开关 ============
+melt_eng:
+  # 薄荷解析模板识别的英文节点；xmjd6_processor 同时读取此处的 i 键入口。
+  prefix: "i"
+  enable_user_dict: false
+  enable_sentence: false
+  enable_completion: true
+
 switches:
   - name: ascii_mode  # custom.yaml的开关0
     states: [ 中文, 英文 ]
     reset: 0
   - name: jffh  # custom.yaml的开关1
+    states: [ 简体, 繁體 ]
+    reset: 0
+  # 薄荷解析模板使用的简繁别名；OpenCC 过滤器同时识别 jffh 与 transcription。
+  - name: transcription
     states: [ 简体, 繁體 ]
     reset: 0
   - name: completion  # custom.yaml的开关2
@@ -115,6 +126,13 @@ switches:
     reset: 0
   - name: full_shape  # custom.yaml的开关10
     states: [ 半角, 全角 ]
+    reset: 0
+  # 薄荷解析模板别名；保留既有 jffh/emoji_cn 以兼容原有快捷键。
+  - name: emoji
+    states: [ 简约, 表情展示 ]
+    reset: 1
+  - name: ascii_punct
+    states: [ "。，", ".," ]
     reset: 0
 
 ascii_composer:
@@ -168,21 +186,21 @@ xmjd6_opencc_filter:
   comment_format: "〔%s〕"
   chain: true
   rules:
-    - option: jffh
+    - options: [ jffh, transcription ]
       dataset_name: "xmjd6_s2g"
       prefix: "jffh/"
       mode: replace
       comment_mode: none
       sentence: true
       tags: [ abc, pinyin_simp, quanpinerfen, xmjd6gbk, reverse_lookup, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
-    - option: emoji_cn
+    - options: [ emoji_cn, emoji ]
       dataset_name: "xmjd6_emoji"
       prefix: "emoji/"
       mode: append
       comment_mode: none
       split: emoji
       tags: [ abc, xmjd6_user, phrase, sentence, date, time, xgqk, jdqk ]
-    - option: emoji_cn
+    - options: [ emoji_cn, emoji ]
       dataset_name: "xmjd6_emoji_extra"
       prefix: "emoji/"
       mode: append

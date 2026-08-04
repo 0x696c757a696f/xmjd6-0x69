@@ -24,15 +24,15 @@ patch:
   # 说明：0=选择第一个状态，1=选择第二个状态
   switches/@0/reset: 0              # [ 中文, 英文 ]
   switches/@1/reset: 0               # [ 简体, 繁體 ]
-  switches/@2/reset: 1               # [ 简约, 逐码展示 ]
-  switches/@3/reset: 1               # [ 简约, 表情展示 ]
-  switches/@4/reset: 1               # [ 快符关, 快符开 ]
-  switches/@5/reset: 0               # [ ;次选关, ;次选开 ]
-  switches/@6/reset: 1               # [ 计算关, 计算开 ]
-  switches/@7/reset: 0               # [ 空顶关, 空顶开 ]
-  switches/@8/reset: 1               # [ 简约, 630提示 ]
-  switches/@9/reset: 0               # [ 地球文, 火星文 ]
-  switches/@10/reset: 0              # [ 半角, 全角 ]
+  switches/@3/reset: 1               # [ 简约, 逐码展示 ]
+  switches/@4/reset: 1               # [ 简约, 表情展示 ]
+  switches/@5/reset: 1               # [ 快符关, 快符开 ]
+  switches/@6/reset: 0               # [ ;次选关, ;次选开 ]
+  switches/@7/reset: 1               # [ 计算关, 计算开 ]
+  switches/@8/reset: 0               # [ 空顶关, 空顶开 ]
+  switches/@9/reset: 1               # [ 简约, 630提示 ]
+  switches/@10/reset: 0              # [ 地球文, 火星文 ]
+  switches/@11/reset: 0              # [ 半角, 全角 ]
 
   # ==================== 模块加载配置 ====================
   # processors 索引：@0 typing_stats  @1 xmjd6_zzc_processor  @2 xmjd6_processor

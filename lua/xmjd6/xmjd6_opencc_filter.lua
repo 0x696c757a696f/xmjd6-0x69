@@ -676,7 +676,8 @@ function M.func(input, env)
     local fixed_count = 0
     local emoji_limit = env.engine.schema.page_size or 5
     if emoji_limit <= 0 then emoji_limit = 5 end
-    local dense_emoji_mode = ctx:get_option("emoji_cn") and input_len >= DENSE_CODE_LEN
+    local dense_emoji_mode = (ctx:get_option("emoji_cn") or ctx:get_option("emoji"))
+        and input_len >= DENSE_CODE_LEN
     for _, rule in ipairs(rules) do
         local skip_for_reverse = in_reverse_lookup and rule.split_mode == "emoji"
         if not skip_for_reverse and rule.provider and rule_is_active(rule, ctx, seg) then

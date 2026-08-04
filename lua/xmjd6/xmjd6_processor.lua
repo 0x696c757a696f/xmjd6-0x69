@@ -215,7 +215,9 @@ local function init(env)
     env._tu_ac = config:get_bool("topup/auto_clear") or false
     env._tu_cmd = config:get_bool("topup/topup_command") or false
     env._tu_streaming = config:get_bool("translator/enable_sentence") or false
-    env._english_prefix = config:get_string("english/prefix") or "i"
+    env._english_prefix = config:get_string("melt_eng/prefix")
+        or config:get_string("english/prefix")
+        or "i"
     local schema_id = env.engine.schema.schema_id or ""
     env._rx_prefix = _collect_reverse_prefixes(config, schema_id, true)
     state.init_append(env, schema_id)

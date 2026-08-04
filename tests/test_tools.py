@@ -127,6 +127,31 @@ class RepositoryValidationTests(unittest.TestCase):
             switch_block = schema.split(f"- name: {name}", 1)[1].split("- name:", 1)[0]
             self.assertIn(f"reset: {reset}", switch_block, name)
 
+    def test_main_schema_supports_rimetool_mint_template_with_live_aliases(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        schema = (root / "xmjd6.schema.yaml").read_text(encoding="utf-8")
+        opencc_filter = (root / "lua" / "xmjd6" / "xmjd6_opencc_filter.lua").read_text(
+            encoding="utf-8"
+        )
+        processor = (root / "lua" / "xmjd6" / "xmjd6_processor.lua").read_text(
+            encoding="utf-8"
+        )
+
+        for node in (
+            "melt_eng:",
+            "  - name: transcription",
+            "  - name: emoji",
+            "  - name: ascii_punct",
+            "menu:\n  page_size:",
+        ):
+            self.assertIn(node, schema)
+        self.assertLess(schema.index("  - name: transcription"), schema.index("  - name: emoji"))
+        self.assertLess(schema.index("melt_eng:"), schema.index("  - name: ascii_punct"))
+        self.assertIn("options: [ jffh, transcription ]", schema)
+        self.assertEqual(schema.count("options: [ emoji_cn, emoji ]"), 2)
+        self.assertIn('ctx:get_option("emoji_cn") or ctx:get_option("emoji")', opencc_filter)
+        self.assertIn('config:get_string("melt_eng/prefix")', processor)
+
     def test_explicit_lua_component_namespace_resolves_module_path(self) -> None:
         from tools import validate_repo
 
