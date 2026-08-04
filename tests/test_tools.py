@@ -199,6 +199,29 @@ columns:
         self.assertNotIn("D:\\", workflow)
         self.assertNotIn("D:/", workflow)
 
+    def test_workflows_use_native_node24_actions(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        workflows = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted((root / ".github" / "workflows").glob("*.yml"))
+        )
+
+        self.assertNotIn("FORCE_JAVASCRIPT_ACTIONS_TO_NODE24", workflows)
+        for deprecated in (
+            "actions/checkout@v4",
+            "actions/setup-python@v5",
+            "actions/upload-artifact@v4",
+            "actions/github-script@v8",
+        ):
+            self.assertNotIn(deprecated, workflows)
+        for native_node24 in (
+            "actions/checkout@v6",
+            "actions/setup-python@v6",
+            "actions/upload-artifact@v6",
+            "actions/github-script@v9",
+        ):
+            self.assertIn(native_node24, workflows)
+
     def test_falls_back_to_lupa_when_luac_cannot_execute(self) -> None:
         from tools import validate_repo
 

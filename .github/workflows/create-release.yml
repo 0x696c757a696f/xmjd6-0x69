@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   OPENCC_TONGGUI_URL: https://github.com/amorphobia/opencc-tonggui/releases/download/latest/opencc-tonggui.zip
   OPENCC_TONGGUI_SHA256: 1b76a1028669b89d55a9055400e8be628014ea6f3b200b34b5e8a7d88f04e018
   YONG_WIN_URL: https://github.com/hugh7007/xmjd6-rere/releases/download/20231115/yong-win.7z
@@ -29,9 +28,9 @@ jobs:
         echo "RELEASE_TITLE=$(date +'%Y.%m.%d') 词库更新" >> $GITHUB_ENV
 
     - name: Checkout main branch
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: '3.12'
 
@@ -69,7 +68,7 @@ jobs:
 
     - name: Fetch tags and generate changelog from last release
       id: changelog
-      uses: actions/github-script@v8
+      uses: actions/github-script@v9
       with:
         script: |
           const lastRelease = await github.rest.repos.getLatestRelease({
