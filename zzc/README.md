@@ -1,4 +1,4 @@
-# XMJD6 自造词（ZZZC）脚本说明
+# xmjd6 自造词（ZZZC）脚本说明
 
 ## 平台入口
 
@@ -15,14 +15,16 @@ Windows Python 入口只是薄包装，和 Linux 共用同一份可审查核心�
 
 旧的 `apply_zzc.py`、`gen_char_parts.py`、`.cmd`、`.bat` 入口已经废弃，不要恢复。
 
-合并入口可以放在方案根目录，也可以放在 `zzc/` 目录。脚本会自动检查脚本所在目录和上级目录里的 `*.zzc.dict.yaml`。Python 合并入口还支持 `XMJD6_ZZC_ROOT` / `XMJD6_ZZC_STATE_DIR` 环境变量，供自动化或 iOS 包装脚本明确指定最终词库目录和 `zzc_state` 目录。
+合并入口可以放在方案根目录，也可以放在 `zzc/` 目录。脚本会自动检查脚本所在目录和上级目录里的 `*.zzc.dict.yaml`。Python 合并入口还支持 `xmjd6_zzc_root` / `xmjd6_zzc_state_dir` 环境变量，供自动化或 iOS 包装脚本明确指定最终词库目录和 `zzc_state` 目录。
 
 iOS 入口只负责路径配置和调用同一套合并核心，不另写合并算法。免费方案见 [`a-Shell快捷指令合并说明.md`](a-Shell快捷指令合并说明.md)，Pythonista 方案见 [`iOS快捷指令合并说明.md`](iOS快捷指令合并说明.md)。选择 `RimeUserData` 父目录时，脚本会向下查找一级；只有一个含 `*.zzc.dict.yaml` 的方案目录时自动使用它，多个方案时要求直接选择具体目录。`zzc_state` 默认跟随最终方案目录，避免正式词库和 reset/runtime 状态落在不同位置。
 
-按 `*.zzc.dict.yaml` 前缀选择合并目标：
+合并脚本只接受 `xmjd6.zzc.dict.yaml` 及其带编号副本，并且只写入：
 
-- `txjx*` 前缀合并到 `*.dict.yaml` 和 `*.fjcy.dict.yaml`
-- `xmjd*` 前缀合并到 `*.cizu.dict.yaml` 和 `*.fjcy.dict.yaml`
+- `xmjd6.cizu.dict.yaml`
+- `xmjd6.fjcy.dict.yaml`
+
+发现其他方案的 ZZZC 文件或不受支持的前缀时会拒绝处理，避免把操作误合并到错误词库。
 
 Linux/macOS 合并脚本按 Python 3.7+ 兼容写法维护，避免依赖 Python 3.9/3.10 专属运行时 API。
 
@@ -32,7 +34,7 @@ Linux/macOS 合并脚本按 Python 3.7+ 兼容写法维护，避免依赖 Python
 
 关键运行状态：
 
-- `../txjx.zzc.dict.yaml` / `../xmjd6.zzc.dict.yaml`：部署可读的持久层，不再是运行时唯一真源。
+- `../xmjd6.zzc.dict.yaml`：部署可读的持久层，不再是运行时唯一真源。
 - `../zzc_state/runtime_ops.tsv`：实时运行时操作记录；每次自造词、替换、删除、置顶、前移、append、restore 都先写这里。
 - `../zzc_state/effective_state.tsv`：运行时实际生效快照，普通显示、自造词 collect、删除、置顶、前移、append、restore、completion 都读这里。
 - `../zzc_state/runtime_exact.tsv`：兼容缓存占位，不是当前主要显示来源。

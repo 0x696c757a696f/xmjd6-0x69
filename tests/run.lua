@@ -190,7 +190,7 @@ test("typing statistics uses the shared cache registry", function()
     if not found then error("typing_stats cleaner was not registered") end
 end)
 
-test("modular input processor components load from the XMJD6 namespace", function()
+test("modular input processor components load from the xmjd6 namespace", function()
     local modules = {
         "xmjd6.input.xmjd6_key_event",
         "xmjd6.input.xmjd6_processor_state",

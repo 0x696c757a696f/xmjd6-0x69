@@ -69,7 +69,7 @@ def main() -> int:
             "rime-txjx has changed: "
             f"{report['integrated_commit']} -> {report['current_commit']}"
         )
-        print("Review and adapt the locked source paths; do not overwrite XMJD6 patches blindly.")
+        print("Review and adapt the locked source paths; do not overwrite xmjd6 patches blindly.")
     else:
         print(f"rime-txjx is current at {report['integrated_commit']}")
     return 10 if args.fail_on_update and report["update_available"] else 0

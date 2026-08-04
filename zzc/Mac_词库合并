@@ -25,11 +25,9 @@ def find_one(base: Path, pattern: str) -> Path:
 
 
 def target_dict_name_options(prefix: str) -> list[list[str]]:
-    if prefix.startswith("txjx"):
-        return [[f"{prefix}.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
-    if prefix.startswith("xmjd"):
-        return [[f"{prefix}.cizu.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
-    raise ValueError(f"unsupported zzc prefix: {prefix}")
+    if prefix == "xmjd6":
+        return [["xmjd6.cizu.dict.yaml"], ["xmjd6.fjcy.dict.yaml"]]
+    raise ValueError(f"unsupported zzc schema (expected xmjd6): {prefix}")
 
 
 def resolve_target_dicts(root: Path, prefix: str) -> list[Path]:
@@ -88,7 +86,7 @@ def ops_family(
 
 
 def discover_layout() -> tuple[Path, Path, Path, tuple[Path, ...], str]:
-    root_override = os.environ.get("XMJD6_ZZC_ROOT")
+    root_override = os.environ.get("xmjd6_zzc_root")
     if root_override:
         start_dir = Path(root_override).expanduser().resolve()
         if not start_dir.exists():
@@ -121,8 +119,8 @@ def discover_layout() -> tuple[Path, Path, Path, tuple[Path, ...], str]:
 
 ROOT, ZZC_DIR, OPS, OPS_SOURCES, SCHEMA = discover_layout()
 STATE_DIR = (
-    Path(os.environ["XMJD6_ZZC_STATE_DIR"]).expanduser().resolve()
-    if os.environ.get("XMJD6_ZZC_STATE_DIR")
+    Path(os.environ["xmjd6_zzc_state_dir"]).expanduser().resolve()
+    if os.environ.get("xmjd6_zzc_state_dir")
     else ROOT / "zzc_state"
 )
 ROLLBACK_DIR = ZZC_DIR / "撤回合并"

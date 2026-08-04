@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Windows/Pixi entry point for the shared XMJD6 ZZZC rollback core."""
+"""Windows/Pixi entry point for the shared xmjd6 ZZZC rollback core."""
 
 from __future__ import annotations
 

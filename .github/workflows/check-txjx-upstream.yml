@@ -57,7 +57,7 @@ jobs:
               `- 当前上游：\`${report.current_commit}\``,
               `- [查看差异](${compare})`,
               '',
-              '请重点审查锁文件列出的 source_paths，并继续保留 XMJD6 的模块命名空间、`i` 英文入口、OpenCC 目录和本地键道六顶功差异。不要直接覆盖本地文件。',
+              '请重点审查锁文件列出的 source_paths，并继续保留 xmjd6 的模块命名空间、`i` 英文入口、OpenCC 目录和本地键道六顶功差异。不要直接覆盖本地文件。',
             ].join('\n');
             const open = await github.rest.issues.listForRepo({
               owner: context.repo.owner,

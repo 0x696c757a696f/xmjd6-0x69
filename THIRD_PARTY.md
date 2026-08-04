@@ -13,7 +13,7 @@ commits and generated-file checksums are recorded in
 - License copy: `licenses/rime-jiandao-AGPL-3.0.txt`
 
 The local synchronization tool reproduces the relevant `make_dicts.sh`
-behavior for this repository: it writes an XMJD6-specific Rime header and then
+behavior for this repository: it writes an xmjd6-specific Rime header and then
 appends the upstream single-character rows unchanged.
 
 ## `xmjd6.ice.dict.yaml`
@@ -43,7 +43,7 @@ baseline, with no more than eight new combined candidates per code.
 
 The two English sources are merged in main-then-extension order. Codes are
 normalized to reachable lowercase letter sequences and prefixed with `i` before
-the generated dictionary is imported into the main XMJD6 table. This removes
+the generated dictionary is imported into the main xmjd6 table. This removes
 the need for a separate auxiliary English schema while keeping English entries
 isolated from JianDao 6 codes.
 
@@ -59,7 +59,7 @@ isolated from JianDao 6 codes.
 - Integration lock: `tools/upstream_code.lock.json`
 
 The implementation is adapted rather than copied as a whole: module names are
-kept below `lua/xmjd6/`, state keys use the XMJD6 namespace, OpenCC assets stay
+kept below `lua/xmjd6/`, state keys use the xmjd6 namespace, OpenCC assets stay
 below `opencc/xmjd6/`, and the main processor preserves this repository's `i`
 English prefix and JianDao 6 top-up behavior. TXJX dictionaries, schema files,
 root-level OpenCC data, opaque platform binaries, and project-specific release

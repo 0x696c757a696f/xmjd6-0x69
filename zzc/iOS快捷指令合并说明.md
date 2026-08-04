@@ -1,4 +1,4 @@
-# Pythonista：iOS 快捷指令合并 XMJD6 自造词
+# Pythonista：iOS 快捷指令合并 xmjd6 自造词
 
 适用于 iOS 16 或更新版本、Pythonista 和当前 `iOS_词库合并.py`。
 
@@ -8,8 +8,8 @@
 
 第一次在 Pythonista 内直接运行 `iOS_词库合并.py`：
 
-- 使用 iCloud：选择 iCloud 中的 `RimeUserData` 或 XMJD6 方案目录。
-- 不使用 iCloud：选择输入法应用文件中的 `RimeUserData` 或 XMJD6 方案目录。
+- 使用 iCloud：选择 iCloud 中的 `RimeUserData` 或 xmjd6 方案目录。
+- 不使用 iCloud：选择输入法应用文件中的 `RimeUserData` 或 xmjd6 方案目录。
 - 若选择 `RimeUserData`，只有一个方案目录时会自动进入；多个方案时需直接选择具体方案目录。
 - `zzc_state` 默认使用最终方案目录下的 `zzc_state/`，一般不要改到别处。
 

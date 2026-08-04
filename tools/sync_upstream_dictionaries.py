@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync pinned Jiandao and Rime-Ice sources into native XMJD6 dictionaries."""
+"""Sync pinned Jiandao and Rime-Ice sources into native xmjd6 dictionaries."""
 
 from __future__ import annotations
 
@@ -412,7 +412,7 @@ def render_english(
         f"# Source commit: {source['commit']}",
         "# Sources: en_dicts/en.dict.yaml, en_dicts/en_ext.dict.yaml",
         "# Codes are normalized to lowercase letters and prefixed with i.",
-        "# Imported by the main XMJD6 table; no auxiliary schema is needed.",
+        "# Imported by the main xmjd6 table; no auxiliary schema is needed.",
         f"# Source rows: {stats['english_source_rows']}",
         f"# Generated rows: {stats['english_generated_rows']}",
         f"# Deduplicated inside upstream: {stats['english_deduplicated_upstream']}",

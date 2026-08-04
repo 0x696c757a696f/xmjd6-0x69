@@ -248,7 +248,7 @@ Windows 下推荐使用 PowerShell 7：
 
 `.github/workflows/sync-upstream-dictionaries.yml` 每周一 04:17 UTC 自动检查，有变化时运行测试并创建 PR。首次启用自动 PR 前，需要在仓库的 **Settings → Actions → General → Workflow permissions** 中允许 GitHub Actions 创建 Pull Request。
 
-Lua 与自造词实现参考 [wzxmer/rime-txjx](https://github.com/wzxmer/rime-txjx)，已整合的 commit、审查目录和明确排除项记录在 [`tools/upstream_code.lock.json`](tools/upstream_code.lock.json)。这部分不能像纯词库一样无损自动重建，因为必须保留 XMJD6 的命名空间、英文 `i` 入口和顶功差异；因此每周检查只会创建待审查 Issue，不会盲目覆盖本地代码：
+Lua 与自造词实现参考 [wzxmer/rime-txjx](https://github.com/wzxmer/rime-txjx)，已整合的 commit、审查目录和明确排除项记录在 [`tools/upstream_code.lock.json`](tools/upstream_code.lock.json)。这部分不能像纯词库一样无损自动重建，因为必须保留 xmjd6 的命名空间、英文 `i` 入口和顶功差异；因此每周检查只会创建待审查 Issue，不会盲目覆盖本地代码：
 
 ```powershell
 & 'D:\Dev\pixi\bin\python.exe' tools/check_txjx_upstream.py

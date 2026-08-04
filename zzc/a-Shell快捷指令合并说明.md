@@ -1,4 +1,4 @@
-# a-Shell 免费方案：iOS 快捷指令合并 XMJD6 自造词
+# a-Shell 免费方案：iOS 快捷指令合并 xmjd6 自造词
 
 适用于 iOS 16 或更新版本、a-Shell 和当前 `iOS_词库合并.py`。
 
@@ -31,8 +31,8 @@ python3 iOS_词库合并.py --root "$root" --default-state
 
 目录选择规则：
 
-- 使用 iCloud：选择 iCloud 中的 `RimeUserData` 或其中的 XMJD6 方案目录。
-- 不使用 iCloud：选择输入法应用文件中的 `RimeUserData` 或 XMJD6 方案目录。
+- 使用 iCloud：选择 iCloud 中的 `RimeUserData` 或其中的 xmjd6 方案目录。
+- 不使用 iCloud：选择输入法应用文件中的 `RimeUserData` 或 xmjd6 方案目录。
 - 若选中 `RimeUserData`，脚本只向下查找一级；只有一个方案时自动进入，多个方案时应直接选具体方案目录。
 - `--default-state` 让 `zzc_state/` 和正式词库保持在同一方案目录。
 

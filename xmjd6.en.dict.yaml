@@ -5,7 +5,7 @@
 # Source commit: 569ff3bc65dd4aec0a26b33c49c8bbdfa8b5fd57
 # Sources: en_dicts/en.dict.yaml, en_dicts/en_ext.dict.yaml
 # Codes are normalized to lowercase letters and prefixed with i.
-# Imported by the main XMJD6 table; no auxiliary schema is needed.
+# Imported by the main xmjd6 table; no auxiliary schema is needed.
 # Source rows: 23861
 # Generated rows: 23610
 # Deduplicated inside upstream: 249

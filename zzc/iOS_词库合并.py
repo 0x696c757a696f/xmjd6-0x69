@@ -48,11 +48,9 @@ def pick_directory(prompt: str) -> Path:
 
 
 def target_dict_name_options(prefix: str) -> list[list[str]]:
-    if prefix.startswith("txjx"):
-        return [[f"{prefix}.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
-    if prefix.startswith("xmjd"):
-        return [[f"{prefix}.cizu.dict.yaml"], [f"{prefix}.fjcy.dict.yaml"]]
-    raise ValueError(f"unsupported zzc prefix: {prefix}")
+    if prefix == "xmjd6":
+        return [["xmjd6.cizu.dict.yaml"], ["xmjd6.fjcy.dict.yaml"]]
+    raise ValueError(f"unsupported zzc schema (expected xmjd6): {prefix}")
 
 
 def resolve_target_dicts(root: Path, prefix: str) -> list[Path]:
@@ -203,8 +201,8 @@ def find_core(script_dir: Path, root: Path) -> Path:
 
 
 def run_core(core_path: Path, root: Path, state_dir: Path) -> int:
-    os.environ["XMJD6_ZZC_ROOT"] = str(root)
-    os.environ["XMJD6_ZZC_STATE_DIR"] = str(state_dir)
+    os.environ["xmjd6_zzc_root"] = str(root)
+    os.environ["xmjd6_zzc_state_dir"] = str(state_dir)
     loader = importlib.machinery.SourceFileLoader("xmjd6_ios_merge_core", str(core_path))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     if spec is None:
@@ -215,7 +213,7 @@ def run_core(core_path: Path, root: Path, state_dir: Path) -> int:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="iOS shortcut wrapper for xmjd6/xmjd zzc merge")
+    parser = argparse.ArgumentParser(description="iOS shortcut wrapper for xmjd6 ZZZC merge")
     parser.add_argument("--configure", action="store_true", help="重新选择目录并保存配置")
     parser.add_argument("--reset-config", action="store_true", help="删除旧配置后重新选择")
     parser.add_argument("--root", help="最终合并码表目录")

@@ -102,6 +102,10 @@ class RepositoryValidationTests(unittest.TestCase):
             module.target_dict_name_options("xmjd6"),
             [["xmjd6.cizu.dict.yaml"], ["xmjd6.fjcy.dict.yaml"]],
         )
+        with self.assertRaisesRegex(ValueError, "expected xmjd6"):
+            module.target_dict_name_options("other")
+        with self.assertRaisesRegex(ValueError, "expected xmjd6"):
+            module.target_dict_name_options("xmjd7")
 
     def test_zzc_merge_integrates_numbered_xmjd6_operation_files(self) -> None:
         repository = Path(__file__).resolve().parents[1]
