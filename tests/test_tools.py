@@ -422,7 +422,7 @@ columns:
     def test_package_and_release_run_windows_executable_checks(self) -> None:
         root = Path(__file__).resolve().parents[1]
         workflows = root / ".github" / "workflows"
-        for name in ("package-main.yml", "create-release.yml"):
+        for name in ("package-master.yml", "create-release.yml"):
             workflow = (workflows / name).read_text(encoding="utf-8")
             self.assertIn("windows-latest", workflow, name)
             self.assertIn("test_windows_merge_executable_runs_current_xmjd6_behavior", workflow, name)
